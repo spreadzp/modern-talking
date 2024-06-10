@@ -12,6 +12,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "pretty": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "useDefineForClassFields": true, 
     "plugins": [
       {
         "name": "next"
