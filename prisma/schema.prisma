@@ -1,5 +1,6 @@
+// "sqlite"
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -24,15 +25,15 @@ model Discussion {
 }
 
 model Reward {
-  id          Int      @id @default(autoincrement())
-  description String
-  condition   String
-  sum         Int
-  token       Token?
+  id           Int        @id @default(autoincrement())
+  description  String
+  condition    String
+  sum          Int
+  token        Token?
   discussionId Int        @unique
   discussion   Discussion @relation(fields: [discussionId], references: [id])
-  createdAt    DateTime   @default(now()) @map("created_at") 
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
 
   @@map("rewards")
 }
@@ -75,12 +76,12 @@ model Chat {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   message   String
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
   chatId    Int
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  chat      Chat      @relation(fields: [chatId], references: [id])
   createdAt DateTime? @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
 
@@ -88,14 +89,15 @@ model Message {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  address   String     @unique
+  id        Int         @id @default(autoincrement())
+  address   String      @unique
+  email     String
   creator   Discussion? @relation(fields: [creatorId], references: [id])
   creatorId Int?        @unique
   messages  Message[]
   wallet    Wallet?
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
   mails     Mail[]
 
   @@map("users")

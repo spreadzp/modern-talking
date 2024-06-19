@@ -1,60 +1,36 @@
-import { useState } from "react"; 
-import Table from "./Table";  
-import { Modal } from "./Modal";
-import ExpandableContent from "./ExpandableTable";
 
-export const StatisticInfo = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+import Table from "./Table";
+import { useRouter } from "next/navigation";
+import { StatisticTableData, TableData } from "../interfaces/table.interfaces";
+import { getCountDiscussions } from "@/server/discussion-db";
+import { useEffect } from "react";
+import { useSiteStore } from "../hooks/store";
 
-    const handleSendClick = () => {
-        setIsModalOpen(true);
-    };
 
-    const handleModalClose = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleModalSubmit = (data: any) => {
-        console.log('Submitted:', data);
-        // Handle the form submission here
-    };
-
-    const coinsData = [
-        { '#': 1, address: 'Address 1', amount: 100, symbol: 'BNB', name: 'BNB' },
+export const StatisticInfo =   () => {
+    const { setCountDiscussions, countDiscussions  } = useSiteStore()
+    useEffect(() => {
+        getCountDiscussions()
+        .then((data) => {
+            setCountDiscussions(data)
+        })
+    }, [ ])
+    const tableData: StatisticTableData[] = [
+        { id: 1, name: 'Discussions', amount: countDiscussions, rewardSumDollar: 1500, rewardSumInTokens: 12233333,  routeName: 'discussions' },
+        { id: 2, name: 'Surveys', amount: 20, rewardSumDollar: 2157, rewardSumInTokens: 54545,  routeName: 'surveys' },
+        { id: 3, name: 'Voting', amount: 15, rewardSumDollar: 3432, rewardSumInTokens: 45354,  routeName: 'voting' },
+        { id: 4, name: 'Data Sets', amount: 12, rewardSumDollar: 3435, rewardSumInTokens: 45435,  routeName: 'ai-tagging' },
     ];
+    const router = useRouter();
 
-    const tokensData = [
-        { '#': 1, contractAddress: 'Address 1', name: 'Token 1', symbol: 'TKN', amount: 50 },
-    ];
-
-    const nftsData = [
-        { '#': 1, name: 'NFT 1', symbol: 'NFT', nftId: '1', contractAddress: 'Address 1', uri: 'http://example.com/nft1', price: 1000, seller: 'Seller 1', nftMetadata: 'Metadata for NFT 1' },
-    ];
+    const handleStatisticClick = (statistic: any) => {
+        router?.push(`/${statistic.routeName}`);
+    };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#76004f] to-[#4b4fa6]">
-            <div className="container mx-auto p-4">
-
-
-                {/* <ExpandableContent title="Surveys" isOpenContent={false}>
-                    <Table data={coinsData} onBuyClick={() => handleSendClick()} /> 
-                </ExpandableContent>
-
-                <ExpandableContent title="Discussions" isOpenContent={false}>
-                    <Table data={tokensData} onBuyClick={() => handleSendClick()} /> 
-                </ExpandableContent>
-
-                <ExpandableContent title="Data tagging for AI" isOpenContent={false}>
-                    <Table data={nftsData} onBuyClick={() => handleSendClick()} /> 
-                </ExpandableContent>
-
-                <ExpandableContent title="Comment to earn" isOpenContent={false}>
-                    <Table data={nftsData} onBuyClick={() => handleSendClick()} /> 
-                </ExpandableContent> */}
-
-                {/* {isModalOpen && (
-                    <Modal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleModalSubmit} />
-                )} */}
+        <div className=" bg-gradient-to-b from-[#76004f] to-[#4b4fa6]">
+            <div className="container mx-auto p-4">  
+                <Table data={tableData} onBuyClick={handleStatisticClick} buttonLabel="Join" />
             </div>
         </div>
     );

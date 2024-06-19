@@ -7,7 +7,6 @@ interface LeftSideProps {
 }
 
 const Content: React.FC<LeftSideProps> = ({ discussion }) => {
-    console.log("🚀 ~ discussion:", discussion)
     return (
         <div className="w-full md:pl-4 md:mr-4 flex flex-col ">
             <h2 className="text-lg font-semibold mb-2">{discussion.title}</h2>

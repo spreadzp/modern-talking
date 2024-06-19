@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { DiscussionData } from '../interfaces/table.interfaces';
 import { createMessage, getMessagesByChatId } from '@/server/chat';
-import { Message } from '@prisma/client';
 import { useSiteStore } from '../hooks/store';
+import { MessageBox } from 'react-chat-elements'
+import { MessageList } from 'react-chat-elements'
+import { Navbar, Avatar, Popup, Button, Input } from 'react-chat-elements'
+import Spinner from './Spinner';
 
 
 
@@ -12,71 +15,145 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = ({ discussion }) => {
-    const { chatMessages, setChatMessages } = useSiteStore()
+    const [showPopup, setShowPopup] = useState(false)
+    const { chatMessages, setChatMessages, currentUser, discussionData } = useSiteStore()
     const [inputValue, setInputValue] = useState('');
     const [chatId, setChatId] = useState(0)
+    const messageListReferance = React.createRef();
+    const inputReferance = React.createRef()
+    const item = {
+        position: 'right',
+        type: 'text',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        date: new Date(),
+    }
     useEffect(() => {
-        if (discussion && discussion.chat) {
-            setChatId(discussion.chat?.id)
+        console.log('discussion :>>', discussion)
+        if (discussion && discussion.chatMessages) {
+            setChatId(discussion.chatMessages?.id)
         }
     }, [discussion]);
     useEffect(() => {
-
         if (chatId) { // TODO update messages
-            getMessagesByChatId(chatId)
+            getMessagesByChatId(chatId, currentUser?.address)
                 .then((data) => {
                     if (data) {
-                        setChatMessages(data.messages)
+                        setChatMessages(data)
                     }
                 })
         }
-    }, [chatId]);
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // setChatMessages((prevMessages) => [
-        //     ...prevMessages,
-        //     { id: prevMessages.length, message: inputValue },
-        // ]);
+    }, [chatId, setChatMessages]);
 
+
+    useEffect(() => {
+
+        console.log("🚀 ~ useEffect ~ chatMessages:", chatMessages)
+    }, [chatMessages]);
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     // setChatMessages((prevMessages) => [
+    //     //     ...prevMessages,
+    //     //     { id: prevMessages.length, message: inputValue },
+    //     // ]);
+
+    //     let message: any = {
+    //         discussionHash: discussion.hash,
+    //         message: inputValue,
+    //         chatId: discussion.chat?.id,
+    //         user: currentUser,
+
+
+    //     }
+    //     const messageSaved = await createMessage(message)
+    //     console.log("🚀 ~ handleSubmit ~ messageSaved:", messageSaved)
+    //     setInputValue('');
+    //     getMessagesByChatId(chatId)
+    //     .then((data) => {
+    //         if (data) {
+    //             setChatMessages(data)
+    //         }
+    //     })
+    // };
+    const inputClear = () => { }
+
+    const sendMessage = async () => {
+        console.log('discussionData :>>', discussionData)
+        let currentMessage = inputReferance.current.value
         let message: any = {
-            message: inputValue,
-            chatId: discussion.chat?.id,
-            userId: 1,
+            discussionHash: discussionData.hash,
+            message: currentMessage,
+            chatId: chatId,
+            user: currentUser,
 
 
         }
         const messageSaved = await createMessage(message)
         console.log("🚀 ~ handleSubmit ~ messageSaved:", messageSaved)
         setInputValue('');
-        getMessagesByChatId(chatId)
-                .then((data) => {
-                    if (data) {
-                        setChatMessages(data.messages)
-                    }
-                })
-    };
-
+        getMessagesByChatId(chatId, currentUser?.address)
+            .then((data) => {
+                console.log("🚀 ~ .then ~ data:", data)
+                if (data) {
+                    setChatMessages(data)
+                }
+            })
+        inputReferance.current.value = null
+    }
     return (
-        <div className="w-full   md:pl-4 md:mr-4 flex flex-col "> 
-            <div className="flex-grow overflow-y-auto mb-2 p-2">
-                {chatMessages?.map((message) => (
-                    <p key={message.id} className="mb-1">{message.message}</p>
-                ))}
-            </div>
-            <form onSubmit={handleSubmit} className="flex items-center">
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Type a message..."
-                    className="w-full p-2 mr-2 border border-gray-300 rounded text-black"
-                />
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-                    Send
-                </button>
-            </form>
-        </div>
+        <div> {<div className="w-full   md:pl-4 md:mr-4 flex flex-col ">
+
+            {chatMessages.length === 0 ? <Spinner /> : <MessageList
+                referance={messageListReferance}
+                className='message-list text-black'
+                lockable={true}
+                toBottomHeight={'100%'}
+                dataSource={chatMessages
+
+                } />}
+
+
+            <Input
+                referance={inputReferance}
+                placeholder='Type here...'
+                multiline={true}
+                value={inputValue} maxHeight={200}
+                rightButtons={<Button color='white' backgroundColor='blue' text='Send' onClick={() => sendMessage()} />}
+            />
+            {/* <Button className='text-black' text={'click me!'} onClick={() => sendMessage()} /> */}
+
+        </div>}</div>
     );
 };
 
 export default Chat;
+
+
+// <Avatar src={'https://facebook.github.io/react/img/logo.svg'} alt={'logo'} size='large' type='circle flexible' />
+// <Navbar className='text-black' left={<div>'LEFT' area</div>} center={<div>'CENTER' area</div>} right={<div>'RIGHT' area</div>} />
+// <Popup
+//     show={showPopup}
+//     header='Lorem ipsum dolor sit amet.'
+//     headerButtons={[
+//         {
+//             type: 'transparent',
+//             color: 'black',
+//             text: 'close',
+//             onClick: () => {
+//                 setShowPopup(false)
+//             },
+//         },
+//     ]}
+//     text='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem animi veniam voluptas eius!'
+//     footerButtons={[
+//         {
+//             color: 'white',
+//             backgroundColor: '#ff5e3e',
+//             text: 'Vazgeç',
+//         },
+//         {
+//             color: 'white',
+//             backgroundColor: 'lightgreen',
+//             text: 'Tamam',
+//         },
+//     ]}
+// />

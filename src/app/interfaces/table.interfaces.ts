@@ -48,8 +48,14 @@ export type DiscussionData = {
     promptRestrictions: string;
     rewards?: Reward[];
     topic: string;
-    chat?: Chat | null; // Make chat nullable
+    chatMessages?: Chat; 
 }
-
-// This type can be extended to include other types of data
-export type TableData = DiscussionData;
+export type StatisticTableData ={
+    id: number;
+    name: string;
+    amount: number;
+    rewardSumDollar: number;
+    rewardSumInTokens: number; 
+    routeName: string;
+} 
+export type TableData = DiscussionData | StatisticTableData;

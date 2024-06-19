@@ -14,7 +14,7 @@ const DiscussionPage = () => {
         if (data) {
             setDiscussionData(data)
         } 
-    }, [pathname])
+    }, [pathname, setDiscussionData, discussionsData]);
 
 
 

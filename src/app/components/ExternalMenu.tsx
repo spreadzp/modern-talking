@@ -20,20 +20,20 @@ const menuItems = [
     {
         icon: getIconByName('Tba'),
         label: "Surveys",
-        href: "/survey",
+        href: "/surveys",
     },
     {
-        icon: getIconByName('Tba'),
-        label: "Earning",
-        href: "/earning",
+        icon: getIconByName('Voting'),
+        label: "Voting",
+        href: "/voting",
     },
     {
-        icon: getIconByName('Tba'),
+        icon: getIconByName('Discussion'),
         label: "Discussions",
         href: "/discussions",
     },
     {
-        icon: getIconByName('Tba'),
+        icon: getIconByName('AiTagging'),
         label: "AI Tagging",
         href: "/ai-tagging",
     },

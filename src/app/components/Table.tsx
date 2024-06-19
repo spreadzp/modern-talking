@@ -2,28 +2,37 @@ import React from 'react';
 import { TableData } from '../interfaces/table.interfaces';
 
 type TableProps = {
-    data: TableData[];
+    data: any[];
     onBuyClick?: (item: TableData) => void;
     buttonLabel?: string;
 };
 
 const Table: React.FC<TableProps> = ({ data, onBuyClick, buttonLabel }) => {
-    // Extract headers from the first item in the data array
     const headers = data.length > 0 ? Object.keys(data[0]) : [];
+    if (headers.includes('chatMessages')) {
+        const handledData = data.map((item) => {
+            const discussion = item
+            discussion.ChatMessages = item.chatMessages.messages.length
+            delete discussion.chatMessages
+            return discussion
+        })
+        debugger
+        data = handledData
+    }
+
+
+
     const stringifyValue = (value: any): string => {
         if (Array.isArray(value)) {
-            // If value is an array, convert each item to a string and join them
             return value.map(item => JSON.stringify(item)).join(', ');
         } else if (typeof value === 'object' && value !== null) {
-            // If value is an object, convert it to a string
             return JSON.stringify(value);
         } else {
-            // If value is a string or a non-object, return it as is
             return String(value);
         }
     };
     return (
-        <div className="overflow-y-auto h-64">
+        <div className="overflow-y-auto min-h-screen">
             <table className="table-auto w-full text-white">
                 <thead>
                     <tr>

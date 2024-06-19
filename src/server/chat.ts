@@ -1,5 +1,6 @@
 'use server'
-import { Chat, Discussion, Message, PrismaClient, Reward, User } from '@prisma/client' 
+import { Chat, Discussion, Message, PrismaClient, Reward, User } from '@prisma/client'
+import { getDiscussionByHash } from './discussion-db'
 // import { z } from 'zod'
 
 // const schema = z.object({
@@ -10,27 +11,70 @@ import { Chat, Discussion, Message, PrismaClient, Reward, User } from '@prisma/c
 
 const prisma = new PrismaClient()
 
-export async function getMessagesByChatId(chatId: number): Promise< (Chat& { messages: Message[] }) | null> {
-    return prisma.chat.findFirst({
+export async function getMessagesByChatId(chatId: number, address: string): Promise<any> {
+    const data = await prisma.chat.findFirst({
         where: {
             id: chatId
         },
         include: {
-            messages: true
+            messages: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
-} 
+    if (data?.messages?.length > 0) {
+        const preparedData = data?.messages?.map((item: any) => {
+            const message = {
+                position: item.user.address === address ? 'left' : 'right',
+                date: new Date(),
+                text: item.message,
+                type: 'text',
+                forwarded: true,
+                replyButton: true,
+                removeButton: true,
+                title: item.user.address === address ? 'You' : item.user.address,
+            }
+            return message
+        })
+        return preparedData
+    } else {
+        return null
+    }
+}
 
 
-export async function createMessage(message: Message): Promise<Message> { 
+export async function createMessage(message: any): Promise<Message> {
     if (!message.message) {
         throw new Error('Message is required');
     }
 
-    const newMessage = await prisma.message.create({  
+    let chat: Chat | null = null;
+    const discussion = await getDiscussionByHash(message.discussionHash)
+    if (!discussion) {
+        throw new Error('Discussion not found');
+    }
+    if (!message.chatId) {
+        chat = await prisma.chat.create({
+            data: {
+                discussion: {
+                    connect: { id: discussion.id }
+                }
+            }
+        });
+        message.chatId = chat.id;
+    }
+
+    const newMessage = await prisma.message.create({
         data: {
-            ...message
+            message: message.message,
+            userId: message.user.id,
+            chatId: message.chatId,
+            createdAt: new Date(),
+            updatedAt: new Date()
         }
-    })
-    return newMessage 
+    });
+
+    return newMessage;
 }

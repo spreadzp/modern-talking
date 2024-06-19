@@ -2,6 +2,7 @@
 import Landing from "./components/Landing"; 
 
 function Page() {
+  
   return (
     <>
       <Landing /> 

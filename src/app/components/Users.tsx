@@ -19,7 +19,8 @@ const Users = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const newUser = { name, email } as User
+        // const newUser = { name, email } as User 
+        const newUser = {  } as User 
         const response = await createUser( newUser)
         if(!response) {
             return
@@ -62,13 +63,13 @@ const Users = () => {
                     Add User
                 </button>
             </form>
-            <ul className="space-y-4">
+            {/* <ul className="space-y-4">
                 {users.map(user => (
                     <li key={user.id} className="bg-gray-100 p-4 rounded-lg shadow">
                         {user.name} ({user.email})
                     </li>
                 ))}
-            </ul>
+            </ul> */}
         </div>
     )
 }

@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/lib/providers";
+import 'react-chat-elements/dist/main.css'
 
+import { Providers } from "@/lib/providers"; 
+import { ReactNode } from "react";
+import AuthProvider from "@/lib/next.auth.provider";
+import { getServerSession } from "next-auth";
+import { options } from "./api/auth/[...nextauth]/options";
+import { getProviders } from "next-auth/react";
+import { AppProps } from "next/app";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -10,18 +17,20 @@ export const metadata: Metadata = {
   description: "Introducing a revolutionary new way to experience web3 chat",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+type Props = {
+  children: ReactNode; 
+};
+export default   function RootLayout({ children  }: Props) { 
   return (
     <html lang="en">
-      <body className={inter.className}><Providers>
-        <div className="flex flex-col">
-          {children}
-        </div>
-      </Providers></body>
+      <body className={inter.className}>  
+      <AuthProvider  >
+            <div className="flex flex-col">
+              {children}
+            </div>  
+        </AuthProvider>
+
+      </body>
     </html>
   );
 }

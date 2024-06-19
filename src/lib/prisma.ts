@@ -1,4 +1,4 @@
-// src/lib/prisma.ts
+
 
 const { PrismaClient } = require('@prisma/client');
 

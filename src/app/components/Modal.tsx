@@ -1,6 +1,6 @@
 import { Discussion } from "@prisma/client";
-import { useEffect, useState } from "react";
-import { createIdentity } from "../hooks/utils";
+import { useEffect, useState } from "react"; 
+import { createHashForPrivateKeyFromString } from "../hooks/utils";
 
 interface ModalProps {
     isOpen: boolean;
@@ -17,9 +17,9 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const identity = createIdentity(sourceUrl)
+        const identity = createHashForPrivateKeyFromString(sourceUrl) 
         console.log("🚀 ~ handleSubmit ~ identity:", identity)
-        setHash(identity.address)
+        setHash(identity?.address as string)
         if( hash && sourceUrl && description && prompt && topic) {
             const newDiscussion: any = {
                 hash,
@@ -35,9 +35,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
             onSubmit(newDiscussion);
             onClose();
         }
-       
     };
- 
 
     return (
         <div className={`fixed inset-0 flex items-center justify-center ${isOpen ? 'block' : 'hidden'}`}>

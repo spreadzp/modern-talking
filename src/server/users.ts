@@ -1,5 +1,5 @@
 'use server'
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient, User, Wallet } from '@prisma/client' 
 // import { z } from 'zod'
 
 // const schema = z.object({
@@ -31,4 +31,19 @@ export async function getUsers() {
         },
     })
     return newUser
+}
+
+export async function getUserByEmail(email: string): Promise<(User & { wallet: Wallet | null;  })> {
+    const user = await  prisma.user.findFirst({
+        where: {
+            email  
+        },
+        include: { 
+            wallet: true
+        },
+    });
+    if(!user) {
+        throw new Error('User not found');
+    }
+    return user
 }

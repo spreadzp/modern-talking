@@ -200,15 +200,58 @@ export const BackIcon = () => (
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         fill="#ffffff"
-        className="w-6 h-6" // Added class to control size with Tailwind CSS
+        className="w-6 h-6" 
     >
         <g id="icomoon-ignore"></g>
         <path d="M14.389 7.956v4.374l1.056 0.010c7.335 0.071 11.466 3.333 12.543 9.944-4.029-4.661-8.675-4.663-12.532-4.664h-1.067v4.337l-9.884-7.001 9.884-7zM15.456 5.893l-12.795 9.063 12.795 9.063v-5.332c5.121 0.002 9.869 0.26 13.884 7.42 0-4.547-0.751-14.706-13.884-14.833v-5.381z" />
     </svg>
 );
 
+export const VotingIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-6 h-6"
+    >
+        <path d="M7 22H4C3.44772 22 3 21.5523 3 21V3C3 2.44772 3.44772 2 4 2H7M14 2H17C17.5523 2 18 2.44772 18 3V21C18 21.5523 17.5523 22 17 22H14M14 2H17M14 2V22M14 22H17M7 22H10M7 2H10M7 2V22" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+)
 
+export const DiscussionIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-6 h-6"
+    >
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+)
 
+export const AiTaggingIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-6 h-6"
+    >
+        <path d="M10 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+)
 export const getIconByName = (name: string) => {
 
     const icones: Record<string, () => React.JSX.Element> = {
@@ -221,7 +264,10 @@ export const getIconByName = (name: string) => {
         About: AboutIcon,
         Help: HelpIcon,
         Tba: TbaIcon,
-        Back: BackIcon
+        Back: BackIcon,
+        Voting: VotingIcon,
+        Discussion: DiscussionIcon,
+        AiTagging: AiTaggingIcon
 
     }
 
