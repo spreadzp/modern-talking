@@ -19,51 +19,35 @@ const authOption: NextAuthOptions = {
         })
     ],
     callbacks: {
-        async signIn({ account, profile }) {
-            //     // if (!profile?.email) {
-            //     //     throw new Error('No profile')
-            //     // }
-
-            //     // await prisma.user.upsert({
-            //     //     where: {
-            //     //         email: profile.email,
-            //     //     },
-            //     //     create: {
-            //     //         email: profile.email,
-            //     //         name: profile.name,
-            //     //     },
-            //     //     update: {
-            //     //         name: profile.name,
-            //     //     },
-            //     // })
+        async signIn({  }) {
             return true
         },
         session,
-        async jwt({ token, user, account, profile }) {
+        async jwt({ token}) {
             if (token) {
                 const identity = `${token?.sub}:${'salt'}`
-                const wallet = createHashForPrivateKeyFromString(identity)
+                const wallet = createHashForPrivateKeyFromString(identity) 
+                if(wallet){
+                    const account = createAccountFromMnemonic(wallet?._mnemonic().phrase)
 
-                //console.log('wallet?._mnemonic', wallet?._mnemonic())
-                const account = createAccountFromMnemonic(wallet?._mnemonic().phrase)
-
-                const sk = account._signingKey()
-                const user = await prisma.user.findFirst({
-                    where: {
-                        email: token.email,
-                    },
-                })
-                if (!user) {
-                    await prisma.user.create({
-                        data: {
-                            address: account.address,
+                    const sk = account._signingKey()
+                    const user = await prisma.user.findFirst({
+                        where: {
                             email: token.email,
-                        }})
-
-                }
-                return token
+                        },
+                    })
+                    if (!user) {
+                        await prisma.user.create({
+                            data: {
+                                address: account.address,
+                                email: token.email,
+                            }})
+    
+                    }
+                } 
             }
-        },
+            return token
+        }  
     }
 
 }

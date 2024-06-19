@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && cd prisma && prisma generate && npm run db:migrate && npm run seed",
+    "build": "next build && cd prisma && prisma generate && npm run migrate-prod",
     "start": "next start",
     "lint": "next lint",
     "prisma-validate": "prisma validate && prisma format",
     "migrate-dev": "npx prisma migrate dev --name init",
+    "migrate-prod": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:migrate": "prisma db push --force-reset",
     "db-alter": "npm run prisma-validate && prisma migrate deploy",

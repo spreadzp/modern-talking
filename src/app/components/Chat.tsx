@@ -35,68 +35,51 @@ const Chat: React.FC<ChatProps> = ({ discussion }) => {
     }, [discussion]);
     useEffect(() => {
         if (chatId) { // TODO update messages
-            getMessagesByChatId(chatId, currentUser?.address)
+            if(currentUser) {
+                getMessagesByChatId(chatId, currentUser?.address)
                 .then((data) => {
                     if (data) {
                         setChatMessages(data)
                     }
                 })
+            }
+            
         }
-    }, [chatId, setChatMessages]);
+    }, [chatId, setChatMessages, currentUser]);
 
 
     useEffect(() => {
 
         console.log("🚀 ~ useEffect ~ chatMessages:", chatMessages)
     }, [chatMessages]);
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     // setChatMessages((prevMessages) => [
-    //     //     ...prevMessages,
-    //     //     { id: prevMessages.length, message: inputValue },
-    //     // ]);
-
-    //     let message: any = {
-    //         discussionHash: discussion.hash,
-    //         message: inputValue,
-    //         chatId: discussion.chat?.id,
-    //         user: currentUser,
-
-
-    //     }
-    //     const messageSaved = await createMessage(message)
-    //     console.log("🚀 ~ handleSubmit ~ messageSaved:", messageSaved)
-    //     setInputValue('');
-    //     getMessagesByChatId(chatId)
-    //     .then((data) => {
-    //         if (data) {
-    //             setChatMessages(data)
-    //         }
-    //     })
-    // };
+    
     const inputClear = () => { }
 
     const sendMessage = async () => {
-        console.log('discussionData :>>', discussionData)
-        let currentMessage = inputReferance.current.value
-        let message: any = {
-            discussionHash: discussionData.hash,
-            message: currentMessage,
-            chatId: chatId,
-            user: currentUser,
-
-
-        }
-        const messageSaved = await createMessage(message)
-        console.log("🚀 ~ handleSubmit ~ messageSaved:", messageSaved)
-        setInputValue('');
-        getMessagesByChatId(chatId, currentUser?.address)
-            .then((data) => {
-                console.log("🚀 ~ .then ~ data:", data)
-                if (data) {
-                    setChatMessages(data)
-                }
-            })
+        if(inputReferance) {
+            let currentMessage = inputReferance.current.value
+            let message: any = {
+                discussionHash: discussionData.hash,
+                message: currentMessage,
+                chatId: chatId,
+                user: currentUser,
+    
+    
+            }
+            const messageSaved = await createMessage(message)
+            console.log("🚀 ~ handleSubmit ~ messageSaved:", messageSaved)
+            setInputValue('');
+            if(currentUser) {
+                getMessagesByChatId(chatId, currentUser?.address)
+                .then((data) => {
+                    console.log("🚀 ~ .then ~ data:", data)
+                    if (data) {
+                        setChatMessages(data)
+                    }
+                })
+            }
+        } 
+        
         inputReferance.current.value = null
     }
     return (
