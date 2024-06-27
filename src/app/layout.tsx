@@ -2,14 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import 'react-chat-elements/dist/main.css'
-
-import { Providers } from "@/lib/providers"; 
+ 
 import { ReactNode } from "react";
-import AuthProvider from "@/lib/next.auth.provider";
-import { getServerSession } from "next-auth";
-import { options } from "./api/auth/[...nextauth]/options";
-import { getProviders } from "next-auth/react";
-import { AppProps } from "next/app";
+import AuthProvider from "@/lib/next.auth.provider";   
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

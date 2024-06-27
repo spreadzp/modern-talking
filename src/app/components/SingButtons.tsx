@@ -17,7 +17,7 @@ export default   function SingButtons() {
                     })
             }  
         }
-    }, [status, update, session, setUserAddressWallet]);
+    }, [status, update, session, setUserAddressWallet, setCurrentUser]);
     if (session) {
         //  {session?.user?.email}
         return (

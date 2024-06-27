@@ -1,6 +1,6 @@
 
-import ExpandableContent from './ExpandableTable';
-import { SurveyTable } from './SurveyTable';
+import ExpandableContent from './ExpandableTable'; 
+import SurveyTable from './SurveyTable';
 
 const MarketPlace: React.FC = () => {
     return (

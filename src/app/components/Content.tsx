@@ -1,28 +1,28 @@
 // src/components/LeftSide.tsx
 import React from 'react';
-import { DiscussionData } from '../interfaces/table.interfaces';
+import { ContentData } from '../interfaces/table.interfaces';
 
 interface LeftSideProps {
-    discussion: DiscussionData;
+    contentData: ContentData;
 }
 
-const Content: React.FC<LeftSideProps> = ({ discussion }) => {
+const Content: React.FC<LeftSideProps> = ({ contentData }) => {
     return (
         <div className="w-full md:pl-4 md:mr-4 flex flex-col ">
-            <h2 className="text-lg font-semibold mb-2">{discussion.title}</h2>
+            <h2 className="text-lg font-semibold mb-2">{contentData.title}</h2>
             <p className="mb-2">
                 Source:{' '}
                 <a
-                    href={discussion.sourceUrl}
+                    href={contentData.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-800"
                 >
-                    {discussion.title}
+                    {contentData.title}
                 </a>
             </p>
             <iframe
-                src={discussion.sourceUrl}
+                src={contentData.sourceUrl}
                 width="100%"
                 height="300" 
                 allowFullScreen
@@ -30,13 +30,13 @@ const Content: React.FC<LeftSideProps> = ({ discussion }) => {
                 className="mb-2"
             />
             <p className="mb-2">
-                <strong>Description:</strong> {discussion.description}
+                <strong>Description:</strong> {contentData.description}
             </p>
             <p className="mb-2">
-                <strong>Prompt Restrictions:</strong> {discussion.promptRestrictions}
+                <strong>Prompt Restrictions:</strong> {contentData.promptRestrictions}
             </p>
             <p className="mb-2">
-                <strong>Rewards:</strong> {discussion?.rewards?.length}
+                <strong>Rewards:</strong> {contentData?.rewards?.length}
             </p>
         </div>
 

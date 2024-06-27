@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && cd prisma && prisma generate && npm run migrate-prod",
+    "build": "prisma generate && npm run migrate-prod && next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "lint": "next lint",
     "prisma-validate": "prisma validate && prisma format",
     "migrate-dev": "npx prisma migrate dev --name init",

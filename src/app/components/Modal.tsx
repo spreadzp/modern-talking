@@ -6,9 +6,10 @@ interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: Discussion) => void;
+    nameSubmit: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
     const [hash, setHash] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
     const [description, setDescription] = useState('');
@@ -90,7 +91,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
                         </div>
                         <div className="modal-footer">
                             <button className="px-4 py-2 font-bold text-white bg-blue-500 rounded shadow hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">
-                                Create Discussion
+                                {`${nameSubmit}`}
                             </button>
                         </div>
                     </form>

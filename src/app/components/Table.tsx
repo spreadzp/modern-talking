@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TableData } from '../interfaces/table.interfaces';
 
 type TableProps = {
@@ -8,19 +8,16 @@ type TableProps = {
 };
 
 const Table: React.FC<TableProps> = ({ data, onBuyClick, buttonLabel }) => {
-    const headers = data.length > 0 ? Object.keys(data[0]) : [];
-    if (headers.includes('chatMessages')) {
-        const handledData = data.map((item) => {
-            const discussion = item
-            discussion.ChatMessages = item.chatMessages.messages.length
-            delete discussion.chatMessages
-            return discussion
-        })
-        debugger
-        data = handledData
-    }
+    console.log("🚀 ~ data:", data)
+    const [headers, setHeaders] = useState<string[]>([]);
 
-
+    useEffect(() => {
+        if (data.length > 0) {
+            const initialHeaders = Object.keys(data[0]);
+            const filteredHeaders = initialHeaders.filter(header => header !== 'chat' && header !== 'hash' && header !== 'routeName');
+            setHeaders(filteredHeaders);
+        }
+    }, [data]);
 
     const stringifyValue = (value: any): string => {
         if (Array.isArray(value)) {
@@ -31,8 +28,9 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, buttonLabel }) => {
             return String(value);
         }
     };
+
     return (
-        <div className="overflow-y-auto min-h-screen">
+        <div className="overflow-y-auto ">
             <table className="table-auto w-full text-white">
                 <thead>
                     <tr>
@@ -47,13 +45,13 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, buttonLabel }) => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={index}>
-                            {Object.values(item).map((value, valueIndex) => (
-                                <td key={valueIndex} className="border px-4 py-2 text-center align-middle">
-                                    {stringifyValue(value)}
+                            {headers.map((header, headerIndex) => (
+                                <td key={headerIndex} className="border px-4 py-2 text-center align-middle">
+                                    {stringifyValue(item[header])}
                                 </td>
                             ))}
                             {onBuyClick && (
-                                <td className="border px-4 py-2 text-center align-middle" role="cell">
+                                <td className="border px-4 py-2 text-center align-middle">
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                         onClick={() => onBuyClick(item)}

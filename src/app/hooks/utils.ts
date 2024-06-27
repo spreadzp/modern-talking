@@ -1,12 +1,6 @@
-//import  EthCrypto from "eth-crypto";
+ 
 import { ethers  } from "ethers";
-// export function recoverPublicKey(signedHash: string, message: string) {
-//     const signer = EthCrypto.recoverPublicKey(
-//         signedHash, // signature
-//         EthCrypto.hash.keccak256(message) // message hash
-//     );
-//     return signer;
-// }
+ 
 
 export function createMnemonicFromString(inputString: string ) {
     // Use the input string to create a mnemonic phrase
@@ -20,22 +14,7 @@ export function createMnemonicFromString(inputString: string ) {
     // Create a wallet from the mnemonic
     const wallet = ethers.Wallet.fromMnemonic(mnemonic);
     return wallet;
-  }
-// export function publicKeyToAddress(pubKey: string) {
-//     const address = EthCrypto.publicKey.toAddress(pubKey);
-//     return address;
-// }
-// export async function encryptWithPublicKey(
-//     pubKey: string,
-//     stringifyInfo: string
-// ) {
-//     const encrypted = await EthCrypto.encryptWithPublicKey(
-//         pubKey, // publicKey
-//         stringifyInfo // message
-//     );
-//     const encryptedStr = EthCrypto.cipher.stringify(encrypted);
-//     return encryptedStr;
-// }
+  } 
 
 export function createWalletPrivateKey(privateKey: string) {
     try {
@@ -75,15 +54,7 @@ export function fromStringToHash(inputString: string) {
     return buffByteLike;
 }
 
-// export function createIdentity(inputString: string) {
-//     const messageHash = EthCrypto.hash.keccak256(inputString);
-
-//     const normalizedStr = lengthMore128Chars(messageHash);
-//     const entropy = Buffer.from(normalizedStr, "utf-8");
-//     const identity = EthCrypto.createIdentity(entropy);
-//     console.log("🚀 ~ file: crypto.js:54 ~ createIdentity ~ identity:", identity);
-//     return identity;
-// }
+ 
 
 export function lengthMore128Chars(str: string) {
     // Check if the string length is less than 128
@@ -102,53 +73,8 @@ export function lengthMore128Chars(str: string) {
         return str;
     }
 }
-export function publicKeyByPrivateKey(privKey: string) {
-    const publicKey = EthCrypto.publicKeyByPrivateKey(privKey);
-    console.log(
-        "🚀 ~ file: crypto.js:44 ~ publicKeyByPrivateKey ~ publicKey:",
-        publicKey
-    );
-    return publicKey;
-}
-
-// export function publicKeyToAddress(pubKey) {
-//   const address = EthCrypto.publicKey.toAddress(pubKey);
-//   return address;
-// }
-
-export function sign(message: string, privateKey: string) {
-    const messageHash = EthCrypto.hash.keccak256(message);
-    const signature = EthCrypto.sign(
-        privateKey, // privateKey
-        messageHash // hash of message
-    );
-    console.log("🚀 ~ file: crypto.js:62 ~ sign ~ signature:", signature);
-    return signature;
-}
-
-export function cipherParse(encryptedStr: string) {
-    const encryptedCipher = EthCrypto.cipher.parse(encryptedStr);
-    console.log(
-        "🚀 ~ file: crypto.js:68 ~ cipherParse ~ encryptedCipher:",
-        encryptedCipher
-    );
-    return encryptedCipher;
-}
-
-export async function decryptWithPrivateKey(
-    privateKey: string,
-    encryptedCipher: any
-) {
-    const message = await EthCrypto.decryptWithPrivateKey(
-        privateKey, // privateKey
-        encryptedCipher // encrypted-data
-    );
-    console.log(
-        "🚀 ~ file: crypto.js:82 ~ decryptWithPrivateKey ~ message:",
-        message
-    );
-    return JSON.parse(message);
-}
+ 
+ 
 
 export function shortenEthAddress(address: string) {
     // Check if the address is a valid Ethereum address

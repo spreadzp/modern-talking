@@ -1,7 +1,7 @@
 'use server'
+ 
 import { DiscussionData } from '@/app/interfaces/table.interfaces';
-import { Chat, Discussion, PrismaClient, Reward, User } from '@prisma/client'
-import { Wallet } from 'ethers';
+import {  Discussion, PrismaClient } from '@prisma/client' 
 // import { z } from 'zod'
 
 // const schema = z.object({
@@ -12,40 +12,64 @@ import { Wallet } from 'ethers';
 
 const prisma = new PrismaClient()
 
-export async function getDiscussions(): Promise<DiscussionData[]> {
+export async function getDiscussions(): Promise<any[]> {
     const discussions = await prisma.discussion.findMany({
         include: {
             chat: {
                 include: {
-                    messages: true, // Include messages to count them later
+                    messages: true, 
                 },
             },
             rewards: true,
         },
     });
 
-    return discussions.map(discussion => {
-        const chatMessages = discussion.chat?.messages.length || 0;
+    return discussions.map(discussion => { 
 
         return {
             hash: discussion.hash,
             sourceUrl: discussion.sourceUrl,
-            title: discussion.prompt, // Assuming 'title' can be derived from 'prompt'
+            title: discussion.topic, 
             description: discussion.description,
-            promptRestrictions: discussion.prompt, // Assuming 'promptRestrictions' is the same as 'prompt'
+            promptRestrictions: discussion.prompt, 
             rewards: discussion.rewards,
             topic: discussion.topic,
-            chatMessages: discussion.chat,
+            chat: discussion.chat,
+            messages: discussion.chat?.messages.length || 0 
         };
     });
 }
 
-export async function getDiscussionByHash(hash: string): Promise<Discussion | null> {
-    return prisma.discussion.findFirst({
+export async function getDiscussionByHash(hash: string): Promise<any | null> {
+   const discussion = await prisma.discussion.findFirst({
         where: {
             hash: hash,
         },
+        include: {
+            chat: {
+                include: {
+                    messages: true, 
+                },
+            },
+            rewards: true,
+        },
     });
+    if(discussion) {
+        return {
+            hash: discussion.hash,
+            sourceUrl: discussion.sourceUrl,
+            title: discussion.topic, 
+            description: discussion.description,
+            promptRestrictions: discussion.prompt, 
+            rewards: discussion.rewards,
+            topic: discussion.topic,
+            chat: discussion.chat,
+            messages: discussion.chat?.messages.length || 0 
+        };
+    } else {
+        return null
+    }
+    
 }
 
 export async function getCountDiscussions(): Promise<number> {
@@ -54,7 +78,6 @@ export async function getCountDiscussions(): Promise<number> {
 }
 
 export async function createDiscussion(discussion: Discussion, userId: number, greetingMessage: string): Promise<Discussion> {
-    // Assuming you have some rewards data to associate with the discussion
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -81,7 +104,7 @@ export async function createDiscussion(discussion: Discussion, userId: number, g
                 },
             },
             rewards: {
-                create: rewardsData // Create rewards and associate them with the discussion
+                create: rewardsData
             }
         },
     });

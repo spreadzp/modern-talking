@@ -1,23 +1,70 @@
- 
-import { TableData } from "../interfaces/table.interfaces";
-import Table from "./Table";
+'use client'
+import React, { useCallback, useEffect, useState } from 'react';
+import Table from './Table';
+import { useRouter } from 'next/navigation';
+import { useSiteStore } from '../hooks/store';
+import { Modal } from './Modal';
+import { Survey } from '@prisma/client';
+import Spinner from './Spinner';
+import { createSurvey, getSurveys } from '@/server/survey';
 
-export const SurveyTable: React.FC = () => {
-    const offersData: TableData[] = [
+const SurveyTable: React.FC = () => {
+    const router = useRouter();
+    const { setSurveysData, surveysData, currentUser, setSurveyData } = useSiteStore()
+    const [isModalOpen, setModalOpen] = useState(false);
+    const updateSurveys = useCallback(() => {
+        getSurveys().then((data) => {
+            if (data) {
+                setSurveysData([...surveysData, ...data]);
+            }
+        });
+    }, [ setSurveysData, surveysData]);
+    useEffect(() => {
+        if (surveysData.length === 0) { // TODO
+            updateSurveys()
+        }
+    }, [surveysData, updateSurveys]);
+    const handleSurveyClick = (survey: any) => {
+        setSurveyData(survey)
+        router?.push(`/survey/${survey.hash}`);
+    };
+    const openModal = () => {
+        setModalOpen(true);
+    };
 
-    ];
-    // for (let i = 3; i <= 15; i++) {
-    //     offersData.push({
-    //         : i,
-    //         name: `Item ${i}`,
-    //         uri: `http://example.com/item${i}`,
-    //         price: i * 100,
-    //         seller: `Seller ${i}`,
-    //         nftMetadata: `Metadata for Item ${i}`,
-    //     });
-    // }
-    const handleBuyClick = () => {
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
-    }
-    return <Table data={offersData} onBuyClick={handleBuyClick} />;
+    const handleSubmit = async (newSurvey: Survey) => {
+        try {
+            if (currentUser) {
+                const createdSurvey = await createSurvey(newSurvey, currentUser?.id, `Let's start survey:  ${newSurvey.topic}`);
+                console.log('Survey created:', createdSurvey);
+                updateSurveys()
+            }
+
+        } catch (error) {
+            console.error('Error creating survey:', error);
+        }
+    };
+    return (
+        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6]">
+            <div className="container mx-auto p-4">
+                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Create a new survey
+                </button>
+                {
+                    isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Survey" /> :
+                        (surveysData.length === 0 ? <Spinner /> : <Table
+                            data={surveysData}
+                            onBuyClick={handleSurveyClick}
+                            buttonLabel="Join"
+                        />)
+                }
+            </div>
+        </div>
+    );
 };
+
+export default SurveyTable;

@@ -16,15 +16,7 @@ export async function getUsers() {
 
 }
  export async function createUser(user: User): Promise<User> {
-//     const validatedFields = schema.safeParse({
-//         email: user.email,
-//         name: user.name
-//     }) 
-//     if (!validatedFields.success) {
-//         return {
-//             errors: validatedFields.error.flatten().fieldErrors,
-//         }
-//     }
+
     const newUser = await prisma.user.create({
         data: {
             ...user
@@ -34,9 +26,9 @@ export async function getUsers() {
 }
 
 export async function getUserByEmail(email: string): Promise<(User & { wallet: Wallet | null;  })> {
-    const user = await  prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
         where: {
-            email  
+            email
         },
         include: { 
             wallet: true

@@ -40,6 +40,17 @@ export type NFTData = {
     nftMetadata?: string;
 };
 
+export type SurveyData = { 
+    hash: string;
+    sourceUrl: string;
+    title: string;
+    description: string;
+    promptRestrictions: string;
+    rewards?: Reward[];
+    topic: string;
+    chat?: Chat; 
+}
+
 export type DiscussionData = { 
     hash: string;
     sourceUrl: string;
@@ -48,7 +59,7 @@ export type DiscussionData = {
     promptRestrictions: string;
     rewards?: Reward[];
     topic: string;
-    chatMessages?: Chat; 
+    chat?: Chat; 
 }
 export type StatisticTableData ={
     id: number;
@@ -58,4 +69,5 @@ export type StatisticTableData ={
     rewardSumInTokens: number; 
     routeName: string;
 } 
-export type TableData = DiscussionData | StatisticTableData;
+export type TableData = DiscussionData | StatisticTableData | SurveyData;
+export type  ContentData = any | SurveyData ;

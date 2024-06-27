@@ -1,5 +1,5 @@
 'use server'
-import { Chat, Discussion, Message, PrismaClient, Reward, User } from '@prisma/client'
+import { Chat,   Message, PrismaClient  } from '@prisma/client'
 import { getDiscussionByHash } from './discussion-db'
 // import { z } from 'zod'
 
@@ -11,7 +11,7 @@ import { getDiscussionByHash } from './discussion-db'
 
 const prisma = new PrismaClient()
 
-export async function getMessagesByChatId(chatId: number, address: string): Promise<any> {
+export async function getMessagesByChatId(chatId: number, address?: string): Promise<any> {
     const data = await prisma.chat.findFirst({
         where: {
             id: chatId
@@ -24,7 +24,7 @@ export async function getMessagesByChatId(chatId: number, address: string): Prom
             }
         }
     })
-    if (data?.messages?.length > 0) {
+    if (data && data?.messages?.length > 0) {
         const preparedData = data?.messages?.map((item: any) => {
             const message = {
                 position: item.user.address === address ? 'left' : 'right',

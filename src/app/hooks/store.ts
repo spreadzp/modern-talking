@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { DiscussionData } from "../interfaces/table.interfaces";
+import { DiscussionData, SurveyData } from "../interfaces/table.interfaces";
 import { Message, User } from "@prisma/client";
 
 interface MTSite {
@@ -17,6 +17,13 @@ interface MTSite {
     setMessages: (messages: Message[]) => void;
     countDiscussions: number;
     setCountDiscussions: (countDiscussions: number) => void;
+    surveysData: SurveyData[];
+    setSurveysData: (surveysData: SurveyData[]) => void;
+    surveyData: SurveyData;
+    setSurveyData: (surveyData: SurveyData) => void;
+    countSurveys: number;
+    setCountSurveys: (countSurveys: number) => void;
+
 }
 
 export const useSiteStore = create<MTSite>((set) => ({
@@ -34,5 +41,12 @@ export const useSiteStore = create<MTSite>((set) => ({
     setMessages: (messages: Message[]) => set({ messages }),
     countDiscussions: 0,
     setCountDiscussions: (countDiscussions: number) => set({ countDiscussions }),
+    surveysData: [],
+    setSurveysData: (surveysData: SurveyData[]) => set({ surveysData }),
+    surveyData: {} as SurveyData,
+    setSurveyData: (surveyData: SurveyData) => set({ surveyData }),
+    countSurveys: 0,
+    setCountSurveys: (countSurveys: number) => set({ countSurveys }),
+
 })
 )

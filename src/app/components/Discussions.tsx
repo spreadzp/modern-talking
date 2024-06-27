@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import Table from './Table';
-import { DiscussionData } from '../interfaces/table.interfaces';
+import Table from './Table'; 
 import { useRouter } from 'next/navigation';
 import { useSiteStore } from '../hooks/store';
 import { createDiscussion, getDiscussions } from '@/server/discussion-db';
@@ -13,11 +12,12 @@ const Discussions: React.FC = () => {
     const router = useRouter();
     const { setDiscussionsData, discussionsData, setDiscussionData, currentUser } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
+    
     useEffect(() => {
         if (discussionsData.length === 0) { // TODO
             updateDiscussions()
         }
-    }, [discussionsData, setDiscussionsData]);
+    }, [discussionsData,  setDiscussionsData, setDiscussionData, currentUser  ]);
     const handleDiscussionClick = (discussion: any) => {
         setDiscussionData(discussion)
         router?.push(`/discussion/${discussion.hash}`);
@@ -42,23 +42,13 @@ const Discussions: React.FC = () => {
             console.error('Error creating discussion:', error);
         }
     };
-
     const updateDiscussions = () => {
         getDiscussions().then((data) => {
-            // const preparedData: DiscussionData[] = data.map((discussion) => {
-            //     return {
-            //         hash: discussion.hash,
-            //         sourceUrl: discussion.sourceUrl,
-            //         title: discussion.topic,
-            //         description: discussion.description,
-            //         promptRestrictions: discussion.prompt,
-            //         rewards: discussion.rewards,
-            //         topic: discussion.topic,
-            //         chatMessages: discussion?.chat ? discussion.chat : undefined,
-            //     }
+            
             setDiscussionsData([...discussionsData, ...data])
             })  
     }
+  
     return (
         <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6]">
             <div className="container mx-auto p-4">
@@ -67,7 +57,7 @@ const Discussions: React.FC = () => {
                     Create new discussion
                 </button>
                 {
-                    isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} /> :
+                    isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion"  /> :
                         (discussionsData.length === 0 ? <Spinner /> : <Table
                             data={discussionsData}
                             onBuyClick={handleDiscussionClick}
