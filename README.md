@@ -1,4 +1,4 @@
-# ![file_2 (1)](https://github.com/spreadzp/modern-talking/assets/11519562/8ffe3216-2358-483a-9fad-93b09428264a) Modern Talking
+# ![mt_resized](https://github.com/spreadzp/modern-talking/assets/11519562/d1c19d08-5d36-421f-a673-8e186a252966) Modern Talking
 
 ## About Modern Talking
 
