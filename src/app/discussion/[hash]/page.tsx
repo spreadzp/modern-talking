@@ -1,8 +1,5 @@
 'use client'
-import DiscussionComponent from '../../components/Discussion';
-import { usePathname} from 'next/navigation'
-import { useEffect, useState } from 'react';
-import { useSiteStore } from '@/app/hooks/store'; 
+import DiscussionComponent from '../../components/business/discussion/Discussion'; 
  
 
 const DiscussionPage = () => { 

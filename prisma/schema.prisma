@@ -40,6 +40,38 @@ model Survey {
   @@map("surveys")
 }
 
+model Voting {
+  id          Int      @id @default(autoincrement())
+  hash        String   @unique
+  creator     User?
+  sourceUrl   String   @unique
+  description String
+  prompt      String
+  topic       String
+  rewards     Reward[]
+  chat        Chat?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("voting_list")
+}
+
+model DataSet {
+  id          Int      @id @default(autoincrement())
+  hash        String   @unique
+  creator     User?
+  sourceUrl   String   @unique
+  description String
+  prompt      String
+  topic       String
+  rewards     Reward[]
+  chat        Chat?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("datasets")
+}
+
 model Reward {
   id           Int         @id @default(autoincrement())
   description  String
@@ -48,6 +80,10 @@ model Reward {
   token        Token?
   surveyId     Int?        @unique
   survey       Survey?     @relation(fields: [surveyId], references: [id])
+  votingId     Int?        @unique
+  voting       Voting?     @relation(fields: [votingId], references: [id])
+  datasetId    Int?        @unique
+  dataset      DataSet?    @relation(fields: [datasetId], references: [id])
   discussionId Int?        @unique
   discussion   Discussion? @relation(fields: [discussionId], references: [id])
   createdAt    DateTime    @default(now()) @map("created_at")
@@ -87,6 +123,10 @@ model Chat {
   messages     Message[]
   discussionId Int?        @unique
   discussion   Discussion? @relation(fields: [discussionId], references: [id])
+  votingId     Int?        @unique
+  voting       Voting?     @relation(fields: [votingId], references: [id])
+  datasetId    Int?        @unique
+  dataset      DataSet?    @relation(fields: [datasetId], references: [id])
   surveyId     Int?        @unique
   survey       Survey?     @relation(fields: [surveyId], references: [id])
   createdAt    DateTime    @default(now()) @map("created_at")
@@ -109,18 +149,24 @@ model Message {
 }
 
 model User {
-  id              Int         @id @default(autoincrement())
-  address         String      @unique
-  email           String
-  creator         Discussion? @relation(fields: [creatorId], references: [id])
-  creatorId       Int?        @unique
-  creatorSurveyId Int?        @unique
-  creatorSurvey   Survey?     @relation(fields: [creatorSurveyId], references: [id])
-  messages        Message[]
-  wallet          Wallet?
-  createdAt       DateTime    @default(now()) @map("created_at")
-  updatedAt       DateTime    @updatedAt @map("updated_at")
-  mails           Mail[]
+  id               Int           @id @default(autoincrement())
+  address          String        @unique
+  email            String
+  creator          Discussion?   @relation(fields: [creatorId], references: [id])
+  creatorId        Int?          @unique
+  creatorSurveyId  Int?          @unique
+  creatorSurvey    Survey?       @relation(fields: [creatorSurveyId], references: [id])
+  creatorVotingId  Int?          @unique
+  creatorVoting    Voting?       @relation(fields: [creatorVotingId], references: [id])
+  creatorDatasetId Int?          @unique
+  creatorDataset   DataSet?      @relation(fields: [creatorDatasetId], references: [id])
+  messages         Message[]
+  wallet           Wallet?
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  mails            Mail[]
+  marketplaceOwner Marketplace[] @relation("MarketplaceOwner")
+  bidOwner         Bid[]         @relation("BidOwner")
 
   @@map("users")
 }
@@ -137,4 +183,56 @@ model Mail {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("mails")
+}
+
+enum LotType {
+  DataSet
+  Voting
+  Survey
+  Discussion
+}
+
+enum BidStatus {
+  Pending
+  Accepted
+  Rejected
+}
+
+model Marketplace {
+  id           Int       @id @default(autoincrement())
+  ownerLot     Int
+  owner        User      @relation(fields: [ownerLot], references: [id], name: "MarketplaceOwner")
+  typeLot      LotType
+  hashResource String
+  price        BigInt
+  bids         Bid[]
+  history      History[]
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@map("marketplace")
+}
+
+model Bid {
+  id        Int         @id @default(autoincrement())
+  bidOwner  Int
+  owner     User        @relation(fields: [bidOwner], references: [id], name: "BidOwner")
+  price     BigInt
+  status    BidStatus
+  idLot     Int
+  lot       Marketplace @relation(fields: [idLot], references: [id])
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@map("bids")
+}
+
+model History {
+  id        Int         @id @default(autoincrement())
+  idLot     Int
+  lot       Marketplace @relation(fields: [idLot], references: [id])
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@map("history")
 }

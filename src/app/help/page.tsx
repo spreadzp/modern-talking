@@ -1,10 +1,9 @@
-"use client"; 
+"use client";
+import Help from "../components/common/Help"; 
 
 function Page() {
     return (
-        <>
-            Help
-        </>
+        <Help />
     );
 }
 

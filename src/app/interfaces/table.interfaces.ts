@@ -51,6 +51,29 @@ export type SurveyData = {
     chat?: Chat; 
 }
 
+export type VotingData = { 
+    hash: string;
+    sourceUrl: string;
+    title: string;
+    description: string;
+    promptRestrictions: string;
+    rewards?: Reward[];
+    topic: string;
+    chat?: Chat; 
+}
+
+export type DataSetType = { 
+    hash: string;
+    sourceUrl: string;
+    title: string;
+    description: string;
+    promptRestrictions: string;
+    rewards?: Reward[];
+    topic: string;
+    chat?: Chat; 
+}
+
+
 export type DiscussionData = { 
     hash: string;
     sourceUrl: string;
@@ -69,5 +92,5 @@ export type StatisticTableData ={
     rewardSumInTokens: number; 
     routeName: string;
 } 
-export type TableData = DiscussionData | StatisticTableData | SurveyData;
+export type TableData = DiscussionData | StatisticTableData | SurveyData | VotingData;
 export type  ContentData = any | SurveyData ;

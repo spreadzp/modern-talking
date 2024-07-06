@@ -1,10 +1,9 @@
-"use client"; 
+"use client";
+import About from "../components/common/About";
 
 function Page() {
     return (
-        <>
-            About
-        </>
+        <About />
     );
 }
 

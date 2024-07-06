@@ -1,7 +1,7 @@
 'use client';
 
-import Footer from '@/app/components/Footer';
-import Header from '@/app/components/Header';
+import Footer from '@/app/components/shared/Footer';
+import Header from '@/app/components/shared/Header';
 import * as React from 'react'; 
 
 export function Providers({ children  }: { children: React.ReactNode  }) { 

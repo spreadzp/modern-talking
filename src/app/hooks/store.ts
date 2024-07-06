@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { DiscussionData, SurveyData } from "../interfaces/table.interfaces";
+import { DataSetType, DiscussionData, SurveyData, VotingData } from "../interfaces/table.interfaces";
 import { Message, User } from "@prisma/client";
 
 interface MTSite {
@@ -23,6 +23,18 @@ interface MTSite {
     setSurveyData: (surveyData: SurveyData) => void;
     countSurveys: number;
     setCountSurveys: (countSurveys: number) => void;
+    votingList: VotingData[];
+    setVotingList: (votingList: VotingData[]) => void;
+    votingData: VotingData;
+    setVotingData: (votingData: VotingData) => void;
+    countVotingList: number;
+    setCountVotingList: (countVotingList: number) => void;
+    dataSets: DataSetType[];
+    setDataSets: (dataSets: DataSetType[]) => void;
+    dataSet: DataSetType;
+    setDataSet: (dataSet: DataSetType) => void;
+    countDataSet: number;
+    setCountDataSet: (countVotingList: number) => void;
 
 }
 
@@ -47,6 +59,18 @@ export const useSiteStore = create<MTSite>((set) => ({
     setSurveyData: (surveyData: SurveyData) => set({ surveyData }),
     countSurveys: 0,
     setCountSurveys: (countSurveys: number) => set({ countSurveys }),
+    votingList: [],
+    setVotingList: (votingList: VotingData[]) => set({ votingList }),
+    votingData: {} as VotingData,
+    setVotingData: (votingData: VotingData) => set({ votingData }),
+    countVotingList: 0,
+    setCountVotingList: (countVotingList: number) => set({ countVotingList }),
+    dataSets: [],
+    setDataSets: (dataSets: DataSetType[]) => set({ dataSets }),
+    dataSet: {} as DataSetType,
+    setDataSet: (dataSet: DataSetType) => set({ dataSet }),
+    countDataSet: 0,
+    setCountDataSet: (countDataSet: number) => set({ countDataSet }),
 
 })
 )

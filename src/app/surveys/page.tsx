@@ -1,6 +1,6 @@
 "use client";
 
-import Surveys from "../components/Surveys"; 
+import Surveys from "../components/business/survey/Surveys"; 
 
 function Page() {
     return (

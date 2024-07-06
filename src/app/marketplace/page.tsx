@@ -1,12 +1,10 @@
 "use client";
-
-import MarketPlace from "../components/MarketPlace";
-
+import Marketplace from "../components/pages/Marketplace/MarketPlace"; 
 
 function Page() {
     return (
         <>
-            <MarketPlace />
+            <Marketplace />
         </>
     );
 }

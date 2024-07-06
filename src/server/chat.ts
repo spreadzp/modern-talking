@@ -31,9 +31,9 @@ export async function getMessagesByChatId(chatId: number, address?: string): Pro
                 date: new Date(),
                 text: item.message,
                 type: 'text',
-                forwarded: true,
-                replyButton: true,
-                removeButton: true,
+                forwarded: item.user.address !== address ? true: false,
+                replyButton: item.user.address !== address ? true: false,
+                removeButton: item.user.address === address ? true: false,
                 title: item.user.address === address ? 'You' : item.user.address,
             }
             return message

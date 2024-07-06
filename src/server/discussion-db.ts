@@ -1,7 +1,6 @@
 'use server'
- 
-import { DiscussionData } from '@/app/interfaces/table.interfaces';
-import {  Discussion, PrismaClient } from '@prisma/client' 
+
+import { Discussion, LotType, PrismaClient } from '@prisma/client'
 // import { z } from 'zod'
 
 // const schema = z.object({
@@ -17,59 +16,64 @@ export async function getDiscussions(): Promise<any[]> {
         include: {
             chat: {
                 include: {
-                    messages: true, 
+                    messages: true,
                 },
             },
             rewards: true,
         },
     });
+    if (discussions.length === 0) {
+        return discussions
 
-    return discussions.map(discussion => { 
+    } else {
 
-        return {
-            hash: discussion.hash,
-            sourceUrl: discussion.sourceUrl,
-            title: discussion.topic, 
-            description: discussion.description,
-            promptRestrictions: discussion.prompt, 
-            rewards: discussion.rewards,
-            topic: discussion.topic,
-            chat: discussion.chat,
-            messages: discussion.chat?.messages.length || 0 
-        };
-    });
+        return discussions.map(discussion => {
+
+            return {
+                hash: discussion.hash,
+                sourceUrl: discussion.sourceUrl,
+                title: discussion.topic,
+                description: discussion.description,
+                promptRestrictions: discussion.prompt,
+                rewards: discussion.rewards,
+                topic: discussion.topic,
+                chat: discussion.chat,
+                messages: discussion.chat?.messages.length || 0
+            };
+        });
+    }
 }
 
 export async function getDiscussionByHash(hash: string): Promise<any | null> {
-   const discussion = await prisma.discussion.findFirst({
+    const discussion = await prisma.discussion.findFirst({
         where: {
             hash: hash,
         },
         include: {
             chat: {
                 include: {
-                    messages: true, 
+                    messages: true,
                 },
             },
             rewards: true,
         },
     });
-    if(discussion) {
+    if (discussion) {
         return {
             hash: discussion.hash,
             sourceUrl: discussion.sourceUrl,
-            title: discussion.topic, 
+            title: discussion.topic,
             description: discussion.description,
-            promptRestrictions: discussion.prompt, 
+            promptRestrictions: discussion.prompt,
             rewards: discussion.rewards,
             topic: discussion.topic,
             chat: discussion.chat,
-            messages: discussion.chat?.messages.length || 0 
+            messages: discussion.chat?.messages.length || 0
         };
     } else {
         return null
     }
-    
+
 }
 
 export async function getCountDiscussions(): Promise<number> {
@@ -77,7 +81,7 @@ export async function getCountDiscussions(): Promise<number> {
     return count;
 }
 
-export async function createDiscussion(discussion: Discussion, userId: number, greetingMessage: string): Promise<Discussion> {
+export async function createDiscussion(discussion: Discussion, userId: number, greetingMessage: string, price: number): Promise<Discussion> {
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -106,6 +110,19 @@ export async function createDiscussion(discussion: Discussion, userId: number, g
             rewards: {
                 create: rewardsData
             }
+        },
+    });
+
+    await prisma.marketplace.create({
+        data: {
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
+            typeLot: LotType.Discussion,
+            hashResource: newDiscussion.hash,
+            price: BigInt(price),
         },
     });
     return newDiscussion;

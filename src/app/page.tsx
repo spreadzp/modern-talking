@@ -1,5 +1,5 @@
 "use client";
-import Landing from "./components/Landing"; 
+import Landing from "./components/pages/Landing/Landing"; 
 
 function Page() {
   

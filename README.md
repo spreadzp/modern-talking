@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ![file_2 (1)](https://github.com/spreadzp/modern-talking/assets/11519562/8ffe3216-2358-483a-9fad-93b09428264a) Modern Talking
+
+## About Modern Talking
+
+Modern Talking is a revolutionary SocialFi application designed to engage users through interactive surveys, polls, commentaries, and dataset annotations for AI models. Users earn rewards in the form of MDTN tokens for their participation and contributions. The platform utilizes blockchain technology for secure transactions and AI to ensure content relevance and appropriateness.
+
+## Hosted Application
+
+Visit the hosted application: [Modern Talking](https://like-to-earn.vercel.app/)
 
 ## Getting Started
-https://like-to-earn-spread-spreads-projects.vercel.app/
-First, run the development server:
 
+To get started with the development server, follow these steps:
+
+First, clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+    git clone https://github.com/spreadzp/modern-talking.git
+    cd modern-talking
+    npm install 
+    npm run dev 
+    vercel --prod
 ```
+## Technologies Used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Blockchain
+Modern Talking leverages blockchain technology to provide secure and transparent transactions. Each user is assigned an Ethereum address upon authentication, which is used to receive rewards in MDTN tokens. NFTs are minted and tied to specific URLs or topics, granting administrative rights and facilitating the distribution of rewards.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Artificial Intelligence
+AI plays a crucial role in Modern Talking by analyzing user-generated content. It ensures that comments and other inputs are relevant, appropriate, and free of prohibited words. The AI model processes data continuously, providing a robust and intelligent moderation system.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Keywords
+- SocialFi
+- Blockchain
+- AI
+- Surveys
+- Polls
+- Commentaries
+- Token Rewards
+- Ethereum
+- NFTs
+- Decentralized Applications
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

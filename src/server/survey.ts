@@ -46,8 +46,8 @@ export async function getSurveys(): Promise<any[]> {
             rewards: true,
         },
     });
-    if (!surveys) {
-        return []
+    if (surveys.length === 0) {
+        return surveys
 
     } else {
         return surveys?.map((survey: any) => {
