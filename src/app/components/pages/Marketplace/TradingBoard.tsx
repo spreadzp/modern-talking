@@ -3,10 +3,13 @@ import ChangeBidModal from './ChangeBidModal';
 import AcceptBidModal from './AcceptBidModal';
 import { createBid } from '@/server/bid';
 import { Bid } from '@prisma/client';
+import { useSiteStore } from '@/app/hooks/store';
+import { getMarketplaceByHash } from '@/server/marketplace';
+import StarryBackground from '../../shared/StarryBackground';
 
 interface LotData {
     hashResource: string;
-    askPrice: number;
+    price: number;
     sellerAddress: string;
     bids: Bid[];
     historyTrades: HistoryTrade[];
@@ -26,11 +29,12 @@ interface HistoryTrade {
 const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
     const [lotData, setLotData] = useState<LotData>({
         hashResource: '',
-        askPrice: 0,
+        price: 0,
         sellerAddress: '',
         bids: [],
         historyTrades: []
     });
+    const {userAddressWallet} =useSiteStore()
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
     const [showChangeBidModal, setShowChangeBidModal] = useState<boolean>(false);
@@ -42,21 +46,22 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const lotData = await getMarketplaceByHash(hashResource);
                 // Mock data for demonstration
-                const mockResponse: LotData = {
-                    hashResource: 'mockHash',
-                    askPrice: 100,
-                    sellerAddress: '0x12345',
-                    bids: [
-                        { price: 95, address: '0x54321' },
-                        { price: 97, address: '0x67890' }
-                    ],
-                    historyTrades: [
-                        { price: 100, address: '0x11111', date: '2023-04-01T12:00:00Z' },
-                        { price: 98, address: '0x22222', date: '2023-03-31T12:00:00Z' }
-                    ]
-                };
-                setLotData(mockResponse);
+                // const mockResponse: LotData = {
+                //     hashResource: 'mockHash',
+                //     askPrice: 100,
+                //     sellerAddress: '0x12345',
+                //     bids: [
+                //         { price: 95, address: '0x54321' },
+                //         { price: 97, address: '0x67890' }
+                //     ],
+                //     historyTrades: [
+                //         { price: 100, address: '0x11111', date: '2023-04-01T12:00:00Z' },
+                //         { price: 98, address: '0x22222', date: '2023-03-31T12:00:00Z' }
+                //     ]
+                // };
+                setLotData(lotData);
             } catch (err) {
                 setError(err as Error);
             } finally {
@@ -106,7 +111,7 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
     const handleCreateNewBid = async () => {
         const newBid: BidData= {
             price:  newBidPrice , // Convert to bigint for Prisma typeBidPrice,
-            address: newBidAddress,
+            address: userAddressWallet,
         };
 
         try {
@@ -121,6 +126,8 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
     if (error) return <p>Error: {error.message}</p>;
 
     return (
+        <>
+        <StarryBackground />
         <div className="min-h-screen ">
             <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-4">Trading Board</h1>
@@ -128,7 +135,7 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
                     <strong>Lot Hash:</strong> {lotData.hashResource}
                 </div>
                 <div className="mb-4">
-                    <strong>Ask Price:</strong> {lotData.askPrice}
+                    <strong>Ask Price:</strong> {lotData.price}
                 </div>
                 <div className="mb-4">
                     <strong>Seller Address:</strong> {lotData.sellerAddress}
@@ -173,15 +180,9 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
                         placeholder="New Bid Price"
                         value={newBidPrice}
                         onChange={(e) => setNewBidPrice(Number(e.target.value))}
-                        className="border px-4 py-2 mr-2"
+                        className="border px-4 py-2 mr-2 text-black"
                     />
-                    <input
-                        type="text"
-                        placeholder="New Bid Address"
-                        value={newBidAddress}
-                        onChange={(e) => setNewBidAddress(e.target.value)}
-                        className="border px-4 py-2 mr-2"
-                    />
+                     
                     <button
                         className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleCreateNewBid}
@@ -200,7 +201,7 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {lotData.historyTrades.map((trade, index) => (
+                        {lotData?.historyTrades?.map((trade, index) => (
                             <tr key={index}>
                                 <td className="border px-4 py-2 text-center align-middle">{trade.price}</td>
                                 <td className="border px-4 py-2 text-center align-middle">{trade.address}</td>
@@ -221,13 +222,15 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
                 {showAcceptBidModal && (
                     <AcceptBidModal
                         bid={selectedBid}
-                        askPrice={lotData.askPrice}
+                        askPrice={lotData.price}
                         onClose={() => setShowAcceptBidModal(false)}
                         onAccept={handleAcceptBid}
                     />
                 )}
             </div>
         </div>
+
+        </>
     );
 };
 

@@ -198,6 +198,13 @@ enum BidStatus {
   Rejected
 }
 
+enum StatusLot {
+  Active
+  Inactive
+  Sold
+  Cancelled
+}
+
 model Marketplace {
   id           Int       @id @default(autoincrement())
   ownerLot     Int
@@ -207,6 +214,7 @@ model Marketplace {
   price        BigInt
   bids         Bid[]
   history      History[]
+  status       StatusLot @default(Active)
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 

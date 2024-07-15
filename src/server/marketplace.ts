@@ -17,6 +17,18 @@ export async function createMarketplace(marketplaceData: Marketplace, userId: nu
     return newMarketplace;
 }
 
+export async function getMarketplaceByHash(hash: string): Promise<any | null> {
+    const marketplace = await prisma.marketplace.findFirst({
+        where: {
+            hashResource: hash,
+        },
+        include: {
+            bids: true,
+            history: true,
+        },
+    });
+    return marketplace;
+}
 export async function getMarketplaceList(): Promise<any[]> {
     const marketplaceList = await prisma.marketplace.findMany({
         include: {

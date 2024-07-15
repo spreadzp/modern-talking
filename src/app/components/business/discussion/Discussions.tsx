@@ -7,6 +7,7 @@ import { createDiscussion, getDiscussions } from '@/server/discussion-db';
 import { Modal } from '../../shared/Modal';
 import { Discussion } from '@prisma/client';
 import Spinner from '../../shared/Spinner';
+import StarryBackground from '../../shared/StarryBackground';
 
 const Discussions: React.FC = () => {
     const router = useRouter();
@@ -48,7 +49,9 @@ const Discussions: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6]">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
             <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-semibold mb-4 text-white">Discussions</h1>
                 <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -64,6 +67,7 @@ const Discussions: React.FC = () => {
                 }
             </div>
         </div>
+        </>
     );
 };
 

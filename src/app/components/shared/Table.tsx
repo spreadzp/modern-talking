@@ -14,7 +14,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
     useEffect(() => {
         if (data.length > 0) {
             const initialHeaders = Object.keys(data[0]);
-            const filteredHeaders = initialHeaders.filter(header => header !== 'chat' && header !== 'hash' && header !== 'routeName');
+            const filteredHeaders = initialHeaders.filter(header => header !== 'chat' && header !== 'hash' && header !== 'routeName' && header !== 'rewards');
             setHeaders(filteredHeaders);
         }
     }, [data]);
@@ -41,7 +41,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
 
     return (
         <div className="overflow-y-auto ">
-            <table className="table-auto w-full text-white">
+            <table className="table-auto w-full text-yellow-500">
                 <thead>
                     <tr>
                         {headers.map((header, index) => (

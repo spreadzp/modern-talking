@@ -9,7 +9,7 @@ import Spinner from '../../shared/Spinner';
 import { createSurvey, getSurveys } from '@/server/survey';
 import StarryBackground from '../../shared/StarryBackground';
 
-const SurveyTable: React.FC = () => {
+const RewardsTable: React.FC = () => {
     const router = useRouter();
     const { setSurveysData, surveysData, currentUser, setSurveyData } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
@@ -53,10 +53,10 @@ const SurveyTable: React.FC = () => {
         <div className="min-h-screen ">
             <div className="container mx-auto p-4">
                 <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Create a new survey
+                Create a new Reward
                 </button>
                 {
-                    isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Survey" /> :
+                    isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create a new Reward" /> :
                         (surveysData.length === 0 ? <Spinner /> : <Table
                             data={surveysData}
                             onBuyClick={handleSurveyClick}
@@ -65,9 +65,8 @@ const SurveyTable: React.FC = () => {
                 }
             </div>
         </div>
-
         </>
     );
 };
 
-export default SurveyTable;
+export default RewardsTable;

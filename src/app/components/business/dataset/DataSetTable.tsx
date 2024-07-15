@@ -7,6 +7,7 @@ import { Modal } from '../../shared/Modal';
 import { DataSet } from '@prisma/client';
 import Spinner from '../../shared/Spinner'; 
 import { createDataSet, getDataSets } from '@/server/dataset';
+import StarryBackground from '../../shared/StarryBackground';
 
 const DataSetTable: React.FC = () => {
     const router = useRouter();
@@ -47,7 +48,9 @@ const DataSetTable: React.FC = () => {
         }
     };
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6]">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
             <div className="container mx-auto p-4">
                 <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Create a new DataSet
@@ -62,6 +65,8 @@ const DataSetTable: React.FC = () => {
                 }
             </div>
         </div>
+
+        </>
     );
 };
 

@@ -1,8 +1,6 @@
 'use client';
 import {   useState } from "react";
 import { getIconByName } from "./Icons"; 
-import { useSession } from "next-auth/react"
-
 
 import ExternalMenu from "./ExternalMenu";
 import SingButtons from "./SingButtons"; 

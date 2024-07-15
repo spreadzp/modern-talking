@@ -1,5 +1,6 @@
 import { getIconByName } from "./Icons"; 
 import MenuItem from "./MenuItem";
+import StarryBackground from "./StarryBackground";
 
 type MenuProps = {
     isOpen: boolean;
@@ -61,7 +62,9 @@ const ExternalMenu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
             className="fixed inset-0 bg-black bg-opacity-50 z-50"
             onClick={onClose}
         >
-            <div className="bg-gradient-to-b from-[#76004f] to-[#0e0109] w-64 h-full p-4">
+        
+        <StarryBackground /> 
+            <div className=" w-64 h-full p-4">
                 {menuItems.map((item) => (
                     <MenuItem
                         key={item.label}

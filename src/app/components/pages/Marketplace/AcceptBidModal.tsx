@@ -1,8 +1,8 @@
 import React from 'react';
-import { Bid } from './TradingBoard';
+import {  BidData } from './TradingBoard';
 
 interface AcceptBidModalProps {
-    bid: Bid | null;
+    bid: BidData | null;
     askPrice: number;
     onClose: () => void;
     onAccept: () => void;

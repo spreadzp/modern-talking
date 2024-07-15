@@ -8,6 +8,7 @@ import { useSiteStore } from "../../../hooks/store";
 import { getCountSurveys } from "@/server/survey";
 import { getCountDataSets } from "@/server/dataset";
 import { getCountVoting } from "@/server/voting";
+import StarryBackground from "../../shared/StarryBackground";
 
 
 export const StatisticInfo = () => {
@@ -50,10 +51,15 @@ export const StatisticInfo = () => {
     };
 
     return (
-        <div className=" bg-gradient-to-b from-[#76004f] to-[#4b4fa6]">
+        <>
+        <StarryBackground />
+        
+        <div className="">
             <div className="container mx-auto p-4">
                 <Table data={tableData} onBuyClick={handleStatisticClick} buttonLabel="Join" />
             </div>
         </div>
+
+        </>
     );
 };

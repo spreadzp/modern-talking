@@ -1,6 +1,7 @@
 // src/components/LeftSide.tsx
 import React from 'react';
 import { ContentData } from '../../interfaces/table.interfaces';
+import Rewards from '../business/rewards/Rewards';
 
 interface LeftSideProps {
     contentData: ContentData;
@@ -36,7 +37,7 @@ const Content: React.FC<LeftSideProps> = ({ contentData }) => {
                 <strong>Prompt Restrictions:</strong> {contentData.promptRestrictions}
             </p>
             <p className="mb-2">
-                <strong>Rewards:</strong> {contentData?.rewards?.length}
+            <Rewards />
             </p>
         </div>
 

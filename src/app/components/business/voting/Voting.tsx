@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useSiteStore } from '../../../hooks/store';
 import Spinner from '../../shared/Spinner'; 
 import { getVotingByHash } from '@/server/voting';
+import StarryBackground from '../../shared/StarryBackground';
 
  
 
@@ -25,7 +26,9 @@ const Voting: React.FC = ( ) => {
 
     }, [ setVotingData,  pathname]); 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6] p-4">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
             {!votingData.title ? <Spinner /> :<div className="container mx-auto flex flex-col md:flex-row h-full">
                 <div className="md:w-1/2 md:pr-4 md:mb-4 md:mb-0 md:ml-4 overflow-y-auto p-4 border-2 border-dotted border-gray-500">
                     <ExpandableContent title={`Content block: ${votingData.title}`} isOpenContent={true}>
@@ -39,6 +42,7 @@ const Voting: React.FC = ( ) => {
                 </div>
             </div>}
         </div>
+        </>
     );
 };
 

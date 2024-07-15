@@ -1,6 +1,7 @@
  
 import React, { useState, useEffect } from 'react';
 import JoinActivityModal from './JoinActivityModal';
+import StarryBackground from '../../shared/StarryBackground';
 
 export interface Asset {
     id: number;
@@ -58,11 +59,13 @@ const MyWallet: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6]">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
             <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4">My Wallet</h1>
+                <h1 className="text-2xl font-bold mb-4 text-white">My Wallet</h1>
 
-                <h2 className="text-xl font-bold mb-2">Assets</h2>
+                <h2 className="text-xl font-bold mb-2 text-white">Assets</h2>
                 <table className="table-auto w-full text-white">
                     <thead>
                         <tr>
@@ -89,7 +92,7 @@ const MyWallet: React.FC = () => {
                     </tbody>
                 </table>
 
-                <h2 className="text-xl font-bold mb-2 mt-4">Rewards</h2>
+                <h2 className="text-xl font-bold mb-2 mt-4 text-white">Rewards</h2>
                 <table className="table-auto w-full text-white">
                     <thead>
                         <tr>
@@ -129,6 +132,8 @@ const MyWallet: React.FC = () => {
                 )}
             </div>
         </div>
+
+        </>
     );
 };
 

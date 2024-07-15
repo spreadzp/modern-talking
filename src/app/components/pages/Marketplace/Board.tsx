@@ -1,5 +1,4 @@
-// src/components/Discussion.tsx
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import ExpandableContent from '../../shared/ExpandableTable';
 import { getDiscussionByHash } from '@/server/discussion-db';
 import { useSiteStore } from '../../../hooks/store';
@@ -7,15 +6,14 @@ import { usePathname } from 'next/navigation';
 import Spinner from '../../shared/Spinner';
 import TradingBoard from './TradingBoard';
 import Content from '../../common/Content';
-
- 
+import StarryBackground from '../../shared/StarryBackground';
 
 const Board: React.FC = () => {
     const pathname = usePathname()
-    const { discussionData, setDiscussionData } = useSiteStore() 
-   const [hash, setHash] = useState('')
+    const { discussionData, setDiscussionData } = useSiteStore()
+    const [hash, setHash] = useState('')
     useEffect(() => {
-        const parsedHash = pathname.split('/')[2]; 
+        const parsedHash = pathname.split('/')[2];
         if (parsedHash !== '') {
             setHash(parsedHash)
             getDiscussionByHash(parsedHash).then((data: any) => { // TODO
@@ -23,12 +21,14 @@ const Board: React.FC = () => {
                     setDiscussionData(data)
                 }
             })
-        } 
+        }
 
-    }, [setDiscussionData, pathname]); 
+    }, [setDiscussionData, pathname]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6] p-4">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
             {!discussionData.title ? <Spinner /> : <div className="container mx-auto flex flex-col md:flex-row h-full">
                 <div className="md:w-1/2 md:pr-4 md:mb-4 md:mb-0 md:ml-4 overflow-y-auto p-4 border-2 border-dotted border-gray-500">
                     <ExpandableContent title={`Content block: ${discussionData.title}`} isOpenContent={true}>
@@ -42,6 +42,7 @@ const Board: React.FC = () => {
                 </div>
             </div>}
         </div>
+        </>
     );
 };
 

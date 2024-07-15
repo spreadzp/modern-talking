@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import Spinner from '../../shared/Spinner';
 import Table from '../../shared/Table';
 import { useRouter } from 'next/navigation';
+import StarryBackground from '../../shared/StarryBackground';
 
 const Marketplace: React.FC = () => {
     const [marketplaceData, setMarketplaceData] = useState<any[]>([]);
@@ -53,8 +54,10 @@ const Marketplace: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6]">
-            <div className="container mx-auto p-4">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
+            <div className="container mx-auto p-4 text-white">
                 <h1 className="text-2xl font-bold mb-4">Marketplace</h1>
                 <div className="mb-8">
                     <h2 className="text-xl font-bold mb-2">Lots for Sale</h2>
@@ -86,6 +89,7 @@ const Marketplace: React.FC = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

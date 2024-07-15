@@ -1,9 +1,12 @@
 import React from 'react';
 import Collaboration from '../pages/Landing/Collaboration';
+import StarryBackground from '../shared/StarryBackground';
 
 const About: React.FC = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#76004f] to-[#4b4fa6] p-4">
+        <>
+        <StarryBackground />
+        <div className="min-h-screen ">
             <div className="container mx-auto p-4 text-white">
                 <h1 className="text-4xl font-bold mb-4">About Modern Talking</h1>
                 <p className="mb-4">
@@ -33,6 +36,8 @@ const About: React.FC = () => {
                 <Collaboration />
             </div>
         </div>
+        </>
+       
     );
 };
 
