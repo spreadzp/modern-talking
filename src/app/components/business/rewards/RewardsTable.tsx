@@ -52,7 +52,7 @@ const RewardsTable: React.FC = () => {
         <StarryBackground />
         <div className="min-h-screen ">
             <div className="container mx-auto p-4">
-                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
                 Create a new Reward
                 </button>
                 {

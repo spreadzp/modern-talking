@@ -71,6 +71,57 @@ body {
 .item-icon {
   margin-right: 10px;
 }
+.logo-mt {
+  background-image: url("./../../assets/logo_mt.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 300px;
+  height: 100px;
+  max-height: 100%;
+  transition: transform 5s ease-in-out;
+}
+
+.logo-mt:hover {
+  animation: scaleAnimation 5s ease-in-out forwards;
+}
+
+@keyframes scaleAnimation {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(2);
+  }
+  40% {
+    transform: scale(0.7);
+  }
+  60%, 100% {
+    transform: scale(1);
+  }
+}
+
+
+/* header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+} */
+
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+}
 
 .item-nftId {
   margin-left: 10px;
@@ -114,46 +165,88 @@ body {
 
 /* Poster.css */
 .poster {
-  position: relative;
-  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  overflow: hidden;
 }
 
 .poster-content {
+  width: 100%;
+  max-width: 1200px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
 
 .poster-image-container {
-  flex: 1;
-  margin-right: 20px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .poster-image {
-  max-width: 100%;
+  width: 100%;
   height: auto;
+  object-fit: cover;
 }
 
 .poster-description {
-  flex: 1;
+  margin-top: 20px;
 }
 
-.poster-description h2 {
-  margin-bottom: 10px;
+.text-left {
+  text-align: left;
 }
 
-.poster-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /*  background: url('cosmos-background.png') repeat;Replace with your actual background image */
-  opacity: 0.1; /* Adjust the opacity as needed */
-  z-index: -1;
+@media (max-width: 768px) {
+  .poster-content {
+      padding: 10px;
+  }
+
+  .poster-image {
+      width: 100%;
+      height: auto;
+  }
+
+  .poster-description {
+      margin-top: 10px;
+  }
+
+  .text-xl {
+      font-size: 1.25rem;
+  }
+
+  .text-base {
+      font-size: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .poster-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+  }
+
+  .poster-image-container {
+      order: 2;
+      flex: 1;
+      margin-left: 20px;
+  }
+
+  .poster-description {
+      order: 1;
+      flex: 1;
+      margin-top: 0;
+  }
+
+  .text-xl {
+      font-size: 1.5rem;
+  }
+
+  .text-base {
+      font-size: 1.125rem;
+  }
 }
 
 /* Collaboration.css */
@@ -254,6 +347,77 @@ body {
   animation: enlarge 1000ms alternate infinite;
   transform: scale(pow(0.9, var(--scale, 0)));
 }
+
+.hover-zoom {
+  transition: transform 0.2s; /* Animation */
+}
+
+.hover-zoom:hover {
+  transform: scale(2); /* (200% zoom) */
+}
+
+.hover-gradient {
+  transition: color 1s; /* Animation */
+}
+
+.hover-gradient:hover {
+  animation: gradientWave 1s linear;
+}
+
+.glowing-icon {
+  animation: pulse 5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(2);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+.marketplace-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.icon-white {
+  color: white;
+}
+
+@keyframes gradientWave {
+  0% { 
+      color: white; 
+      transform: scale(1); /* Initial scale */
+  }
+  20% { 
+      color: hsl(240, 100%, 50%); 
+      transform: scale(1.2); /* Zoom in */
+  }
+  40% { 
+      color: hsl(220, 100%, 50%); 
+      transform: scale(1.3); /* Maintain zoom */
+  }
+  60% { 
+      color: hsl(200, 100%, 50%); 
+      transform: scale(1.4); /* Maintain zoom */
+  }
+  80% { 
+      color: hsl(180, 100%, 50%); 
+      transform: scale(1.2); /* Maintain zoom */
+  }
+  100% { 
+      color: hsl(187, 100%, 68%); 
+      transform: scale(1); /* Return to original scale */
+  }
+}
+
+
 @property --scale {
   syntax: "<number-";
   inherits: true;

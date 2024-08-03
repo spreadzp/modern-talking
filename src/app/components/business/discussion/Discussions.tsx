@@ -8,6 +8,7 @@ import { Modal } from '../../shared/Modal';
 import { Discussion } from '@prisma/client';
 import Spinner from '../../shared/Spinner';
 import StarryBackground from '../../shared/StarryBackground';
+import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 
 const Discussions: React.FC = () => {
     const router = useRouter();
@@ -29,7 +30,7 @@ const Discussions: React.FC = () => {
         setModalOpen(false);
     };
 
-    const handleSubmit = async (newDiscussion: Discussion & {price: number}) => {
+    const handleSubmit = async (newDiscussion: any) => {//  Discussion & {price: number}) => {
         try {
             if (currentUser) {
                 const { price, ...discussion } = newDiscussion
@@ -50,23 +51,27 @@ const Discussions: React.FC = () => {
 
     return (
         <>
-        <StarryBackground />
-        <div className="min-h-screen ">
-            <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-semibold mb-4 text-white">Discussions</h1>
-                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Create new discussion
-                </button>
-                {
-                    isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion" /> :
-                        (discussionsData.length === 0 ? <Spinner /> : <Table
-                            data={discussionsData}
-                            onBuyClick={handleDiscussionClick}
-                            buttonLabel="Join"
-                        />)
-                }
+            <StarryBackground />
+            <div className="min-h-screen ">
+                <div className="container mx-auto p-4">
+                    <div className="flex items-center justify-center"><Title
+                        titleName="Discussions"
+                        titleSize={TitleSize.H3}
+                        titleEffect={TitleEffect.Gradient}
+                    /></div>
+                    <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
+                        Create new discussion
+                    </button>
+                    {
+                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion" /> :
+                            (discussionsData.length === 0 ? <Spinner /> : <Table
+                                data={discussionsData}
+                                onBuyClick={handleDiscussionClick}
+                                buttonLabel="Join"
+                            />)
+                    }
+                </div>
             </div>
-        </div>
         </>
     );
 };

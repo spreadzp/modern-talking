@@ -1,25 +1,21 @@
 'use server'
 
 import { Discussion, LotType, PrismaClient } from '@prisma/client'
-// import { z } from 'zod'
-
-// const schema = z.object({
-//     email: z.string({
-//         invalid_type_error: 'Invalid Email',
-//     }),
-// })
+ 
 
 const prisma = new PrismaClient()
 
 export async function getDiscussions(): Promise<any[]> {
     const discussions = await prisma.discussion.findMany({
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true,
                 },
             },
-            rewards: true,
+            rewards: true, 
+
         },
     });
     if (discussions.length === 0) {
@@ -30,6 +26,7 @@ export async function getDiscussions(): Promise<any[]> {
         return discussions.map(discussion => {
 
             return {
+                owner: discussion.owner, 
                 hash: discussion.hash,
                 sourceUrl: discussion.sourceUrl,
                 title: discussion.topic,
@@ -38,7 +35,8 @@ export async function getDiscussions(): Promise<any[]> {
                 rewards: discussion.rewards,
                 topic: discussion.topic,
                 chat: discussion.chat,
-                messages: discussion.chat?.messages.length || 0
+                messages: discussion.chat?.messages.length || 0,
+                resourceType: LotType.Discussion
             };
         });
     }
@@ -50,6 +48,7 @@ export async function getDiscussionByHash(hash: string): Promise<any | null> {
             hash: hash,
         },
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true,
@@ -60,6 +59,7 @@ export async function getDiscussionByHash(hash: string): Promise<any | null> {
     });
     if (discussion) {
         return {
+            owner: discussion.owner,
             hash: discussion.hash,
             sourceUrl: discussion.sourceUrl,
             title: discussion.topic,
@@ -68,7 +68,8 @@ export async function getDiscussionByHash(hash: string): Promise<any | null> {
             rewards: discussion.rewards,
             topic: discussion.topic,
             chat: discussion.chat,
-            messages: discussion.chat?.messages.length || 0
+            messages: discussion.chat?.messages.length || 0,
+            resourceType: LotType.Discussion
         };
     } else {
         return null
@@ -93,6 +94,11 @@ export async function createDiscussion(discussion: Discussion, userId: number, g
     const newDiscussion = await prisma.discussion.create({
         data: {
             ...discussion,
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
             chat: {
                 create: {
                     messages: {

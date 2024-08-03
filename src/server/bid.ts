@@ -1,27 +1,39 @@
 'use server'
-import { BidData } from "@/app/components/pages/Marketplace/TradingBoard";
-import { PrismaClient, Bid, BidStatus } from "@prisma/client";
+import { BidData } from "@/app/components/pages/Marketplace/trading/TradingBoard";
+import { PrismaClient, Bid, BidStatus, User } from "@prisma/client";
 const prisma = new PrismaClient()
 
-export async function createBid(bid: BidData,   idLot: number): Promise<Bid> {
+export async function createBid(bid: BidData, idLot: number): Promise<Bid & { owner: User }> {
     const user = await prisma.user.findUnique({
         where: {
             address: bid.address,
         },
-    })
-    if(!user) {
+    });
+    if (!user) {
         throw new Error('User not found');
     }
-  
+
     const newBid = await prisma.bid.create({
         data: {
             price: BigInt(bid.price),
             status: BidStatus.Pending,
             idLot,
-            bidOwner: user?.id,
+            bidOwner: user.id,
         },
     });
-    return newBid;
+
+    // Fetch the owner information
+    const owner = await prisma.user.findUnique({
+        where: {
+            id: newBid.bidOwner,
+        },
+    });
+
+    if (!owner) {
+        throw new Error('Owner not found');
+    }
+
+    return { ...newBid, owner };
 }
 
 export async function getBidList(): Promise<any[]> {

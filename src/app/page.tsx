@@ -1,12 +1,14 @@
 "use client";
-import Landing from "./components/pages/Landing/Landing"; 
+import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts";
+import Landing from "./components/pages/Landing/Landing";
+import LoginPage from "./login/LoginPage";
 
 function Page() {
-  
+  const { activeAccount } = useKeylessAccounts();
   return (
     <>
-      <Landing /> 
+      {activeAccount ? <Landing /> : <LoginPage />}
     </>
   );
-} 
+}
 export default Page;

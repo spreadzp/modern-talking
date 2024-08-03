@@ -10,6 +10,7 @@ import { createDataSet, getDataSets } from '@/server/dataset';
 import StarryBackground from '../../shared/StarryBackground';
 
 const DataSetTable: React.FC = () => {
+    const MIN_START_DATA_SET_PRICE = 25;
     const router = useRouter();
     const { setDataSets, dataSets, currentUser, setDataSet } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
@@ -35,10 +36,12 @@ const DataSetTable: React.FC = () => {
         setModalOpen(false);
     };
 
-    const handleSubmit = async (newDataSet: DataSet) => {
+    const handleSubmit = async (newDataSet: any) => {
         try {
             if (currentUser) {
-                const createdDataSet = await createDataSet(newDataSet, currentUser?.id, `Let's start DataSet:  ${newDataSet.topic}`);
+                const {price, ...restData} = newDataSet 
+                const priceForDataSet = !price ? MIN_START_DATA_SET_PRICE : +price
+                const createdDataSet = await createDataSet(restData, currentUser?.id, `Let's start DataSet:  ${restData.topic}`, priceForDataSet);
                 console.log('DataSet created:', createdDataSet);
                 updateDataSets()
             }
@@ -52,7 +55,7 @@ const DataSetTable: React.FC = () => {
         <StarryBackground />
         <div className="min-h-screen ">
             <div className="container mx-auto p-4">
-                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
                     Create a new DataSet
                 </button>
                 {

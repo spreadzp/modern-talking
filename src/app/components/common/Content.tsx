@@ -1,16 +1,27 @@
-// src/components/LeftSide.tsx
-import React from 'react';
+'use client'
+import React, { useEffect } from 'react';
 import { ContentData } from '../../interfaces/table.interfaces';
 import Rewards from '../business/rewards/Rewards';
+import MarketData from '../shared/MarketData';
+import { useSiteStore } from '@/app/hooks/store';
+import OwnerPanel from '../shared/OwnerPanel';
 
 interface LeftSideProps {
     contentData: ContentData;
 }
 
-const Content: React.FC<LeftSideProps> = ({ contentData }) => {
+const Content: React.FC<LeftSideProps> = ({ contentData }) => { 
+    const {setSelectedOwnerAddress, setCurrentResourceType}  = useSiteStore();
+    useEffect(() => {
+        setSelectedOwnerAddress(contentData.owner?.address)
+        setCurrentResourceType(contentData?.resourceType)
+    }, [contentData, setSelectedOwnerAddress, setCurrentResourceType])
     return (
         <div className="w-full md:pl-4 md:mr-4 flex flex-col ">
             <h2 className="text-lg font-semibold mb-2">{contentData.title}</h2>
+            <MarketData hash={contentData.hash} /> 
+            {contentData.owner && 
+                    <OwnerPanel /> }
             <p className="mb-2">
                 Source:{' '}
                 <a

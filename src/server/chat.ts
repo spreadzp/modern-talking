@@ -1,17 +1,11 @@
 'use server'
 import { Chat,   Message, PrismaClient  } from '@prisma/client'
 import { getDiscussionByHash } from './discussion-db'
-// import { z } from 'zod'
-
-// const schema = z.object({
-//     email: z.string({
-//         invalid_type_error: 'Invalid Email',
-//     }),
-// })
+ 
 
 const prisma = new PrismaClient()
 
-export async function getMessagesByChatId(chatId: number, address?: string): Promise<any> {
+export async function getMessagesByChatId(chatId: number, address?: string, ownerAddress?: string): Promise<any> {
     const data = await prisma.chat.findFirst({
         where: {
             id: chatId
@@ -27,13 +21,14 @@ export async function getMessagesByChatId(chatId: number, address?: string): Pro
     if (data && data?.messages?.length > 0) {
         const preparedData = data?.messages?.map((item: any) => {
             const message = {
+                id: item.id,
                 position: item.user.address === address ? 'left' : 'right',
                 date: new Date(),
                 text: item.message,
                 type: 'text',
-                forwarded: item.user.address !== address ? true: false,
-                replyButton: item.user.address !== address ? true: false,
-                removeButton: item.user.address === address ? true: false,
+                forwarded: false,
+                replyButton: true,
+                removeButton: address === ownerAddress ? true: false,
                 title: item.user.address === address ? 'You' : item.user.address,
             }
             return message
@@ -42,6 +37,15 @@ export async function getMessagesByChatId(chatId: number, address?: string): Pro
     } else {
         return null
     }
+}
+
+export async function removeMessageById(id: number): Promise<any> {
+    const message = await prisma.message.delete({
+        where: {
+            id: id
+        }
+    })
+    return message
 }
 
 

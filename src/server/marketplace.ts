@@ -23,7 +23,11 @@ export async function getMarketplaceByHash(hash: string): Promise<any | null> {
             hashResource: hash,
         },
         include: {
-            bids: true,
+            bids: {
+                include: {
+                    owner: true, 
+                },
+            },
             history: true,
         },
     });

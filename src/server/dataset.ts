@@ -1,7 +1,7 @@
 'use server'
-import { PrismaClient, DataSet } from "@prisma/client";
+import { PrismaClient, DataSet, LotType } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createDataSet(dataSet: DataSet, userId: number, greetingMessage: string): Promise<DataSet> {
+export async function createDataSet(dataSet: DataSet, userId: number, greetingMessage: string,  price: number): Promise<DataSet> {
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -13,6 +13,11 @@ export async function createDataSet(dataSet: DataSet, userId: number, greetingMe
     const newDataSet = await prisma.dataSet.create({
         data: {
             ...dataSet,
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
             chat: {
                 create: {
                     messages: {
@@ -32,12 +37,25 @@ export async function createDataSet(dataSet: DataSet, userId: number, greetingMe
             }
         },
     });
+    await prisma.marketplace.create({
+        data: {
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
+            typeLot: LotType.DataSet,
+            hashResource: newDataSet.hash,
+            price: BigInt(price),
+        },
+    });
     return newDataSet;
 }
 
 export async function getDataSets(): Promise<any[]> {
     const dataSets = await prisma.dataSet.findMany({
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true,
@@ -52,6 +70,7 @@ export async function getDataSets(): Promise<any[]> {
     } else {
         return dataSets?.map((dataSet: any) => {
             return {
+                owner: dataSet.owner,
                 hash: dataSet.hash,
                 sourceUrl: dataSet.sourceUrl,
                 title: dataSet.topic,
@@ -60,7 +79,8 @@ export async function getDataSets(): Promise<any[]> {
                 rewards: dataSet.rewards,
                 topic: dataSet.topic,
                 chat: dataSet.chat,
-                messages: dataSet.chat?.messages.length || 0
+                messages: dataSet.chat?.messages.length || 0,
+                resourceType: LotType.DataSet
             };
         });
     }
@@ -72,6 +92,7 @@ export async function getDataSetByHash(hash: string): Promise<any | null> {
             hash: hash,
         },
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true, 
@@ -82,6 +103,7 @@ export async function getDataSetByHash(hash: string): Promise<any | null> {
     });
     if(dataSet) {
         return {
+            owner: dataSet.owner,
             hash: dataSet.hash,
             sourceUrl: dataSet.sourceUrl,
             title: dataSet.topic, 
@@ -90,7 +112,8 @@ export async function getDataSetByHash(hash: string): Promise<any | null> {
             rewards: dataSet.rewards,
             topic: dataSet.topic,
             chat: dataSet.chat,
-            messages: dataSet.chat?.messages.length || 0 
+            messages: dataSet.chat?.messages.length || 0,
+            resourceType: LotType.DataSet
         };
     } else {
         return null

@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
 import { TableData } from '../../interfaces/table.interfaces';
+import { getIconByName } from './Icons';
+import WalletAddressDisplay from './WalletAddressDisplay';
+import { disabledHeaderTableNames } from './disabledHeaderTableNames';
 
 type TableProps = {
     data: any[];
@@ -14,29 +18,57 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
     useEffect(() => {
         if (data.length > 0) {
             const initialHeaders = Object.keys(data[0]);
-            const filteredHeaders = initialHeaders.filter(header => header !== 'chat' && header !== 'hash' && header !== 'routeName' && header !== 'rewards');
+            const filteredHeaders = initialHeaders.filter(header => ![...disabledHeaderTableNames].includes(header));
             setHeaders(filteredHeaders);
         }
     }, [data]);
-
     const stringifyValue = (value: any): string => {
+        const replacer = (key: string, val: any) => {
+            if (typeof val === 'bigint') {
+                return val.toString();
+            }
+            return val;
+        };
+
         if (Array.isArray(value)) {
             return value.map(item => {
-                const tmp = item
+                let tmp = { ...item }; // Create a shallow copy of the item
                 if (item.price) {
-                    tmp.price = item.price.toString()
+                    tmp.price = item.price.toString();
                 }
-                return JSON.stringify(tmp)
+                return JSON.stringify(tmp, replacer);
             }).join(', ');
         } else if (typeof value === 'object' && value !== null) {
-            const tmp = value
+            let tmp = { ...value }; // Create a shallow copy of the value
             if (value.price) {
-                tmp.price = value.price.toString()
+                tmp.price = value.price.toString();
             }
-            return JSON.stringify(tmp);
+            return JSON.stringify(tmp, replacer);
         } else {
             return String(value);
         }
+    };
+
+    const renderValueByHeader = (header: string, value: string) => { 
+        if (header === 'sourceUrl') {
+            if (value.includes('https://www.youtube.com')) {
+                return (
+                    <a href={value} target="_blank" rel="noopener noreferrer" title={value}>
+                        {getIconByName('YouTube')}
+                    </a>
+                );
+            } else {
+                return (
+                    <a href={value} target="_blank" rel="noopener noreferrer" title={value}>
+                        {getIconByName('Chrome')}
+                    </a>
+                );
+            }
+        }
+        if (header === 'hashResource') {
+            return (<WalletAddressDisplay address={value} />)
+        }
+        return stringifyValue(value);
     };
 
     return (
@@ -57,14 +89,14 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
                     {data.map((item, index) => (
                         <tr key={index}>
                             {headers.map((header, headerIndex) => (
-                                <td key={headerIndex} className="border px-4 py-2 text-center align-middle">
-                                    {stringifyValue(item[header])}
+                                <td key={headerIndex} className={`border py-2 text-center align-middle ${header === 'sourceUrl' ? 'px-10' : 'px-4'}`}>
+                                    {renderValueByHeader(header, item[header])}
                                 </td>
                             ))}
                             {onBuyClick && (
                                 <td className="border px-4 py-2 text-center align-middle">
                                     <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                        className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
                                         onClick={() => onBuyClick(item)}
                                     >
                                         {buttonLabel || "Buy"}

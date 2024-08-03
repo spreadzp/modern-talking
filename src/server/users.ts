@@ -25,7 +25,30 @@ export async function getUsers() {
     return newUser
 }
 
-export async function getUserByEmail(email: string): Promise<(User & { wallet: Wallet | null;  })> {
+export async function upsertUser(user: User): Promise<User> { 
+    const newUser = await prisma.user.upsert({
+    
+        where: { 
+            id: user.id
+        },
+        create: {
+            ...{
+                address: user.address,
+                email: user.email
+            }
+        },
+        update: {
+            ...{
+                address: user.address,
+                email: user.email
+            }
+        },
+    });
+    return newUser;
+}
+
+
+export async function getUserByEmail(email: string): Promise<(User & { wallet: Wallet | null;  }) | null> {
     const user = await prisma.user.findFirst({
         where: {
             email
@@ -35,7 +58,7 @@ export async function getUserByEmail(email: string): Promise<(User & { wallet: W
         },
     });
     if(!user) {
-        throw new Error('User not found');
+        return null
     }
     return user
 }

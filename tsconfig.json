@@ -16,6 +16,7 @@
     "removeComments": false,
     "sourceMap": true,
     "useDefineForClassFields": true, 
+    "forceConsistentCasingInFileNames": true,
     "plugins": [
       {
         "name": "next"
@@ -25,6 +26,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma", "tests/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -10,6 +10,6 @@ export interface AuthProviderProps {
 }
 
 function AuthProvider({ children  }: Readonly<AuthProviderProps>) { 
-    return   <SessionProvider  ><Providers>{children}</Providers></SessionProvider> 
+    return <SessionProvider  ><Providers>{children}</Providers></SessionProvider> 
 }
 export default AuthProvider

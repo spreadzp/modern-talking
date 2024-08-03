@@ -1,30 +1,34 @@
 'use client';
-import {   useState } from "react";
+import { useEffect, useState } from "react";
 import { getIconByName } from "./Icons"; 
-
 import ExternalMenu from "./ExternalMenu";
-import SingButtons from "./SingButtons"; 
+import SingButtons from "./SingButtons";  
+import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts";
 
 export default function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);  
-
-   
+  
+    const [isMenuOpen, setIsMenuOpen] = useState(false);   
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     }; 
     return (
-        <header className="  text-white p-4 w-full ">
-            <div className="container mx-auto flex place-items-center justify-between">
-                <button onClick={toggleMenu}>
-                    {getIconByName('Burger')}
-                </button>
-                <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-[3rem]">
-                    <span className="text-[hsl(187,100%,68%)]">
-                        Modern Talking
-                    </span>{" "}
-                </h1>
-                <SingButtons /> 
-
+        <header className="text-white p-4 w-full flex justify-center">
+            <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
+                <div className="flex items-center justify-between w-full md:w-auto mb-4 md:mb-0">
+                    <button onClick={toggleMenu} className="focus:outline-none">
+                        {getIconByName('Burger')}
+                    </button>
+                    <div className="w-10"></div>
+                    <div className="logo-mt"></div>
+                    {/* <Title 
+                        titleName="Modern Talking" 
+                        titleSize={TitleSize.H1} 
+                        titleEffect={TitleEffect.Gradient} 
+                    /> */}
+                </div>
+                <div className="w-full md:w-auto">
+                    <SingButtons /> 
+                </div>
             </div>
             <ExternalMenu
                 isOpen={isMenuOpen}

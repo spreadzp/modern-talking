@@ -11,7 +11,7 @@ generator client {
 model Discussion {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  creator     User?
+  owner       User?
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -27,7 +27,7 @@ model Discussion {
 model Survey {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  creator     User?
+  owner       User?
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -43,7 +43,7 @@ model Survey {
 model Voting {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  creator     User?
+  owner       User?
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -59,7 +59,7 @@ model Voting {
 model DataSet {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  creator     User?
+  owner       User?
   sourceUrl   String   @unique
   description String
   prompt      String

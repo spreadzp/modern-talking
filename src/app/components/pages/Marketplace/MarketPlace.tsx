@@ -7,6 +7,7 @@ import Spinner from '../../shared/Spinner';
 import Table from '../../shared/Table';
 import { useRouter } from 'next/navigation';
 import StarryBackground from '../../shared/StarryBackground';
+import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 
 const Marketplace: React.FC = () => {
     const [marketplaceData, setMarketplaceData] = useState<any[]>([]);
@@ -50,45 +51,80 @@ const Marketplace: React.FC = () => {
     };
 
     const handleTradeClick = (marketplaceData: any) => {
-        router?.push(`/trading-board/${marketplaceData.hashResource}`);
+        router?.push(`/trading-board/${marketplaceData.hashResource}-${marketplaceData.typeLot}`);
     };
 
     return (
         <>
-        <StarryBackground />
-        <div className="min-h-screen ">
-            <div className="container mx-auto p-4 text-white">
-                <h1 className="text-2xl font-bold mb-4">Marketplace</h1>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">Lots for Sale</h2>
-                    {loading ? <Spinner /> : marketplaceData.length === 0 ? <p>No lots available.</p> : <Table data={marketplaceData} onTradeClick={handleTradeClick} />}
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">Discussions</h2>
-                    {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'Discussion').length === 0 ? <p>No discussions available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'Discussion')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">Surveys</h2>
-                    {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'Survey').length === 0 ? <p>No surveys available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'Survey')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">Voting Lists</h2>
-                    {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'Voting').length === 0 ? <p>No voting lists available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'Voting')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">Data Sets</h2>
-                    {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'DataSet').length === 0 ? <p>No data sets available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'DataSet')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">Bids</h2>
-                    {bidData.length === 0 ? <p>No bids available.</p> : <Table data={bidData} onTradeClick={handleTradeClick} />}
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-bold mb-2">History</h2>
-                    {historyData.length === 0 ? <p>No history available.</p> : <Table data={historyData} onTradeClick={handleTradeClick} />}
+            <StarryBackground />
+            <div className="">
+                <div className="container mx-auto p-4 ">
+                    <div className="flex items-center justify-center"><Title
+                        titleName="Marketplace"
+                        titleSize={TitleSize.H3}
+                        titleEffect={TitleEffect.Gradient}
+                    /></div>
+
+
+                    <div className="mb-8">
+                        <Title
+                            titleName="Lots for sale"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+
+                        {loading ? <Spinner /> : marketplaceData.length === 0 ? <p>No lots available.</p> : <Table data={marketplaceData} onTradeClick={handleTradeClick} />}
+                    </div>
+                    <div className="mb-8">
+                        <Title
+                            titleName="Discussions"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+                        {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'Discussion').length === 0 ? <p>No discussions available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'Discussion')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
+                    </div>
+                    <div className="mb-8">
+                        <Title
+                            titleName="Surveys"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+                        {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'Survey').length === 0 ? <p>No surveys available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'Survey')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
+                    </div>
+                    <div className="mb-8">
+                        <Title
+                            titleName="Voting Lists"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+                        {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'Voting').length === 0 ? <p>No voting lists available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'Voting')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
+                    </div>
+                    <div className="mb-8">
+                        <Title
+                            titleName="Data Sets"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+                        {loading ? <Spinner /> : marketplaceData.filter(item => item.typeLot === 'DataSet').length === 0 ? <p>No data sets available.</p> : <Table data={marketplaceData.filter(item => item.typeLot === 'DataSet')} onBuyClick={handleClick} onTradeClick={handleTradeClick} buttonLabel="Join" />}
+                    </div>
+                    {/* <div className="mb-8">
+                        <Title
+                            titleName="Bids"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+                        {bidData.length === 0 ? <p>No bids available.</p> : <Table data={bidData} onTradeClick={handleTradeClick} />}
+                    </div> */}
+                    <div className="mb-8">
+                        <Title
+                            titleName="History"
+                            titleSize={TitleSize.H4}
+                            titleEffect={TitleEffect.Gradient}
+                        />
+                        {historyData.length === 0 ? <p>No history available.</p> : <Table data={historyData} onTradeClick={handleTradeClick} />}
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     );
 };

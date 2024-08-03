@@ -1,7 +1,8 @@
- 
+
 import React, { useState, useEffect } from 'react';
 import JoinActivityModal from './JoinActivityModal';
 import StarryBackground from '../../shared/StarryBackground';
+import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 
 export interface Asset {
     id: number;
@@ -60,78 +61,89 @@ const MyWallet: React.FC = () => {
 
     return (
         <>
-        <StarryBackground />
-        <div className="min-h-screen ">
-            <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4 text-white">My Wallet</h1>
-
-                <h2 className="text-xl font-bold mb-2 text-white">Assets</h2>
-                <table className="table-auto w-full text-white">
-                    <thead>
-                        <tr>
-                            <th className="border px-4 py-2">Name</th>
-                            <th className="border px-4 py-2">Owned Me</th>
-                            <th className="border px-4 py-2">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {assets.map((asset) => (
-                            <tr key={asset.id}>
-                                <td className="border px-4 py-2 text-center align-middle">{asset.name}</td>
-                                <td className="border px-4 py-2 text-center align-middle">{asset.ownedMe}</td>
-                                <td className="border px-4 py-2 text-center align-middle">
-                                    <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                        onClick={() => handleJoin(asset)}
-                                    >
-                                        Check
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                <h2 className="text-xl font-bold mb-2 mt-4 text-white">Rewards</h2>
-                <table className="table-auto w-full text-white">
-                    <thead>
-                        <tr>
-                            <th className="border px-4 py-2">Name</th>
-                            <th className="border px-4 py-2">Owned Me</th>
-                            <th className="border px-4 py-2">Sum</th>
-                            <th className="border px-4 py-2">Date to Airdrop</th>
-                            <th className="border px-4 py-2">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rewards.map((reward) => (
-                            <tr key={reward.id}>
-                                <td className="border px-4 py-2 text-center align-middle">{reward.name}</td>
-                                <td className="border px-4 py-2 text-center align-middle">{reward.ownedMe}</td>
-                                <td className="border px-4 py-2 text-center align-middle">{reward.sum}</td>
-                                <td className="border px-4 py-2 text-center align-middle">{new Date(reward.airdropDate).toLocaleDateString()}</td>
-                                <td className="border px-4 py-2 text-center align-middle">
-                                    <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                        onClick={() => handleJoin(reward)}
-                                    >
-                                        Check
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                {showModal && (
-                    <JoinActivityModal
-                        item={selectedItem}
-                        onClose={closeModal}
-                        onJoin={joinActivity}
+            <StarryBackground />
+            <div className="min-h-screen ">
+                <div className="container mx-auto p-4">
+                    <div className="flex items-center justify-center"><Title
+                        titleName="My Activity"
+                        titleSize={TitleSize.H3}
+                        titleEffect={TitleEffect.Gradient}
+                    /></div>
+                    <Title
+                        titleName="Assets"
+                        titleSize={TitleSize.H4}
+                        titleEffect={TitleEffect.Gradient}
                     />
-                )}
+                    <table className="table-auto w-full text-yellow-500">
+                        <thead>
+                            <tr>
+                                <th className="border px-4 py-2">Name</th>
+                                <th className="border px-4 py-2">Owned Me</th>
+                                <th className="border px-4 py-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {assets.map((asset) => (
+                                <tr key={asset.id}>
+                                    <td className="border px-4 py-2 text-center align-middle">{asset.name}</td>
+                                    <td className="border px-4 py-2 text-center align-middle">{asset.ownedMe}</td>
+                                    <td className="border px-4 py-2 text-center align-middle">
+                                        <button
+                                            className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                                            onClick={() => handleJoin(asset)}
+                                        >
+                                            Check
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <Title
+                        titleName="Rewards"
+                        titleSize={TitleSize.H4}
+                        titleEffect={TitleEffect.Gradient}
+                    />
+                    <table className="table-auto w-full text-yellow-500">
+                        <thead>
+                            <tr>
+                                <th className="border px-4 py-2">Name</th>
+                                <th className="border px-4 py-2">Owned Me</th>
+                                <th className="border px-4 py-2">Sum</th>
+                                <th className="border px-4 py-2">Date to Airdrop</th>
+                                <th className="border px-4 py-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rewards.map((reward) => (
+                                <tr key={reward.id}>
+                                    <td className="border px-4 py-2 text-center align-middle">{reward.name}</td>
+                                    <td className="border px-4 py-2 text-center align-middle">{reward.ownedMe}</td>
+                                    <td className="border px-4 py-2 text-center align-middle">{reward.sum}</td>
+                                    <td className="border px-4 py-2 text-center align-middle">{new Date(reward.airdropDate).toLocaleDateString()}</td>
+                                    <td className="border px-4 py-2 text-center align-middle">
+                                        <button
+                                            className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                                            onClick={() => handleJoin(reward)}
+                                        >
+                                            Check
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    {showModal && (
+                        <JoinActivityModal
+                            item={selectedItem}
+                            onClose={closeModal}
+                            onJoin={joinActivity}
+                        />
+                    )}
+                </div>
             </div>
-        </div>
 
         </>
     );

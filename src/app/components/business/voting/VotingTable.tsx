@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useSiteStore } from '../../../hooks/store';
 import { Modal } from '../../shared/Modal'; 
 import Spinner from '../../shared/Spinner'; 
-import { createVoting, getVotingList } from '@/server/voting';
-import { Voting } from '@prisma/client';
+import { createVoting, getVotingList } from '@/server/voting'; 
 import StarryBackground from '../../shared/StarryBackground';
 
 const VotingTable: React.FC = () => {
+    const MIN_START_VOTING_PRICE = 25; //TODO: get from config
     const router = useRouter();
     const { setVotingList, votingList, currentUser, setVotingData } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
@@ -36,10 +36,12 @@ const VotingTable: React.FC = () => {
         setModalOpen(false);
     };
 
-    const handleSubmit = async (newVoting: Voting) => {
+    const handleSubmit = async (newVoting: any) => {
         try {
             if (currentUser) {
-                const createdVoting = await createVoting(newVoting, currentUser?.id, `Let's start Voting:  ${newVoting.topic}`);
+                const {price, ...restData} = newVoting 
+                const priceForVoting = !price ? MIN_START_VOTING_PRICE : +price
+                const createdVoting = await createVoting(restData, currentUser?.id, `Let's start Voting:  ${restData.topic}`, priceForVoting);
                 console.log('Voting created:', createdVoting);
                 updateVotingList()
             }
@@ -53,7 +55,7 @@ const VotingTable: React.FC = () => {
         <StarryBackground />
         <div className="min-h-screen ">
             <div className="container mx-auto p-4">
-                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
                     Create a new voting
                 </button>
                 {

@@ -1,7 +1,7 @@
 'use server'
-import { PrismaClient, Voting } from "@prisma/client";
+import { LotType, PrismaClient, Voting } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createVoting(votingData: Voting, userId: number, greetingMessage: string): Promise<Voting> {
+export async function createVoting(votingData: Voting, userId: number, greetingMessage: string, price: number): Promise<Voting> {
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -13,6 +13,11 @@ export async function createVoting(votingData: Voting, userId: number, greetingM
     const newVoting = await prisma.voting.create({
         data: {
             ...votingData,
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
             chat: {
                 create: {
                     messages: {
@@ -32,12 +37,25 @@ export async function createVoting(votingData: Voting, userId: number, greetingM
             }
         },
     });
+    await prisma.marketplace.create({
+        data: {
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
+            typeLot: LotType.Voting,
+            hashResource: newVoting.hash,
+            price: BigInt(price),
+        },
+    });
     return newVoting;
 }
 
 export async function getVotingList(): Promise<any[]> { 
     const votingList = await prisma.voting.findMany({
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true,
@@ -52,6 +70,7 @@ export async function getVotingList(): Promise<any[]> {
     } else {
         return votingList?.map((voting: any) => {
             return {
+                owner: voting.owner,
                 hash: voting.hash,
                 sourceUrl: voting.sourceUrl,
                 title: voting.topic,
@@ -60,7 +79,8 @@ export async function getVotingList(): Promise<any[]> {
                 rewards: voting.rewards,
                 topic: voting.topic,
                 chat: voting.chat,
-                messages: voting.chat?.messages.length || 0
+                messages: voting.chat?.messages.length || 0,
+                resourceType: LotType.Voting
             };
         });
     }
@@ -72,6 +92,7 @@ export async function getVotingByHash(hash: string): Promise<any | null> {
             hash: hash,
         },
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true, 
@@ -82,6 +103,7 @@ export async function getVotingByHash(hash: string): Promise<any | null> {
     });
     if(voting) {
         return {
+            owner: voting.owner,
             hash: voting.hash,
             sourceUrl: voting.sourceUrl,
             title: voting.topic, 
@@ -90,7 +112,8 @@ export async function getVotingByHash(hash: string): Promise<any | null> {
             rewards: voting.rewards,
             topic: voting.topic,
             chat: voting.chat,
-            messages: voting.chat?.messages.length || 0 
+            messages: voting.chat?.messages.length || 0,
+            resourceType: LotType.Voting
         };
     } else {
         return null

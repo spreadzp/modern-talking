@@ -6,7 +6,7 @@ const Rewards: React.FC = () => {
     return (
         <>
         <StarryBackground />
-        <div className="min-h-screen ">
+        <div className="">
             <div className="container mx-auto p-4">
                 <ExpandableContent title="Rewards" isOpenContent={false}>
                     <RewardsTable />

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { DataSetType, DiscussionData, SurveyData, VotingData } from "../interfaces/table.interfaces";
-import { Message, User } from "@prisma/client";
+import { LotType, Message, User } from "@prisma/client";
 
 interface MTSite {
     discussionsData: DiscussionData[];
@@ -35,6 +35,10 @@ interface MTSite {
     setDataSet: (dataSet: DataSetType) => void;
     countDataSet: number;
     setCountDataSet: (countVotingList: number) => void;
+    selectedOwnerAddress: string;
+    setSelectedOwnerAddress: (selectedOwnerAddress: string) => void;
+    currentResourceType: LotType;
+    setCurrentResourceType: (currentResourceType: LotType) => void;
 
 }
 
@@ -71,6 +75,10 @@ export const useSiteStore = create<MTSite>((set) => ({
     setDataSet: (dataSet: DataSetType) => set({ dataSet }),
     countDataSet: 0,
     setCountDataSet: (countDataSet: number) => set({ countDataSet }),
+    selectedOwnerAddress: '',
+    setSelectedOwnerAddress: (selectedOwnerAddress: string) => set({ selectedOwnerAddress }),
+    currentResourceType: LotType.Discussion,
+    setCurrentResourceType: (currentResourceType: LotType) => set({ currentResourceType }),
 
 })
 )

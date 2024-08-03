@@ -19,8 +19,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, nameSub
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const identity = createHashForPrivateKeyFromString(sourceUrl) 
-        console.log("🚀 ~ handleSubmit ~ identity:", identity)
+        const identity = createHashForPrivateKeyFromString(sourceUrl)  
         setHash(identity?.address as string)
         if( hash && sourceUrl && description && prompt && topic) {
             const newDiscussion: any = {
@@ -53,14 +52,6 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, nameSub
                         </div>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        {/* {hash !== '' && <div className="mb-4">
-                            <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="hash">
-                                Hash
-                            </label>
-                            <input className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="hash" type="text" value={hash}  />
-                        </div>} */}
-                        {/* Add similar input fields for sourceUrl, description, prompt, and topic */}
                         <div className="mb-4">
                             <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="sourceUrl">
                                 Source URL

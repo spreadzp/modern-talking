@@ -1,7 +1,7 @@
 'use server'
-import { PrismaClient, Survey } from "@prisma/client";
+import { LotType, PrismaClient, Survey } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createSurvey(surveyData: Survey, userId: number, greetingMessage: string): Promise<Survey> {
+export async function createSurvey(surveyData: Survey, userId: number, greetingMessage: string,  price: number): Promise<Survey> {
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -13,6 +13,11 @@ export async function createSurvey(surveyData: Survey, userId: number, greetingM
     const newSurvey = await prisma.survey.create({
         data: {
             ...surveyData,
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
             chat: {
                 create: {
                     messages: {
@@ -32,12 +37,25 @@ export async function createSurvey(surveyData: Survey, userId: number, greetingM
             }
         },
     });
+    await prisma.marketplace.create({
+        data: {
+            owner: {
+                connect: {
+                    id: userId,
+                },
+            },
+            typeLot: LotType.Survey,
+            hashResource: newSurvey.hash,
+            price: BigInt(price),
+        },
+    });
     return newSurvey;
 }
 
 export async function getSurveys(): Promise<any[]> {
     const surveys = await prisma.survey.findMany({
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true,
@@ -52,6 +70,7 @@ export async function getSurveys(): Promise<any[]> {
     } else {
         return surveys?.map((survey: any) => {
             return {
+                owner: survey.owner, 
                 hash: survey.hash,
                 sourceUrl: survey.sourceUrl,
                 title: survey.topic,
@@ -60,7 +79,8 @@ export async function getSurveys(): Promise<any[]> {
                 rewards: survey.rewards,
                 topic: survey.topic,
                 chat: survey.chat,
-                messages: survey.chat?.messages.length || 0
+                messages: survey.chat?.messages.length || 0,
+                resourceType: LotType.Survey
             };
         });
     }
@@ -72,6 +92,7 @@ export async function getSurveyByHash(hash: string): Promise<any | null> {
             hash: hash,
         },
         include: {
+            owner: true,
             chat: {
                 include: {
                     messages: true, 
@@ -82,6 +103,7 @@ export async function getSurveyByHash(hash: string): Promise<any | null> {
     });
     if(survey) {
         return {
+            owner: survey.owner,
             hash: survey.hash,
             sourceUrl: survey.sourceUrl,
             title: survey.topic, 
@@ -90,7 +112,8 @@ export async function getSurveyByHash(hash: string): Promise<any | null> {
             rewards: survey.rewards,
             topic: survey.topic,
             chat: survey.chat,
-            messages: survey.chat?.messages.length || 0 
+            messages: survey.chat?.messages.length || 0,
+            resourceType: LotType.Survey
         };
     } else {
         return null

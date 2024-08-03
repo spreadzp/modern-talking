@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Title, { TitleEffect, TitleSize } from "./Title";
 
 type ExpandableContentProps = {
     title: string;
@@ -15,8 +16,12 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({ title, children, 
 
     return (
         <div className="w-full text-center text-white font-bold mb-4" >
-            <h2 className="text-xl font-semibold mb-2 cursor-pointer" onClick={toggleExpansion} >
-                {title} {isExpanded ? '▲' : '▼'}
+            <h2  className="flex items-center justify-center text-xl font-semibold mb-2 cursor-pointer" onClick={toggleExpansion} >
+            <Title
+                    titleName={title}
+                    titleSize={TitleSize.H4}
+                    titleEffect={TitleEffect.Gradient}
+                /> {isExpanded ? '▲' : '▼'}
             </h2>
             {isExpanded && children}
         </div>

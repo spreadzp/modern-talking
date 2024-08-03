@@ -9,6 +9,11 @@ import GoogleProvider from 'next-auth/providers/google'
 const authOption: NextAuthOptions = {
     session: {
         strategy: 'jwt',
+        maxAge: 30 * 24 * 60 * 60,
+        updateAge: 24 * 60 * 60
+    },
+    pages: {
+        signIn: '/login',
     },
     providers: [
         GoogleProvider({
@@ -25,6 +30,7 @@ const authOption: NextAuthOptions = {
             async jwt({ token}) {
                 try {
                 if (token) {
+                    console.log("🚀 ~ jwt ~ token:", token)
                     const identity = `${token?.sub}:${'salt'}`
                     const wallet = createHashForPrivateKeyFromString(identity) 
                     if(wallet){
@@ -36,14 +42,14 @@ const authOption: NextAuthOptions = {
                                 email: token.email,
                             },
                         })
-                        if (!user) {
-                            await prisma.user.create({
-                                data: {
-                                    address: account.address,
-                                    email: token.email,
-                                }})
+                        // if (!user) {
+                        //     await prisma.user.create({
+                        //         data: {
+                        //             address: account.address,
+                        //             email: token.email,
+                        //         }})
         
-                        }
+                        // }
                     } 
                 }
             } catch (error) {
