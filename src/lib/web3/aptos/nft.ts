@@ -14,7 +14,7 @@ export async function mintNft(signer: KeylessAccount, uri: string): Promise<any>
         data: {
             function: `${ABI.address}::nft::initialize_nft`,
             typeArguments: [],
-            functionArguments: [signer.accountAddress.toString(), uri],
+            functionArguments: [ uri],
         },
     });
     const committedTxn = await aptosClient.signAndSubmitTransaction({
@@ -25,3 +25,18 @@ export async function mintNft(signer: KeylessAccount, uri: string): Promise<any>
         transactionHash: committedTxn.hash,
     });
 } 
+
+
+export async function getNftIdByHash(signer: KeylessAccount, hash: string) {
+    // const payload = {
+    //     payload: {
+    //         function: `${ABI.address}::nft::get_nft_id_by_hash` as never,
+    //         typeArguments: [],
+    //         functionArguments: [signer.accountAddress.toString(),  hash],
+    //     }
+
+    // };
+
+    const response = await aptosClient.account.getAccountResources({accountAddress: signer.accountAddress.toString()});
+    return response ;
+}

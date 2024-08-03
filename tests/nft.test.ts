@@ -13,10 +13,10 @@ describe("NFT Module Tests", () => {
         const config = new AptosConfig({ network: APTOS_NETWORK });
         client = new Aptos(config);
 
-        const privateKeyCreator = new Ed25519PrivateKey('0x8282a5244cda90ffd4b07f5a1cf769eae52b4edeb43aa03aadcfe2606a11ac3c');
+        const privateKeyCreator = new Ed25519PrivateKey('0x82');
         creator = Account.fromPrivateKey({ privateKey: privateKeyCreator });
 
-        const privateKeyRecipient = new Ed25519PrivateKey('0x9ecfc86832e06f97dc73b43d0f2fc63da6b0548fe06eebe0955a6e0717de4b7c');
+        const privateKeyRecipient = new Ed25519PrivateKey('0x9e');
         recipient = Account.fromPrivateKey({ privateKey: privateKeyRecipient });
     });
 

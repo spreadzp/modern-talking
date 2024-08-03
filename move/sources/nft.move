@@ -104,6 +104,4 @@ module nft_addr::nft {
     public fun test_transfer(from: &signer, to: address, token_id: address) acquires NFT {
         transfer(from, to, token_id);
     }
-
-    // Removed verify_nft_ownership function as it is not needed
 }

@@ -8,7 +8,7 @@ import { getIconByName } from "./Icons"
 import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts"
 import BalanceDisplay from './BalanceDisplay'; // Import the new component
 import { mintTokenTransaction } from "@/lib/web3/aptos/provider" 
-import { mintNft } from "@/lib/web3/aptos/nft"
+import { getNftIdByHash, mintNft } from "@/lib/web3/aptos/nft"
 
 export default function SingButtons() {
     const { activeAccount, disconnectKeylessAccount, accounts } = useKeylessAccounts();
@@ -21,7 +21,11 @@ export default function SingButtons() {
                     setCurrentUser(user)
                     setUserAddressWallet(activeAccount?.accountAddress.toString())
                 });
-                mintNft(activeAccount, '0xd35708AE20B66B06B27Cb5f328e5819eF4D25877')
+                // mintNft(activeAccount, '0xd35708AE20B66B06B27Cb5f328e5819eF4D25879')
+                // .then(tx => {
+                //     console.log('tx :>>', tx)
+                // })
+                getNftIdByHash(activeAccount, '0xd35708AE20B66B06B27Cb5f328e5819eF4D25879')
                 .then((tx ) => {
                     console.log('tx :>>', tx)
                 })
