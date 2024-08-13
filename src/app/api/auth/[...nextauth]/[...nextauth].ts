@@ -1,8 +1,8 @@
-
 import type { NextAuthOptions } from "next-auth"
 import NextAuth from "next-auth"
 import GoogleProvider from 'next-auth/providers/google'
 import jwt from "jsonwebtoken"
+import { JwtPayload } from "jsonwebtoken"
 
 export const authOptions: NextAuthOptions = {
     providers: [GoogleProvider({
@@ -15,7 +15,13 @@ export const authOptions: NextAuthOptions = {
             return jwt.sign(token as any, secret)
         },
         async decode({ secret, token }) {
-            return jwt.verify(token as any, secret)
+            try {
+                const decoded = jwt.verify(token as string, secret)
+                return decoded as JwtPayload | null
+            } catch (error) {
+                console.error("JWT verification failed:", error)
+                return null
+            }
         },
     },
 }

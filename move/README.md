@@ -29,6 +29,7 @@ aptos move compile --package-dir move --dev
 
 Deploy to testnet
 aptos move publish --package-dir move/sources --profile testnet-profile-1 --assume-yes
+aptos move publish --package-dir move/sources --named-addresses marketplace_addr=0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97,nft_addr=0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97 --profile testnet-profile-1 --assume-yes
 ```sh
 ./sh_scripts/deploy.sh
 ```

@@ -17,11 +17,10 @@ const Content: React.FC<LeftSideProps> = ({ contentData }) => {
         setCurrentResourceType(contentData?.resourceType)
     }, [contentData, setSelectedOwnerAddress, setCurrentResourceType])
     return (
-        <div className="w-full md:pl-4 md:mr-4 flex flex-col ">
-            <h2 className="text-lg font-semibold mb-2">{contentData.title}</h2>
+        <div className="w-full md:pl-4 md:mr-4 flex flex-col "> 
             <MarketData hash={contentData.hash} /> 
             {contentData.owner && 
-                    <OwnerPanel /> }
+                    <OwnerPanel  /> }
             <p className="mb-2">
                 Source:{' '}
                 <a
@@ -48,7 +47,7 @@ const Content: React.FC<LeftSideProps> = ({ contentData }) => {
                 <strong>Prompt Restrictions:</strong> {contentData.promptRestrictions}
             </p>
             <p className="mb-2">
-            <Rewards />
+            <Rewards contentData={contentData}/>
             </p>
         </div>
 

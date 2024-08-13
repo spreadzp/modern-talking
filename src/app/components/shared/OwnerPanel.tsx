@@ -5,16 +5,17 @@ import DmChatModal from './DmChatModal'; // Import the new component
 import { useState } from 'react';
 import WalletAddressDisplay from './WalletAddressDisplay';
 
-const OwnerPanel: React.FC = () => {
+ 
+const OwnerPanel: React.FC = ( ) => {
     const { selectedOwnerAddress, userAddressWallet } = useSiteStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tooltipText, setTooltipText] = useState("Copy the resource owner address");
 
-    const handleCopyAddress = () => {
-        navigator.clipboard.writeText(selectedOwnerAddress);
-        setTooltipText("Copied");
-        setTimeout(() => setTooltipText("Copy the resource owner address"), 2000);
-    };
+    // const handleCopyAddress = () => {
+    //     navigator.clipboard.writeText(selectedOwnerAddress);
+    //     setTooltipText("Copied");
+    //     setTimeout(() => setTooltipText("Copy the resource owner address"), 2000);
+    // };
 
     const handleSendMessage = (message: string) => { 
         console.log("Sending message:", message); // TODO
@@ -30,7 +31,7 @@ const OwnerPanel: React.FC = () => {
             >
                 {getIconByName('Chat')}
             </button>
-            <WalletAddressDisplay address={userAddressWallet} />
+            <WalletAddressDisplay address={selectedOwnerAddress} />
             {isModalOpen && (
                 <DmChatModal
                     ownerAddress={selectedOwnerAddress}

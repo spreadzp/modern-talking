@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { DataSetType, DiscussionData, SurveyData, VotingData } from "../interfaces/table.interfaces";
+import { DataSetType, DiscussionData, RewardTableData, SurveyData, VotingData } from "../interfaces/table.interfaces";
 import { LotType, Message, User } from "@prisma/client";
+import { CoinChain } from "../interfaces/common.interfaces";
 
 interface MTSite {
     discussionsData: DiscussionData[];
@@ -38,7 +39,15 @@ interface MTSite {
     selectedOwnerAddress: string;
     setSelectedOwnerAddress: (selectedOwnerAddress: string) => void;
     currentResourceType: LotType;
-    setCurrentResourceType: (currentResourceType: LotType) => void;
+    setCurrentResourceType: (currentResourceType: LotType) => void; 
+    coin: CoinChain;
+    setCoin: (coin: CoinChain) => void;
+    rewards: RewardTableData[];
+    setRewards: (rewards: RewardTableData[]) => void;
+    reward: RewardTableData;
+    setReward: (reward: RewardTableData) => void;
+    countRewards: number;
+    setCountRewards: (countRewards: number) => void;
 
 }
 
@@ -79,6 +88,14 @@ export const useSiteStore = create<MTSite>((set) => ({
     setSelectedOwnerAddress: (selectedOwnerAddress: string) => set({ selectedOwnerAddress }),
     currentResourceType: LotType.Discussion,
     setCurrentResourceType: (currentResourceType: LotType) => set({ currentResourceType }),
+    coin: {} as CoinChain,
+    setCoin: (coin: CoinChain) => set({ coin }),
+    rewards: [],
+    setRewards: (rewards: RewardTableData[]) => set({ rewards }),
+    reward: {} as RewardTableData,
+    setReward: (reward: RewardTableData) => set({ reward }),
+    countRewards: 0,
+    setCountRewards: (countRewards: number) => set({ countRewards }),
 
 })
 )

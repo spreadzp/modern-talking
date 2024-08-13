@@ -92,5 +92,7 @@ export type StatisticTableData ={
     rewardSumInTokens: number; 
     routeName: string;
 } 
+
+export type RewardTableData = Reward;
 export type TableData = DiscussionData | StatisticTableData | SurveyData | VotingData;
 export type  ContentData = any | SurveyData ;

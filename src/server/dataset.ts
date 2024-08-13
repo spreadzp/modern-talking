@@ -1,7 +1,7 @@
 'use server'
 import { PrismaClient, DataSet, LotType } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createDataSet(dataSet: DataSet, userId: number, greetingMessage: string,  price: number): Promise<DataSet> {
+export async function createDataSet(dataSet: any, userId: number, greetingMessage: string,  price: number): Promise<DataSet> {
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -10,9 +10,11 @@ export async function createDataSet(dataSet: DataSet, userId: number, greetingMe
         },
     ];
 
+    const {hashLot, ...restData} = dataSet
+
     const newDataSet = await prisma.dataSet.create({
         data: {
-            ...dataSet,
+            ...restData,
             owner: {
                 connect: {
                     id: userId,
@@ -46,6 +48,7 @@ export async function createDataSet(dataSet: DataSet, userId: number, greetingMe
             },
             typeLot: LotType.DataSet,
             hashResource: newDataSet.hash,
+            hashLot,
             price: BigInt(price),
         },
     });
@@ -81,6 +84,45 @@ export async function getDataSets(): Promise<any[]> {
                 chat: dataSet.chat,
                 messages: dataSet.chat?.messages.length || 0,
                 resourceType: LotType.DataSet
+            };
+        });
+    }
+}
+
+export async function getDataSetListByOwnerAddress( address: string): Promise<any[]> {
+    const dataSets = await prisma.dataSet.findMany({
+        where: {
+            owner: { 
+                address, 
+            }
+        },
+        include: {
+            owner: true,
+            chat: {
+                include: {
+                    messages: true,
+                },
+            },
+            rewards: true,
+        },
+    });
+    if (dataSets.length === 0) {
+        return dataSets
+
+    } else {
+        return dataSets?.map((dataSet: any) => {
+            return {
+                owner: dataSet.owner,
+                hash: dataSet.hash, 
+                sourceUrl: dataSet.sourceUrl,
+                title: dataSet.topic,
+                description: dataSet.description,
+                promptRestrictions: dataSet.prompt,
+                rewards: dataSet.rewards,
+                topic: dataSet.topic,
+                chat: dataSet.chat,
+                messages: dataSet.chat?.messages.length || 0,
+                resourceType: LotType.DataSet   
             };
         });
     }

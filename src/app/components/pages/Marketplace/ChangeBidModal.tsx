@@ -1,4 +1,5 @@
  
+import { useSiteStore } from '@/app/hooks/store';
 import { Bid } from '@prisma/client';
 import React, { useState, useEffect } from 'react'; 
 
@@ -10,10 +11,11 @@ interface ChangeBidModalProps {
 }
 
 const ChangeBidModal: React.FC<ChangeBidModalProps> = ({ bid, onClose, onSave, onRemove }) => {
+    const { selectedOwnerAddress, userAddressWallet, coin } = useSiteStore();
     const [newPrice, setNewPrice] = useState<number | undefined>(Number(bid?.price));
 
     useEffect(() => {
-        setNewPrice(Number(bid?.price));
+        setNewPrice(Number(bid?.price)/ 10**coin.decimals);
     }, [bid]);
 
     const handleSave = () => {

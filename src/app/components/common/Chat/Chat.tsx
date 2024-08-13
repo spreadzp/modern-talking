@@ -124,7 +124,7 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
         <div className="min-h-screen">
             <div className="container mx-auto p-4">
                 {/* {ownerAddress && <h3> Owner: {ownerAddress}</h3>} */}
-                {chatMessages.length === 0 ? <Spinner /> : <MessageList
+                {chatMessages.length === 0 ? <Spinner text='Loading messages...' /> : <MessageList
                     referance={messageListReference}
                     className='message-list text-black'
                     lockable={true}

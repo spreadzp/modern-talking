@@ -1,10 +1,10 @@
 module marketplace_addr::marketplace {
     use std::error;
     use std::signer;
-    use std::option; 
+    use std::option;
     use aptos_std::smart_vector;
-    use aptos_framework::aptos_account;
-    use aptos_framework::coin;
+    use aptos_framework::coin; // Import coin module directly
+    use aptos_framework::aptos_coin::AptosCoin; // Import AptosCoin directly if defined
     use aptos_framework::object;
     use nft_addr::nft; // Import the nft module
 
@@ -17,6 +17,7 @@ module marketplace_addr::marketplace {
     const ENO_LISTING: u64 = 1;
     /// There exists no seller.
     const ENO_SELLER: u64 = 2;
+    const EINSUFFICIENT_BALANCE: u64 = 3;
 
     // Core data structures
 
@@ -44,7 +45,7 @@ module marketplace_addr::marketplace {
     }
 
     #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
-    struct FixedPriceListing<phantom CoinType> has key {
+    struct FixedPriceListing has key {
         /// The price to purchase the item up for listing.
         price: u64,
     }
@@ -75,47 +76,47 @@ module marketplace_addr::marketplace {
     // ================================= Entry Functions ================================= //
 
     /// List an item for sale at a fixed price.
-    public entry fun list_with_fixed_price<CoinType>(
+    public entry fun list_with_fixed_price(
         seller: &signer,
         object: object::Object<object::ObjectCore>,
         price: u64,
     ) acquires SellerListings, Sellers, MarketplaceSigner {
-        list_with_fixed_price_internal<CoinType>(seller, object, price);
+        list_with_fixed_price_internal(seller, object, price);
     }
 
     /// List an NFT for sale at a fixed price.
-    public entry fun list_nft_with_fixed_price<CoinType>(
+    public entry fun list_nft_with_fixed_price(
         seller: &signer,
         nft_id: address,
         price: u64,
     ) acquires SellerListings, Sellers, MarketplaceSigner {
         let nft_object = object::address_to_object<nft::NFT>(nft_id);
         assert!(nft::get_creator(nft_id) == signer::address_of(seller), error::permission_denied(ENO_SELLER));
-        list_with_fixed_price_internal<CoinType>(seller, object::convert(nft_object), price);
+        list_with_fixed_price_internal(seller, object::convert(nft_object), price);
     }
 
     /// Purchase outright an item from a fixed price listing.
-    public entry fun purchase<CoinType>(
+    public entry fun purchase(
         purchaser: &signer,
         object: object::Object<object::ObjectCore>,
     ) acquires FixedPriceListing, Listing, SellerListings, Sellers {
         let listing_addr = object::object_address(&object);
 
         assert!(exists<Listing>(listing_addr), error::not_found(ENO_LISTING));
-        assert!(exists<FixedPriceListing<CoinType>>(listing_addr), error::not_found(ENO_LISTING));
+        assert!(exists<FixedPriceListing>(listing_addr), error::not_found(ENO_LISTING));
 
-        let FixedPriceListing {
-            price,
-        } = move_from<FixedPriceListing<CoinType>>(listing_addr);
+        let FixedPriceListing { price } = move_from<FixedPriceListing>(listing_addr);
 
-        // The listing has concluded, transfer the asset and delete the listing. Returns the seller
-        // for depositing any profit.
+        // Check if the purchaser has sufficient balance before attempting to withdraw
+        let purchaser_addr = signer::address_of(purchaser);
+        assert!(coin::balance<AptosCoin>(purchaser_addr) >= price, error::invalid_argument(EINSUFFICIENT_BALANCE));
 
-        let coins = coin::withdraw<CoinType>(purchaser, price);
+        // If we reach here, we know the purchaser has sufficient balance
+        let coins = coin::withdraw<AptosCoin>(purchaser, price);
 
         let Listing {
             object,
-            seller, // get seller from Listing object
+            seller,
             delete_ref,
             extend_ref,
         } = move_from<Listing>(listing_addr);
@@ -124,27 +125,25 @@ module marketplace_addr::marketplace {
         object::transfer(&obj_signer, object, signer::address_of(purchaser));
         object::delete(delete_ref); // Clean-up the listing object.
 
-        // Note this step of removing the listing from the seller's listings will be costly since it's O(N).
-        // Ideally you don't store the listings in a vector but in an off-chain indexer
+        // Handle the seller's listings
         let seller_listings = borrow_global_mut<SellerListings>(seller);
         let (exist, idx) = smart_vector::index_of(&seller_listings.listings, &listing_addr);
         assert!(exist, error::not_found(ENO_LISTING));
         smart_vector::remove(&mut seller_listings.listings, idx);
 
         if (smart_vector::length(&seller_listings.listings) == 0) {
-            // If the seller has no more listings, remove the seller from the marketplace.
             let sellers = borrow_global_mut<Sellers>(get_marketplace_signer_addr());
             let (exist, idx) = smart_vector::index_of(&sellers.addresses, &seller);
             assert!(exist, error::not_found(ENO_SELLER));
             smart_vector::remove(&mut sellers.addresses, idx);
         };
 
-        aptos_account::deposit_coins(seller, coins);
+        coin::deposit<AptosCoin>(seller, coins);
     }
 
     // ================================= Friend Functions ================================= //
 
-    public(friend) fun list_with_fixed_price_internal<CoinType>(
+    public(friend) fun list_with_fixed_price_internal(
         seller: &signer,
         object: object::Object<object::ObjectCore>,
         price: u64,        
@@ -162,7 +161,7 @@ module marketplace_addr::marketplace {
             delete_ref: object::generate_delete_ref(&constructor_ref),
             extend_ref: object::generate_extend_ref(&constructor_ref),
         };
-        let fixed_price_listing = FixedPriceListing<CoinType> {
+        let fixed_price_listing = FixedPriceListing {
             price,
         };
         move_to(&listing_signer, listing);
@@ -201,12 +200,12 @@ module marketplace_addr::marketplace {
     // View functions
 
     #[view]
-    public fun price<CoinType>(
+    public fun price(
         object: object::Object<Listing>,
     ): option::Option<u64> acquires FixedPriceListing {
         let listing_addr = object::object_address(&object);
-        if (exists<FixedPriceListing<CoinType>>(listing_addr)) {
-            let fixed_price = borrow_global<FixedPriceListing<CoinType>>(listing_addr);
+        if (exists<FixedPriceListing>(listing_addr)) {
+            let fixed_price = borrow_global<FixedPriceListing>(listing_addr);
             option::some(fixed_price.price)
         } else {
             // This should just be an abort but the compiler errors.
@@ -245,9 +244,19 @@ module marketplace_addr::marketplace {
         let seller = nft::get_creator(nft_id);
         assert!(exists<SellerListings>(seller), error::not_found(ENO_LISTING));
         let seller_listings = borrow_global<SellerListings>(seller);
-        let (exist, idx) = smart_vector::index_of(&seller_listings.listings, &nft_id);
-        assert!(exist, error::not_found(ENO_LISTING));
-        *smart_vector::borrow(&seller_listings.listings, idx)
+
+        let len = smart_vector::length(&seller_listings.listings);
+        let i = 0;
+        while (i < len) {
+            let listing = *smart_vector::borrow(&seller_listings.listings, i);
+            if (listing == nft_id) {
+                return listing
+            };
+            i = i + 1;
+        };
+
+        // If the loop completes without finding a match, return a default address like @0x0
+        @0x0
     }
 
     #[test_only]

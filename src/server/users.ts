@@ -49,16 +49,21 @@ export async function upsertUser(user: User): Promise<User> {
 
 
 export async function getUserByEmail(email: string): Promise<(User & { wallet: Wallet | null;  }) | null> {
-    const user = await prisma.user.findFirst({
-        where: {
-            email
-        },
-        include: { 
-            wallet: true
-        },
-    });
-    if(!user) {
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                email
+            },
+            include: { 
+                wallet: true
+            },
+        });
+        if(!user) {
+            return null
+        }
+        return user
+    } catch (error) {
         return null
     }
-    return user
+   
 }

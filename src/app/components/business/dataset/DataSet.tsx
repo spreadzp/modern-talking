@@ -29,7 +29,7 @@ const DataSetComponent: React.FC = ( ) => {
         <>
         <StarryBackground />
         <div className="min-h-screen ">
-            {!dataSet.title ? <Spinner /> :<div className="container mx-auto flex flex-col md:flex-row h-full">
+            {!dataSet.title ? <Spinner /> :<div className="container mx-auto flex flex-col  shadow-lg rounded-lg md:flex-row h-full">
                 <div className="md:w-1/2 md:pr-4 md:mb-4 md:mb-0 md:ml-4 overflow-y-auto p-4 border-2 border-dotted border-gray-500">
                     <ExpandableContent title={`Content block: ${dataSet.title}`} isOpenContent={true}>
                         <Content contentData={dataSet} />

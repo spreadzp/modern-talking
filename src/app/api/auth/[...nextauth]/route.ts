@@ -29,8 +29,7 @@ const authOption: NextAuthOptions = {
             session,
             async jwt({ token}) {
                 try {
-                if (token) {
-                    console.log("🚀 ~ jwt ~ token:", token)
+                if (token) { 
                     const identity = `${token?.sub}:${'salt'}`
                     const wallet = createHashForPrivateKeyFromString(identity) 
                     if(wallet){

@@ -1,4 +1,6 @@
+import Title, { TitleEffect, TitleSize } from '@/app/components/shared/Title';
 import WalletAddressDisplay from '@/app/components/shared/WalletAddressDisplay';
+import { useSiteStore } from '@/app/hooks/store';
 import { Bid, User } from '@prisma/client';
 import React from 'react'; 
 interface BidTableProps {
@@ -10,11 +12,15 @@ interface BidTableProps {
 }
 
 const BidTable: React.FC<BidTableProps> = ({ bids, userAddressWallet, showAccept, onAccept, onChangeBid }) => {
+    const {   coin } = useSiteStore();
     const sortedBids = [...bids].sort((a, b) => Number(b.price) - Number(a.price));
 
     return (
-        <>
-            <h2 className="text-xl font-bold mb-2">Bids</h2>
+        <>     
+            <Title
+                        titleName="Bids"
+                        titleSize={TitleSize.H4}
+                        titleEffect={TitleEffect.Gradient} />
             <table className="table-auto w-full text-white">
                 <thead>
                     <tr>
@@ -26,7 +32,7 @@ const BidTable: React.FC<BidTableProps> = ({ bids, userAddressWallet, showAccept
                 <tbody>
                     {sortedBids.map((bid, index) => (
                         <tr key={index}>
-                            <td className="border px-4 py-2 text-center align-middle">{bid.price.toString()}</td>
+                            <td className="border px-4 py-2 text-center align-middle">{+bid.price.toString() / 10**coin.decimals}</td>
                             <td className="border px-4 py-2 text-center align-middle">
                                 <WalletAddressDisplay address={bid.owner.address} />
                             </td>

@@ -1,7 +1,7 @@
 'use server'
 import { LotType, PrismaClient, Voting } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createVoting(votingData: Voting, userId: number, greetingMessage: string, price: number): Promise<Voting> {
+export async function createVoting(votingData: any, userId: number, greetingMessage: string, price: number): Promise<Voting> {
     const rewardsData: any[] = [
         {
             description: 'First reward',
@@ -9,10 +9,10 @@ export async function createVoting(votingData: Voting, userId: number, greetingM
             sum: 100,
         },
     ];
-
+    const {hashLot, ...restData} = votingData
     const newVoting = await prisma.voting.create({
         data: {
-            ...votingData,
+            ...restData,
             owner: {
                 connect: {
                     id: userId,
@@ -46,6 +46,7 @@ export async function createVoting(votingData: Voting, userId: number, greetingM
             },
             typeLot: LotType.Voting,
             hashResource: newVoting.hash,
+            hashLot,
             price: BigInt(price),
         },
     });
@@ -86,6 +87,45 @@ export async function getVotingList(): Promise<any[]> {
     }
 }
 
+
+export async function getVotingListByOwnerAddress( address: string): Promise<any[]> {
+    const votingList = await prisma.voting.findMany({
+        where: {    
+            owner: { 
+                address, 
+            }   
+        },
+        include: {
+            owner: true,
+            chat: {
+                include: {
+                    messages: true,
+                },
+            },
+            rewards: true,
+        },
+    });
+    if (votingList.length === 0) {
+        return votingList
+
+    } else {
+        return votingList?.map((voting: any) => {
+            return {
+                owner: voting.owner,
+                hash: voting.hash,
+                sourceUrl: voting.sourceUrl,
+                title: voting.topic,
+                description: voting.description,
+                promptRestrictions: voting.prompt,
+                rewards: voting.rewards,
+                topic: voting.topic,
+                chat: voting.chat,
+                messages: voting.chat?.messages.length || 0,
+                resourceType: LotType.Voting
+            };
+        });
+    }
+}
 export async function getVotingByHash(hash: string): Promise<any | null> {
     const voting = await prisma.voting.findFirst({
         where: {

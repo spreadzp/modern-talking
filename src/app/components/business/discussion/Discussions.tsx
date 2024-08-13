@@ -4,13 +4,16 @@ import Table from '../../shared/Table';
 import { useRouter } from 'next/navigation';
 import { useSiteStore } from '../../../hooks/store';
 import { createDiscussion, getDiscussions } from '@/server/discussion-db';
-import { Modal } from '../../shared/Modal';
-import { Discussion } from '@prisma/client';
+import { Modal } from '../../shared/Modal/Modal'; 
 import Spinner from '../../shared/Spinner';
 import StarryBackground from '../../shared/StarryBackground';
 import Title, { TitleEffect, TitleSize } from '../../shared/Title';
+import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
+import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
+import { listWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 
 const Discussions: React.FC = () => {
+    const { activeAccount } = useKeylessAccounts();
     const router = useRouter();
     const { setDiscussionsData, discussionsData, setDiscussionData, currentUser } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
@@ -32,10 +35,26 @@ const Discussions: React.FC = () => {
 
     const handleSubmit = async (newDiscussion: any) => {//  Discussion & {price: number}) => {
         try {
-            if (currentUser) {
-                const { price, ...discussion } = newDiscussion
-                await createDiscussion(discussion, currentUser?.id, `Let's discuss topic:  ${newDiscussion.topic}`, price);
-                updateDiscussions()
+            if (currentUser && activeAccount) {
+                const { price, ...discussion } = newDiscussion 
+                mintNft(activeAccount, discussion.hash)
+                    .then(async trx => {
+                        console.log('!!!!!!!!!!!! mintNft :>>', trx)
+                        getNftIdByHash(activeAccount.accountAddress.toString(), discussion.hash)
+                            .then((tx) => {
+                                console.log('getNftIdByHash tx :>>', tx)
+                                const nftId = tx[0] as string
+                                listWithFixedPrice(activeAccount, nftId, newDiscussion.price)
+                                    .then(async (response) => {
+                                        console.log("@@@@@@@@@", response)
+                                        discussion.hashLot = response.changes[0].address
+                                        debugger
+                                        await createDiscussion(discussion, currentUser?.id, `Let's discuss topic:  ${newDiscussion.topic}`, price);
+                                        updateDiscussions()
+                                    })
+
+                            })
+                    })
             }
 
         } catch (error) {
@@ -63,7 +82,7 @@ const Discussions: React.FC = () => {
                         Create new discussion
                     </button>
                     {
-                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion" /> :
+                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion"  typeModal={'Discussion'} /> :
                             (discussionsData.length === 0 ? <Spinner /> : <Table
                                 data={discussionsData}
                                 onBuyClick={handleDiscussionClick}

@@ -30,19 +30,18 @@ const authOption: NextAuthOptions = {
             session,
             async jwt({ token}) {
                 try {
-                if (token) {
-                    console.log("🚀 ~ jwt ~ token:", token)
+                if (token) { 
                     const identity = `${token?.sub}:${'salt'}`
                     const wallet = createHashForPrivateKeyFromString(identity) 
                     if(wallet){
-                        const account = createAccountFromMnemonic(wallet?._mnemonic().phrase)
+                        // const account = createAccountFromMnemonic(wallet?._mnemonic().phrase)
     
-                        const sk = account._signingKey()
-                        const user = await prisma.user.findFirst({
-                            where: {
-                                email: token.email,
-                            },
-                        })
+                        // const sk = account._signingKey()
+                        // const user = await prisma.user.findFirst({
+                        //     where: {
+                        //         email: token.email,
+                        //     },
+                        // })
                         // if (!user) {
                         //     await prisma.user.create({
                         //         data: {

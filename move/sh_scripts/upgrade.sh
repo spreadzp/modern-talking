@@ -14,4 +14,4 @@ aptos move upgrade-object-package \
   --object-address $CONTRACT_ADDRESS \
   --named-addresses launchpad_addr=$CONTRACT_ADDRESS \
   --profile $PUBLISHER_PROFILE \
-  --assume-yes
+  --dev

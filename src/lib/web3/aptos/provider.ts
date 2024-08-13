@@ -47,14 +47,14 @@ export async function mintTokenTransaction(signer: KeylessAccount, collectionNam
 export async function getBalance(accountAddress: string) {
     const ledgerInfo = await aptosClient.getLedgerInfo();
     const ledgerVersion = ledgerInfo.ledger_version;
-    const alicesDigitalAsset = await aptosClient.getAccountCollectionsWithOwnedTokens({
-        accountAddress: '0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97',
-        minimumLedgerVersion: BigInt(ledgerVersion),
-    });
+    // const alicesDigitalAsset = await aptosClient.getAccountCollectionsWithOwnedTokens({
+    //     accountAddress: '0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97',
+    //     minimumLedgerVersion: BigInt(ledgerVersion),
+    // });
 
-    console.log(
-        `@@@@@@@@@@@@Alice's digital asset: ${JSON.stringify(alicesDigitalAsset[0], null, 4)}`,
-    );
+    // console.log(
+    //     `@@@@@@@@@@@@Alice's digital asset: ${JSON.stringify(alicesDigitalAsset[0], null, 4)}`,
+    // );
     return await aptosClient.getAccountCoinsData({
         accountAddress,
         minimumLedgerVersion: BigInt(ledgerVersion),
@@ -65,7 +65,7 @@ export async function getBalance(accountAddress: string) {
 export async function fundTestAptAccount(receiver: string) {
     const transaction = await aptosClient.fundAccount({
         accountAddress: receiver,
-        amount: 100000000,
+        amount: 300000000,
     });
     console.log("🚀 ~ fundTestAptAccount ~ transaction:", transaction)
 }

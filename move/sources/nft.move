@@ -67,20 +67,24 @@ module nft_addr::nft {
         });
     }
 
+    #[view]
     public fun exists_metadata_map(creator: address): bool {
         exists<MetadataMap>(creator)
     }
-
+    
+    #[view]
     public fun get_metadata(token_id: address): String acquires NFT {
         let nft = borrow_global<NFT>(token_id);
         nft.metadata
     }
-
+    
+    #[view]
     public fun get_creator(token_id: address): address acquires NFT {
         let nft = borrow_global<NFT>(token_id);
         nft.creator
     }
-
+    
+    #[view]
     public fun get_nft_id_by_hash(creator: address, metadata: String): address acquires MetadataMap {
         if (!exists<MetadataMap>(creator)) {
             abort error::not_found(ENOT_FOUND)

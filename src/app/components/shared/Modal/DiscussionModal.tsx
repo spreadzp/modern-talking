@@ -1,27 +1,23 @@
-import { Discussion } from "@prisma/client";
-import { useEffect, useState } from "react"; 
-import { createHashForPrivateKeyFromString } from "../../hooks/utils";
+import { useState } from "react";
+import { ModalProps } from "./modal.interfaces";
+import { createHashForPrivateKeyFromString } from "@/app/hooks/utils";
+import { APT_UNIT } from "@/lib/web3/aptos/marketplace";
 
-interface ModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (data: Discussion) => void;
-    nameSubmit: string;
-}
-
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
+export const DiscussionModal: React.FC<Omit<ModalProps, 'typeModal'>> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
+    // State and logic specific to DiscussionModal
     const [hash, setHash] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
     const [description, setDescription] = useState('');
     const [prompt, setPrompt] = useState('');
     const [topic, setTopic] = useState('');
-    const [price, setPrice] = useState('')
+    const [priceDecimals, setPrice] = useState('');
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const identity = createHashForPrivateKeyFromString(sourceUrl)  
-        setHash(identity?.address as string)
-        if( hash && sourceUrl && description && prompt && topic) {
+        const identity = createHashForPrivateKeyFromString(sourceUrl);
+        setHash(identity?.address as string);
+        if (hash && sourceUrl && description && prompt && topic) {
+            const price = Number(priceDecimals) * APT_UNIT;
             const newDiscussion: any = {
                 hash,
                 sourceUrl,
@@ -29,8 +25,6 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, nameSub
                 prompt,
                 topic,
                 price,
-                // rewards: [], // Assuming you handle rewards separately or as an empty array initially
-                // chat: null, // Assuming chat is nullable and initialized as null 
             };
             onSubmit(newDiscussion);
             onClose();
@@ -85,7 +79,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, nameSub
                                 Price for sell
                             </label>
                             <input className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="price" type="text" value={price} onChange={(e) => setPrice(e.target.value)} />
+                                id="price" type="text" value={priceDecimals} onChange={(e) => setPrice( e.target.value )} />
                         </div>
                         <div className="modal-footer">
                             <button className="px-4 py-2 font-bold text-white bg-blue-500 rounded shadow hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">

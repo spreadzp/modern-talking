@@ -22,8 +22,7 @@ const Board: React.FC = () => {
         const parsedHash = contentInfo.split('-')[0];
         setResourceType(contentInfo.split('-')[1]); //  
         if (parsedHash !== '') {
-            setHash(parsedHash)
-            debugger
+            setHash(parsedHash) 
             if(resourceType ===  LotType.Discussion) {
                 getDiscussionByHash(parsedHash).then((data: any) => { // TODO
                     if (data) {

@@ -1,5 +1,6 @@
-import React from 'react';
-import {  BidData } from './trading/TradingBoard';
+import React from 'react'; 
+import { BidData } from './trading/trade.interfaces';
+import { useSiteStore } from '@/app/hooks/store';
 
 interface AcceptBidModalProps {
     bid: BidData | null;
@@ -9,6 +10,7 @@ interface AcceptBidModalProps {
 }
 
 const AcceptBidModal: React.FC<AcceptBidModalProps> = ({ bid, askPrice, onClose, onAccept }) => {
+   const { coin } = useSiteStore(); 
     return (
         <div className="fixed inset-0 flex items-center justify-center  bg-opacity-50">
             <div className="bg-white p-4 rounded-lg">

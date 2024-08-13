@@ -11,7 +11,8 @@ generator client {
 model Discussion {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  owner       User?
+  ownerId     Int // Add this field to reference the owner
+  owner       User     @relation(fields: [ownerId], references: [id])
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -27,7 +28,8 @@ model Discussion {
 model Survey {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  owner       User?
+  ownerId     Int // Add this field to reference the owner
+  owner       User     @relation(fields: [ownerId], references: [id])
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -43,7 +45,8 @@ model Survey {
 model Voting {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  owner       User?
+  ownerId     Int // Add this field to reference the owner
+  owner       User     @relation(fields: [ownerId], references: [id])
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -59,7 +62,8 @@ model Voting {
 model DataSet {
   id          Int      @id @default(autoincrement())
   hash        String   @unique
-  owner       User?
+  ownerId     Int // Add this field to reference the owner
+  owner       User     @relation(fields: [ownerId], references: [id])
   sourceUrl   String   @unique
   description String
   prompt      String
@@ -78,13 +82,13 @@ model Reward {
   condition    String
   sum          Int
   token        Token?
-  surveyId     Int?        @unique
+  surveyId     Int?        
   survey       Survey?     @relation(fields: [surveyId], references: [id])
-  votingId     Int?        @unique
+  votingId     Int?        
   voting       Voting?     @relation(fields: [votingId], references: [id])
-  datasetId    Int?        @unique
+  datasetId    Int?        
   dataset      DataSet?    @relation(fields: [datasetId], references: [id])
-  discussionId Int?        @unique
+  discussionId Int?        
   discussion   Discussion? @relation(fields: [discussionId], references: [id])
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
@@ -152,14 +156,10 @@ model User {
   id               Int           @id @default(autoincrement())
   address          String        @unique
   email            String
-  creator          Discussion?   @relation(fields: [creatorId], references: [id])
-  creatorId        Int?          @unique
-  creatorSurveyId  Int?          @unique
-  creatorSurvey    Survey?       @relation(fields: [creatorSurveyId], references: [id])
-  creatorVotingId  Int?          @unique
-  creatorVoting    Voting?       @relation(fields: [creatorVotingId], references: [id])
-  creatorDatasetId Int?          @unique
-  creatorDataset   DataSet?      @relation(fields: [creatorDatasetId], references: [id])
+  discussions      Discussion[]  
+  surveys          Survey[]  
+  votings          Voting[]  
+  datasets         DataSet[]  
   messages         Message[]
   wallet           Wallet?
   createdAt        DateTime      @default(now()) @map("created_at")
@@ -211,6 +211,7 @@ model Marketplace {
   owner        User      @relation(fields: [ownerLot], references: [id], name: "MarketplaceOwner")
   typeLot      LotType
   hashResource String
+  hashLot      String?
   price        BigInt
   bids         Bid[]
   history      History[]

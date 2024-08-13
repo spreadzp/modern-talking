@@ -1,5 +1,5 @@
 {
-    "address": "0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97",
+    "address": "0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6",
     "name": "marketplace",
     "friends": [],
     "exposed_functions": [
@@ -90,7 +90,7 @@
                 "u64"
             ],
             "return": [
-                "0x1::object::Object<0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97::marketplace::Listing>"
+                "0x1::object::Object<0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6::marketplace::Listing>"
             ]
         },
         {
@@ -100,7 +100,7 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
-                "0x1::object::Object<0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97::marketplace::Listing>"
+                "0x1::object::Object<0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6::marketplace::Listing>"
             ],
             "return": [
                 "0x1::object::Object<0x1::object::ObjectCore>",
@@ -118,7 +118,7 @@
                 }
             ],
             "params": [
-                "0x1::object::Object<0xd80f67b134fa1bead50678184c4550a59f90349ed004184f995916cd1dd93a97::marketplace::Listing>"
+                "0x1::object::Object<0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6::marketplace::Listing>"
             ],
             "return": [
                 "0x1::option::Option<u64>"

@@ -1,5 +1,5 @@
 'use client';
- 
+
 enum TitleSize {
     H1 = 'h1',
     H2 = 'h2',
@@ -20,8 +20,6 @@ interface TitleProps {
 }
 
 const Title: React.FC<TitleProps> = ({ titleName, titleSize, titleEffect }) => {
-    const titleChars = titleName.split('');
-
     const getTitleSizeClass = (size: TitleSize) => {
         switch (size) {
             case TitleSize.H1:
@@ -49,25 +47,55 @@ const Title: React.FC<TitleProps> = ({ titleName, titleSize, titleEffect }) => {
                 return 'hover-zoom';
         }
     };
+
+    const splitTitleIntoLines = (title: string, maxLength: number) => {
+        const words = title.split(' ');
+        let currentLine = '';
+        const lines = [];
+
+        for (const word of words) {
+            if (currentLine.length + word.length + 1 > maxLength) {
+                lines.push(currentLine);
+                currentLine = word;
+            } else {
+                if (currentLine.length > 0) {
+                    currentLine += ' ';
+                }
+                currentLine += word;
+            }
+        }
+
+        if (currentLine.length > 0) {
+            lines.push(currentLine);
+        }
+
+        return lines;
+    };
+
+    const titleLines = splitTitleIntoLines(titleName, 45);
+
     return (
-        <div className={`font-extrabold tracking-tight ${getTitleSizeClass(titleSize)} mt-5 whitespace-nowrap`}>
-            {titleChars.map((char, index) => (
-                char === ' ' ? (
-                    <span key={index} className="inline-block">&nbsp;</span>
-                ) : (
-                    <span 
-                        key={index} 
-                        className={`text-[hsl(187,100%,68%)] ${getTitleEffectClass(titleEffect)}`} 
-                        style={{ display: 'inline-block' }}
-                    >
-                        {char}
-                    </span>
-                )
+        <div className={`font-extrabold tracking-tight ${getTitleSizeClass(titleSize)} mt-5`}>
+            {titleLines.map((line, index) => (
+                <div key={index} className={`flex justify-center ${getTitleEffectClass(titleEffect)}`}>
+                    {line.split('').map((char, charIndex) => (
+                        char === ' ' ? (
+                            <span key={charIndex} className="inline-block">&nbsp;</span>
+                        ) : (
+                            <span 
+                                key={charIndex} 
+                                className={`text-[hsl(187,100%,68%)] ${getTitleEffectClass(titleEffect)}`} 
+                                style={{ display: 'inline-block' }}
+                            >
+                                {char}
+                            </span>
+                        )
+                    ))}
+                </div>
             ))}
         </div>
     );
 };
-
 
 export default Title;
 export { TitleSize, TitleEffect };

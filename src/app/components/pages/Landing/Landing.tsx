@@ -1,12 +1,16 @@
 
+import { useEffect } from 'react';
 import StarryBackground from '../../shared/StarryBackground';
 import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 import posterImage from './../../../../../assets/poster-1.jpg';
 import Collaboration from './Collaboration';
 import Poster from './Poster';
 import { Statistic } from './Statistic';
+import { CoinChain } from '@/app/interfaces/common.interfaces';
+import { useSiteStore } from '@/app/hooks/store';
 
 const Landing: React.FC = () => {
+ 
     return (
         <>
             <StarryBackground />

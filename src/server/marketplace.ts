@@ -29,6 +29,7 @@ export async function getMarketplaceByHash(hash: string): Promise<any | null> {
                 },
             },
             history: true,
+            owner: true,
         },
     });
     return marketplace;
