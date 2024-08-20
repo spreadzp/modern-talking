@@ -1,5 +1,6 @@
 'use server'
 import { PrismaClient, Marketplace, Bid, History } from "@prisma/client";
+import { getUserByAddress } from "./users";
 const prisma = new PrismaClient()
 
 export async function createMarketplace(marketplaceData: Marketplace, userId: number): Promise<Marketplace> {
@@ -33,6 +34,23 @@ export async function getMarketplaceByHash(hash: string): Promise<any | null> {
         },
     });
     return marketplace;
+}
+
+export async function updateMarketplaceByNewOwnerId(marketplaceId: number ,newOwnerAddress: string): Promise<any> { 
+    try{
+        const user = await getUserByAddress(newOwnerAddress)
+        const marketplace = await prisma.marketplace.update({
+            where: {
+                id: marketplaceId
+            },
+            data: {
+                ownerLot: user?.id
+            }
+        });
+        return marketplace;
+    } catch (error) {
+        console.log(error)
+    } 
 }
 export async function getMarketplaceList(): Promise<any[]> {
     const marketplaceList = await prisma.marketplace.findMany({

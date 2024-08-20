@@ -1,4 +1,5 @@
  
+import { APT_UNIT } from "@/lib/web3/aptos/nft";
 import { ethers  } from "ethers";
  
 
@@ -85,4 +86,18 @@ export function shortenEthAddress(address: string) {
     // Shorten the address
     const shortenedAddress = `${address.slice(0, 4)}...${address.slice(-4)}`;
     return shortenedAddress;
+}
+
+export function calculatePrice(priceDecimals: string ) {
+    // Determine the number of decimal places in priceDecimals
+    const decimalPlaces = priceDecimals.toString().split('.')[1]?.length || 0;
+    
+    // Scale the priceDecimals to an integer
+    const scaleFactor = Math.pow(10, decimalPlaces);
+    const scaledPriceDecimals = Math.round(+priceDecimals * scaleFactor);
+    
+    // Perform the multiplication using the scaled integer
+    const price = scaledPriceDecimals * (APT_UNIT / scaleFactor);
+    
+    return price;
 }

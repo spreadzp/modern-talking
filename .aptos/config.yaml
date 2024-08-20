@@ -1,5 +1,26 @@
 ---
 profiles:
+  bob:
+    network: Local
+    private_key: "0x7a93d5da2363dbdefc47a73c8594178916c84f056ada225632448129070aa4e6"
+    public_key: "0x56628bbe92ca3fc0f525cbd6355a53a057190cc264d3aa06ef3c5624f3bbf167"
+    account: 9221a0c7b06347bf7ee513404436a64e3e1d477b85d69e5f2f0033e14ae3f91f
+    rest_url: "http://localhost:8080"
+    faucet_url: "http://localhost:8081"
+  default:
+    network: Testnet
+    private_key: "0x9ecfc86832e06f97dc73b43d0f2fc63da6b0548fe06eebe0955a6e0717de4b7c"
+    public_key: "0xf54de9bfe11bf40fa32987d57ec52c99904c1033a4a54489451e5d921a75081e"
+    account: d348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6
+    rest_url: "https://fullnode.testnet.aptoslabs.com"
+    faucet_url: "https://faucet.testnet.aptoslabs.com"
+  local:
+    network: Local
+    private_key: "0x9ecfc86832e06f97dc73b43d0f2fc63da6b0548fe06eebe0955a6e0717de4b7c"
+    public_key: "0xf54de9bfe11bf40fa32987d57ec52c99904c1033a4a54489451e5d921a75081e"
+    account: d348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6
+    rest_url: "http://localhost:8080"
+    faucet_url: "http://localhost:8081"
   testnet-profile-1:
     network: Testnet
     private_key: "0x8282a5244cda90ffd4b07f5a1cf769eae52b4edeb43aa03aadcfe2606a11ac3c"

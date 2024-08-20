@@ -9,7 +9,7 @@ interface BalanceDisplayProps {
 
 const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
     const [amount, setAmount] = useState(0);
-    const { coin, setCoin } = useSiteStore()
+    const { coin, setCoin, setUserBalance } = useSiteStore()
     useEffect(() => {
         const coin: CoinChain = {
             name: 'Aptos',
@@ -26,15 +26,16 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
                 if (coin.decimals) {
                     const clearAmount = +balance[0].amount / 10 ** coin.decimals;
                     setAmount(clearAmount);
+                    setUserBalance(+balance[0].amount);
                 }
 
             })
             .catch((error) => {
                 console.log("🚀 ~ .then ~ error:", error);
-                // fundTestAptAccount(address)
-                //     .then((balance) => {
-                //         console.log("🚀 ~ .then ~ balance:", balance);
-                //     });
+                fundTestAptAccount(address)
+                    .then((balance) => {
+                        console.log("🚀 ~ .then ~ balance:", balance);
+                    });
             });
     }, [address, setAmount, coin]);
 

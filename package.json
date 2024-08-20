@@ -11,7 +11,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "prisma-validate": "prisma validate && prisma format",
-    "migrate-dev": "npx prisma migrate dev --name remove_unique_reward",
+    "migrate-dev": "npx prisma migrate dev --name add_nftId",
     "migrate-prod": "prisma migrate deploy",
     "db:generate": "prisma pull && prisma generate --force",
     "db:migrate": "prisma db push --force-reset",
@@ -22,8 +22,6 @@
   "dependencies": {
     "@aptos-labs/ts-sdk": "^1.26.0",
     "@prisma/client": "^5.14.0",
-    "@react-oauth/google": "^0.12.1",
-    "@thalalabs/surf": "^1.7.1",
     "aptos": "^1.21.0",
     "ethers": "^5.7.2",
     "jsonwebtoken": "^9.0.2",
@@ -32,10 +30,11 @@
     "node-cron": "^3.0.3",
     "prisma": "^5.14.0",
     "react": "^18",
-    "react-chat-elements": "^12.0.14",
+    "react-chat-elements": "^12.0.15",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
     "react-tooltip": "^5.26.4",
+    "sharp": "^0.33.5",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "zod": "^3.23.8",
@@ -45,8 +44,8 @@
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "husky": "^9.1.4",
@@ -54,6 +53,6 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.2.4",
-    "typescript": "^5"
+    "typescript": "^5.5.4"
   }
 }

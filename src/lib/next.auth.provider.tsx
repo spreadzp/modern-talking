@@ -9,7 +9,7 @@ export interface AuthProviderProps {
     session?: Session | null;
 }
 
-function AuthProvider({ children  }: Readonly<AuthProviderProps>) { 
+function AuthProvider({ children }: Readonly<AuthProviderProps>) { 
     return <SessionProvider  ><Providers>{children}</Providers></SessionProvider> 
 }
 export default AuthProvider

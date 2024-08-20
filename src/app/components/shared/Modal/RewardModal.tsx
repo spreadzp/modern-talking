@@ -16,7 +16,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ isOpen, onClose, onSubmit, na
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (  description && condition && sum ) {
+        if ( description && condition && sum ) {
             const newReward = { 
                 description,
                 condition,

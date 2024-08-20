@@ -1,5 +1,5 @@
 {
-    "address": "0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6",
+    "address": "0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a",
     "name": "nft",
     "friends": [],
     "exposed_functions": [
@@ -9,9 +9,7 @@
             "is_entry": false,
             "is_view": true,
             "generic_type_params": [],
-            "params": [
-                "address"
-            ],
+            "params": [],
             "return": [
                 "bool"
             ]
@@ -30,7 +28,7 @@
             ]
         },
         {
-            "name": "get_metadata",
+            "name": "get_metadata_hash",
             "visibility": "public",
             "is_entry": false,
             "is_view": true,
@@ -49,8 +47,33 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
-                "address",
                 "0x1::string::String"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_owner_by_hash",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "0x1::string::String"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_owner_by_id",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
             ],
             "return": [
                 "address"
@@ -110,12 +133,16 @@
                     "type": "address"
                 },
                 {
-                    "name": "metadata",
+                    "name": "owner",
+                    "type": "address"
+                },
+                {
+                    "name": "metadata_hash",
                     "type": "0x1::string::String"
                 },
                 {
                     "name": "events",
-                    "type": "0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6::nft::NFTEventHandlers"
+                    "type": "0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::nft::NFTEventHandlers"
                 }
             ]
         },
@@ -129,7 +156,7 @@
             "fields": [
                 {
                     "name": "transfer_events",
-                    "type": "0x1::event::EventHandle<0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6::nft::TransferEvent>"
+                    "type": "0x1::event::EventHandle<0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::nft::TransferEvent>"
                 }
             ]
         },

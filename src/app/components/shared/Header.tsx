@@ -1,9 +1,8 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getIconByName } from "./Icons"; 
 import ExternalMenu from "./ExternalMenu";
 import SingButtons from "./SingButtons";  
-import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts";
 
 export default function Header() {
   

@@ -8,7 +8,7 @@ import Spinner from '../../shared/Spinner';
 import { createVoting, getVotingList } from '@/server/voting';
 import StarryBackground from '../../shared/StarryBackground';
 import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
-import { listWithFixedPrice } from '@/lib/web3/aptos/marketplace';
+import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 
 const VotingTable: React.FC = () => {
@@ -53,7 +53,7 @@ const VotingTable: React.FC = () => {
                             .then((tx) => {
                                 console.log('getNftIdByHash tx :>>', tx)
                                 const nftId = tx[0] as string
-                                listWithFixedPrice(activeAccount, nftId, newVoting.price)
+                                listNftWithFixedPrice(activeAccount, nftId, newVoting.price)
                                     .then(async (response) => {
                                         console.log("@@@@@@@@@", response)
                                         restData.hashLot = response.changes[0].address

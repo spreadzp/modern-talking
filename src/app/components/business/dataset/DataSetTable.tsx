@@ -10,7 +10,7 @@ import { createDataSet, getDataSets } from '@/server/dataset';
 import StarryBackground from '../../shared/StarryBackground';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
-import { listWithFixedPrice } from '@/lib/web3/aptos/marketplace';
+import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 
 const DataSetTable: React.FC = () => {
     const { activeAccount } = useKeylessAccounts();
@@ -51,7 +51,7 @@ const DataSetTable: React.FC = () => {
                             .then((tx) => {
                                 console.log('getNftIdByHash tx :>>', tx)
                                 const nftId = tx[0] as string
-                                listWithFixedPrice(activeAccount, nftId, newDataSet.price)
+                                listNftWithFixedPrice(activeAccount, nftId, newDataSet.price)
                                     .then(async (response) => {
                                         console.log("@@@@@@@@@", response)
                                         restData.hashLot = response.changes[0].address

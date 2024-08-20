@@ -211,6 +211,7 @@ model Marketplace {
   owner        User      @relation(fields: [ownerLot], references: [id], name: "MarketplaceOwner")
   typeLot      LotType
   hashResource String
+  nftId        String?
   hashLot      String?
   price        BigInt
   bids         Bid[]

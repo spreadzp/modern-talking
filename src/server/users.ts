@@ -67,3 +67,23 @@ export async function getUserByEmail(email: string): Promise<(User & { wallet: W
     }
    
 }
+
+export async function getUserByAddress(address: string): Promise<(User & { wallet: Wallet | null;  }) | null> {
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                address
+            },
+            include: { 
+                wallet: true
+            },
+        });
+        if(!user) {
+            return null
+        }
+        return user
+    } catch (error) {
+        return null
+    }
+   
+}

@@ -7,7 +7,7 @@ Modern Talking is a revolutionary SocialFi application designed to engage users 
 ## Hosted Application
 
 Visit the hosted application: [Modern Talking](https://like-to-earn.vercel.app/)
-
+https://t.me/vote_to_earn_bot   
 ## Getting Started
 
 To get started with the development server, follow these steps:
@@ -39,4 +39,13 @@ AI plays a crucial role in Modern Talking by analyzing user-generated content. I
 - Ethereum
 - NFTs
 - Decentralized Applications
+
+https://www.youtube.com/embed/ABDHiwJXTag
+https://www.youtube.com/embed/ez9h762rv0Q
+https://www.youtube.com/embed/UaMv0A1i-zA
+https://www.youtube.com/embed/Mm0tqgYpZCM
+https://www.youtube.com/embed/iJ4ndT0a4Xw
+https://www.youtube.com/embed/lMD70X325Q8
+https://www.youtube.com/embed/hzU7JVQmho0
+https://www.youtube.com/embed/-ftAbARbTJg
 

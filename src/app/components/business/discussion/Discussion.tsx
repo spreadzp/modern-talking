@@ -8,10 +8,13 @@ import { useSiteStore } from '../../../hooks/store';
 import { usePathname } from 'next/navigation';
 import Spinner from '../../shared/Spinner';
 import StarryBackground from '../../shared/StarryBackground';
+import LoginPage from '@/app/login/LoginPage';
+import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 
 const DiscussionComponent: React.FC = () => {
     const pathname = usePathname()
     const { discussionData, setDiscussionData } = useSiteStore() 
+    const { activeAccount } = useKeylessAccounts();
     useEffect(() => {
         const parsedHash = pathname.split('/')[2]; 
         if (parsedHash !== '') {
@@ -23,7 +26,7 @@ const DiscussionComponent: React.FC = () => {
         } 
 
     }, [setDiscussionData, pathname]); 
-
+    if (!activeAccount) return <LoginPage />
     return (
         <>
         <StarryBackground />

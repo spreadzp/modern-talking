@@ -49,7 +49,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
         }
     };
 
-    const renderValueByHeader = (header: string, value: string) => { 
+    const renderValueByHeader = (header: string, value: string) => {
         if (header === 'sourceUrl') {
             if (value.includes('https://www.youtube.com')) {
                 return (
@@ -73,7 +73,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
 
     return (
         <div className="overflow-y-auto ">
-            <table className="table-auto w-full text-yellow-500">
+            <table className="table-auto w-full text-yellow-200">
                 <thead>
                     <tr>
                         {headers.map((header, index) => (

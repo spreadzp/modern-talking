@@ -5,6 +5,7 @@ export interface LotData {
     hashResource: string;
     price: number;
     sellerAddress: string;
+    nftId: string;
     hashLot: string;
     bids: (Bid & { owner: User })[];
     historyTrades: HistoryTrade[];

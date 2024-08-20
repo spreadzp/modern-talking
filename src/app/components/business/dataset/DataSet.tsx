@@ -8,12 +8,16 @@ import { useSiteStore } from '../../../hooks/store';
 import Spinner from '../../shared/Spinner';  
 import { getDataSetByHash } from '@/server/dataset';
 import StarryBackground from '../../shared/StarryBackground';
+import LoginPage from '@/app/login/LoginPage';
+import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 
  
 
 const DataSetComponent: React.FC = ( ) => {
     const pathname = usePathname() 
     const {dataSet, setDataSet } = useSiteStore()
+    const { activeAccount } = useKeylessAccounts();
+
     useEffect(() => {
         const parsedHash = pathname.split('/')[2]; 
         if (parsedHash !== '') {
@@ -25,6 +29,7 @@ const DataSetComponent: React.FC = ( ) => {
         } 
 
     }, [ setDataSet,  pathname]); 
+    if (!activeAccount) return <LoginPage />
     return (
         <>
         <StarryBackground />

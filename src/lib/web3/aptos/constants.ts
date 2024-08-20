@@ -8,8 +8,10 @@ export const LocalStorageKeys = {
 };
 
 export const aptosClient = new Aptos(
-  new AptosConfig({ network: Network.TESTNET })
+  new AptosConfig({
+    network: Network.TESTNET 
+  })
 );
 
 /// TODO: Put your client id here
-export const GOOGLE_CLIENT_ID = "718925344899-mrh41bevtaukhp6amnq1rs685uuq9q22.apps.googleusercontent.com";
+export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string //"718925344899-mrh41bevtaukhp6amnq1rs685uuq9q22.apps.googleusercontent.com";

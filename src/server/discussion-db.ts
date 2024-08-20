@@ -130,7 +130,7 @@ export async function createDiscussion(discussion: any, userId: number, greeting
             sum: 100,
         },
     ];
-const {hashLot, ...restData} = discussion
+const {hashLot, nftId, ...restData} = discussion
     const newDiscussion = await prisma.discussion.create({
         data: {
             ...restData,
@@ -168,6 +168,7 @@ const {hashLot, ...restData} = discussion
             },
             typeLot: LotType.Discussion,
             hashResource: newDiscussion.hash,
+            nftId,
             hashLot,
             price: BigInt(price),
         },

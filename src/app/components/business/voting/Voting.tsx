@@ -8,12 +8,15 @@ import { useSiteStore } from '../../../hooks/store';
 import Spinner from '../../shared/Spinner'; 
 import { getVotingByHash } from '@/server/voting';
 import StarryBackground from '../../shared/StarryBackground';
+import LoginPage from '@/app/login/LoginPage';
+import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 
  
 
 const Voting: React.FC = ( ) => {
     const pathname = usePathname() 
     const {votingData, setVotingData } = useSiteStore()
+    const { activeAccount } = useKeylessAccounts();
     useEffect(() => {
         const parsedHash = pathname.split('/')[2]; 
         if (parsedHash !== '') {
@@ -25,6 +28,7 @@ const Voting: React.FC = ( ) => {
         } 
 
     }, [ setVotingData,  pathname]); 
+    if (!activeAccount) return <LoginPage />
     return (
         <>
         <StarryBackground />

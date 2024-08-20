@@ -91,7 +91,7 @@ module marketplace_addr::marketplace {
         price: u64,
     ) acquires SellerListings, Sellers, MarketplaceSigner {
         let nft_object = object::address_to_object<nft::NFT>(nft_id);
-        assert!(nft::get_creator(nft_id) == signer::address_of(seller), error::permission_denied(ENO_SELLER));
+        assert!(nft::get_owner_by_id(nft_id) == signer::address_of(seller), error::permission_denied(ENO_SELLER));
         list_with_fixed_price_internal(seller, object::convert(nft_object), price);
     }
 
@@ -241,7 +241,7 @@ module marketplace_addr::marketplace {
      // Add this function to get the listing ID of a listed NFT.
     #[view]
     public fun get_nft_listing(nft_id: address): address acquires SellerListings {
-        let seller = nft::get_creator(nft_id);
+        let seller = nft::get_owner_by_id(nft_id);
         assert!(exists<SellerListings>(seller), error::not_found(ENO_LISTING));
         let seller_listings = borrow_global<SellerListings>(seller);
 

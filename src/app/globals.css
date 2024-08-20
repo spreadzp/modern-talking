@@ -197,6 +197,41 @@ body {
   text-align: left;
 }
 
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+
+.slider-button:hover {
+  transform: translateY(-50%) scale(2);
+}
+
+.feature-slider {
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.slider-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  filter: blur(10px); /* Initial foggy state */
+  transition: opacity 0.5s ease-in-out, filter 1.5s ease-in-out;
+}
+
+.slider-item.active {
+  position: relative;
+  opacity: 1;
+  filter: blur(0); /* Fully clear state */
+}
+
 @media (max-width: 768px) {
   .poster-content {
       padding: 10px;
@@ -259,8 +294,7 @@ body {
 
 .collaboration-left {
   flex: 0 0 70%; /* flex-grow, flex-shrink, flex-basis */
-  margin-right: 20px;
-  color: white;
+  margin-right: 20px; 
 }
 
 .collaboration-right {

@@ -9,7 +9,7 @@ import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts"
 import BalanceDisplay from './BalanceDisplay'; // Import the new component
 import { fundTestAptAccount, mintTokenTransaction } from "@/lib/web3/aptos/provider"
 import { getCollectionDataByCreatorAddress, getNftIdByHash, mintNft } from "@/lib/web3/aptos/nft"
-import { getAllListingObjectAddresses, getAllSellers, getListingObjectAndSeller, getListingObjectPrice, listWithFixedPrice, purchase } from "@/lib/web3/aptos/marketplace"
+import { getAllListingObjectAddresses, getAllSellers, getListingObjectAndSeller, getListingObjectPrice, listNftWithFixedPrice, purchase } from "@/lib/web3/aptos/marketplace"
 import { CoinChain } from "@/app/interfaces/common.interfaces"
 
 export default function SingButtons() {
@@ -60,12 +60,12 @@ export default function SingButtons() {
             //                             })
             //                             purchase(activeAccount, response[0])
             //                                 .then((responsePurchase) => console.log("@@@@@@@@@ responsePurchase", responsePurchase))
-            //                                 // listWithFixedPrice(activeAccount, nftId, price)
+            //                                 // listNftWithFixedPrice(activeAccount, nftId, price)
             //                                 //     .then((response) => console.log("@@@@@@@@@", response))
             //                     })
 
             //             })
-            //         //  listWithFixedPrice(activeAccount, nftId, 555)
+            //         //  listNftWithFixedPrice(activeAccount, nftId, 555)
             //         // .then((response) => console.log("@@@@@@@@@", response))
             //         getAllSellers()
             //             .then((response) => {

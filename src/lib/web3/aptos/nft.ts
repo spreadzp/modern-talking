@@ -27,6 +27,25 @@ export async function mintNft(signer: KeylessAccount, uri: string): Promise<any>
     });
 }
 
+export async function transferNft(signer: KeylessAccount,receiverAddress: string, nftId: string): Promise<any> {
+// 0x6079fe53376605ddf06d6b99de0e6a5b05b004e196ba6a2958483673390136d3
+    const txn = await aptosClient.transaction.build.simple({
+        sender: signer.accountAddress.toString(),
+        data: {
+            function: `${ABI['address']}::nft::transfer`,
+            typeArguments: [],
+            functionArguments: [receiverAddress, nftId],
+        },
+    });
+    const committedTxn = await aptosClient.signAndSubmitTransaction({
+        signer,
+        transaction: txn,
+    });
+    return await aptosClient.waitForTransaction({
+        transactionHash: committedTxn.hash,
+    });
+}
+
 
 export async function getNftIdByHash(address: string, hash: string) { 
     return await aptosClient.view({

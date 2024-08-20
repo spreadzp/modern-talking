@@ -5,7 +5,7 @@ import { APT_UNIT } from "@/lib/web3/aptos/marketplace";
 
 export const DiscussionModal: React.FC<Omit<ModalProps, 'typeModal'>> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
     // State and logic specific to DiscussionModal
-    const [hash, setHash] = useState('');
+    //const [hash, setHash] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
     const [description, setDescription] = useState('');
     const [prompt, setPrompt] = useState('');
@@ -13,9 +13,10 @@ export const DiscussionModal: React.FC<Omit<ModalProps, 'typeModal'>> = ({ isOpe
     const [priceDecimals, setPrice] = useState('');
 
     const handleSubmit = (e: any) => {
+        debugger
         e.preventDefault();
         const identity = createHashForPrivateKeyFromString(sourceUrl);
-        setHash(identity?.address as string);
+        const hash =  identity?.address as string;
         if (hash && sourceUrl && description && prompt && topic) {
             const price = Number(priceDecimals) * APT_UNIT;
             const newDiscussion: any = {

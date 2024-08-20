@@ -8,12 +8,15 @@ import { useSiteStore } from '../../../hooks/store';
 import Spinner from '../../shared/Spinner';
 import { getSurveyByHash } from '@/server/survey';
 import StarryBackground from '../../shared/StarryBackground';
+import LoginPage from '@/app/login/LoginPage';
+import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 
  
 
 const Survey: React.FC = ( ) => {
     const pathname = usePathname() 
     const {surveyData, setSurveyData } = useSiteStore()
+    const { activeAccount } = useKeylessAccounts();
     useEffect(() => {
         const parsedHash = pathname.split('/')[2]; 
         if (parsedHash !== '') {
@@ -25,6 +28,7 @@ const Survey: React.FC = ( ) => {
         } 
 
     }, [ setSurveyData,  pathname]); 
+    if (!activeAccount) return <LoginPage />
     return (
         <>
         <StarryBackground />

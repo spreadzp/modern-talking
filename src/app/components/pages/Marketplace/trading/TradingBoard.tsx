@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, use } from 'react';
 import { useSiteStore } from '@/app/hooks/store';
-import { getMarketplaceByHash } from '@/server/marketplace';
-import { Bid, User } from '@prisma/client';
+import { createMarketplace, getMarketplaceByHash, updateMarketplaceByNewOwnerId } from '@/server/marketplace';
+import { Bid, LotType, Marketplace, User } from '@prisma/client';
 import StarryBackground from '@/app/components/shared/StarryBackground';
 
 import BidTable from './BidTable';
@@ -14,24 +14,29 @@ import { BidData, LotData } from './trade.interfaces';
 import Spinner from '@/app/components/shared/Spinner';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 
-import { getListingObjectPrice, purchase } from '@/lib/web3/aptos/marketplace';
+import { getListingObjectPrice, listNftWithFixedPrice, purchase } from '@/lib/web3/aptos/marketplace';
 import { useRouter } from 'next/navigation';
 import AskTable from './AskTable';
 import Title, { TitleEffect, TitleSize } from '@/app/components/shared/Title';
-import ErrorModal from '@/app/components/shared/ErrorModal';
+import ErrorModal from '@/app/components/shared/Modal/ErrorModal';
 import { getNftIdByHash } from '@/lib/web3/aptos/nft';
 import { fundTestAptAccount } from '@/lib/web3/aptos/provider';
+import LoginPage from '@/app/login/LoginPage';
+import SuccessModal from '@/app/components/shared/Modal/SuccessModal';
+import ListingNftModal from '../ListingNftModal';
+import { createDiscussion } from '@/server/discussion-db';
 
 
-const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
+const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = ({ hashResource, resourceType }) => {
     const { activeAccount, disconnectKeylessAccount, accounts } = useKeylessAccounts();
-    const { selectedOwnerAddress, userAddressWallet, coin } = useSiteStore();
+    const { selectedOwnerAddress, userAddressWallet, coin, currentUser } = useSiteStore();
     const router = useRouter();
     const [lotData, setLotData] = useState<LotData>({
         id: 0,
         hashResource: '',
         price: 0,
         sellerAddress: '',
+        nftId: '',
         hashLot: '',
         bids: [],
         historyTrades: []
@@ -45,6 +50,11 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
     const [newBidPrice, setNewBidPrice] = useState<number>(0);
     const [showAccept, setShowAccept] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    const [showListingNftModal, setShowListingNftModal] = useState<boolean>(false);
+    const [selectedNft, setSelectedNft] = useState<string | null>(null);
+    const [accepted, setAccepted] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -143,6 +153,52 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
         }
     }, [newBidPrice, activeAccount, lotData.id, coin.decimals]);
 
+    const handleCreateNewListingNft = useCallback(async (priceForSell: number) => {
+        if (activeAccount) {
+            setAccepted(true);
+            try {
+                const priceInDecimals = priceForSell * 10 ** coin.decimals;
+                console.log("🚀 ~ handleCreateNewListingNft ~ priceInDecimals:", priceInDecimals)
+                listNftWithFixedPrice(activeAccount, lotData.nftId, priceInDecimals)
+                    .then((response) => {
+                        if (response) {
+                            // console.log("@@@@@@@@@", response)
+                            const transferEvent = response.events.find((event: any) => event.type === "0x1::object::TransferEvent");
+                            // discussion.nftId = transferEvent.data.object
+                            // discussion.hashLot = transferEvent.data.to
+                            // debugger
+                            // await createDiscussion(discussion, currentUser?.id, `Let's discuss topic:  ${newDiscussion.topic}`, price);
+                            // updateDiscussions()
+                            const lot = {
+                                hashLot: transferEvent.data.to,
+                                price: priceInDecimals,
+                                nftId: transferEvent.data.object,
+                                owner: activeAccount.accountAddress.toString(),
+                                hashResource: lotData.hashResource,
+                                typeLot: LotType.Discussion
+                            } as any
+                            return createMarketplace(lot, Number(currentUser?.id));
+                        }
+
+                    })
+                    .then((tx) => {
+                        if (tx) {
+                            console.log("createMarketplace tx :>>", tx)
+                            setSuccessMessage('Lot created successfully!');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error listing with fixed price:', error);
+                    })
+                setSuccessMessage('Lot created successfully!');
+            } catch (err) {
+                setErrorMessage((err as Error).message);
+            } finally {
+                setAccepted(false);
+            }
+        }
+    }, [activeAccount, lotData.nftId, lotData.price])
+
     const handleAcceptLot = useCallback(async () => {
         if (activeAccount) {
             try {
@@ -150,18 +206,36 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
                 // .then((tx) => {
                 //     console.log('fundTestAptAccount tx :>>', tx)
                 // })
-                fundTestAptAccount('0x8c05bb5f5aef0816da38e35b6307543870a682119f429bb6000aef6f57ac48a5')
-                .then((tx) => {
-                    console.log('fundTestAptAccount tx :>>', tx)
-                })
-                const tx = await getNftIdByHash('0xd2aff1788f6153c67bf89a20c60ea6f43de12b6a17b353546ae5ff1ec0c576b6', lotData.hashResource);
-                debugger
-                const nftId = `${tx[0]}`
-                console.log("🚀 ~ handleAcceptLot ~ nftId:", nftId);
-                if (nftId) {
-                    const res = await purchase(activeAccount, nftId);
-                    console.log("🚀 ~ handleAcceptLot ~ res:", res);
-                    console.log('Lot accepted!');
+                // fundTestAptAccount('0x8c05bb5f5aef0816da38e35b6307543870a682119f429bb6000aef6f57ac48a5')
+                // .then((tx) => {
+                //     console.log('fundTestAptAccount tx :>>', tx)
+                // })
+                // const tx = await getNftIdByHash('0xd2aff1788f6153c67bf89a20c60ea6f43de12b6a17b353546ae5ff1ec0c576b6', lotData.hashResource);
+                // debugger
+                // const nftId = `${tx[0]}`
+                // console.log("🚀 ~ handleAcceptLot ~ nftId:", nftId);
+
+                const res = await purchase(activeAccount, lotData.hashLot);
+                console.log("🚀 ~ handleAcceptLot ~ res:", res);
+                if (res) {
+                    const transferEvent = res.events.find((event: any) => event.type === "0x1::object::TransferEvent");
+                    console.log("🚀 ~ handleAcceptLot ~ transferEvent:", transferEvent);
+                    console.log("🚀 ~ handleAcceptLot ~ transferEvent.data:", transferEvent.data);
+                    try {
+                        await updateMarketplaceByNewOwnerId(lotData.id, transferEvent.data.to);
+                        // const response = await listNftWithFixedPrice(activeAccount, transferEvent.data.object, lotData.price)
+
+                        // .catch((error) => {
+                        //     console.error('Error listing with fixed price:', error);
+                        // });
+                        setSuccessMessage('Lot accepted successfully!');
+                        setShowListingNftModal(true);
+
+                    } catch (err) {
+                        setErrorMessage((err as Error).message);
+                    } finally {
+                        router?.push(`/trading-board/${hashResource}-${resourceType}`);
+                    }
                 }
 
             } catch (err) {
@@ -171,15 +245,15 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
             setError(new Error('No active account'));
             router?.push(`/`);
         }
-    } , [activeAccount, lotData.hashResource, router]);
+    }, [activeAccount, lotData.hashResource, router]);
 
-    if (loading) return <Spinner />;
+    if (loading) return <Spinner text='Loading trading board...' />;
     if (error) return <p>Error: {error.message}</p>;
 
     return (
         <>
             <StarryBackground />
-            <div className="min-h-screen ">
+            {accepted ? <Spinner text='Accepting lot process ...' /> : <div className="min-h-screen ">
                 <div className="container mx-auto p-4">
                     <Title
                         titleName="Trading Board"
@@ -219,7 +293,16 @@ const TradingBoard: React.FC<{ hashResource: string }> = ({ hashResource }) => {
                         <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />
                     )}
                 </div>
-            </div>
+            </div>}
+            {error && <ErrorModal message={error} onClose={() => setError(null)} />}
+            {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
+
+            {showListingNftModal && (
+                <ListingNftModal
+                    onClose={() => setShowListingNftModal(false)}
+                    onListing={handleCreateNewListingNft}
+                />
+            )}
         </>
     );
 };

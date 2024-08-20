@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react"; 
+import { useState } from "react";
 import { sendDiscordMessage } from "../../../hooks/discordMessage";
 
 const Collaboration: React.FC = () => {
@@ -31,8 +31,8 @@ const Collaboration: React.FC = () => {
     };
 
     return (
-        <div className="collaboration">
-            <div className="collaboration-left">
+        <div className="collaboration ">
+            <div className="collaboration-left text-yellow-200">
                 <h2>Contact Us</h2>
                 <p>
                     We`re here to help! Whether you have a question, a proposal, or just want to say hello, feel free to reach out. Fill out the form below, and we`ll get back to you as soon as possible.

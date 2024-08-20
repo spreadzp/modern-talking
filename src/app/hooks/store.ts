@@ -48,6 +48,8 @@ interface MTSite {
     setReward: (reward: RewardTableData) => void;
     countRewards: number;
     setCountRewards: (countRewards: number) => void;
+    userBalance: number;
+    setUserBalance: (userBalance: number) => void;
 
 }
 
@@ -96,6 +98,8 @@ export const useSiteStore = create<MTSite>((set) => ({
     setReward: (reward: RewardTableData) => set({ reward }),
     countRewards: 0,
     setCountRewards: (countRewards: number) => set({ countRewards }),
+    userBalance: 0,
+    setUserBalance: (userBalance: number) => set({ userBalance }),
 
 })
 )

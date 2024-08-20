@@ -9,7 +9,7 @@ import { createSurvey, getSurveys } from '@/server/survey';
 import StarryBackground from '../../shared/StarryBackground';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
-import { listWithFixedPrice } from '@/lib/web3/aptos/marketplace';
+import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 
 const SurveyTable: React.FC = () => {
     const MIN_START_SURVEY_PRICE = 25; //TODO: get from config
@@ -54,7 +54,7 @@ const SurveyTable: React.FC = () => {
                             .then((tx) => {
                                 console.log('getNftIdByHash tx :>>', tx)
                                 const nftId = tx[0] as string
-                                listWithFixedPrice(activeAccount, nftId, priceForSurvey)
+                                listNftWithFixedPrice(activeAccount, nftId, priceForSurvey)
                                     .then(async (response) => {
                                         console.log("@@@@@@@@@", response)
                                         restData.hashLot = response.changes[0].address
