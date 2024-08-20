@@ -16,8 +16,7 @@
     "db:generate": "prisma pull && prisma generate --force",
     "db:migrate": "prisma db push --force-reset",
     "db-alter": "npm run prisma-validate && prisma migrate deploy",
-    "seed": "ts-node prisma/seed.ts",
-    "prepare": "husky"
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^1.26.0",
