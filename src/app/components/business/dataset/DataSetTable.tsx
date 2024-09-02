@@ -11,6 +11,9 @@ import StarryBackground from '../../shared/StarryBackground';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
 import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
+import ErrorModal from '../../shared/Modal/ErrorModal';
+import SuccessModal from '../../shared/Modal/SuccessModal';
+import LoginPage from '@/app/login/LoginPage';
 
 const DataSetTable: React.FC = () => {
     const { activeAccount } = useKeylessAccounts();
@@ -18,6 +21,8 @@ const DataSetTable: React.FC = () => {
     const router = useRouter();
     const { setDataSets, dataSets, currentUser, setDataSet } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const updateDataSets = useCallback(() => {
         getDataSets().then((data) => {
             if (data) {
@@ -57,23 +62,30 @@ const DataSetTable: React.FC = () => {
                                         restData.hashLot = response.changes[0].address
                                         const priceForDataSet = !price ? MIN_START_DATA_SET_PRICE : +price
                                         const createdDataSet = await createDataSet(restData, currentUser?.id, `Let's start DataSet:  ${restData.topic}`, priceForDataSet);
-                                        console.log('DataSet created:', createdDataSet);
+                                        if (createdDataSet) {
+                                            setSuccessMessage("DataSet created successfully")
+                                        }
                                         updateDataSets()
                                     })
 
                             })
+                            .catch((error) => {
+                                console.error('Error getting NFT ID:', error);
+                                setErrorMessage(error.message);
+                            });
                     })
 
             }
 
         } catch (error) {
             console.error('Error creating DataSet:', error);
+            setErrorMessage((error as Error).message);
         }
     };
     return (
         <>
             <StarryBackground />
-            <div className="min-h-screen ">
+            {activeAccount ? <div className="min-h-screen ">
                 <div className="container mx-auto p-4">
                     <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
                         Create a new DataSet
@@ -87,7 +99,10 @@ const DataSetTable: React.FC = () => {
                             />)
                     }
                 </div>
-            </div>
+                {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
+                {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
+            </div> : <LoginPage />}
+
 
         </>
     );

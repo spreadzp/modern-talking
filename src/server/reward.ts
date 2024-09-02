@@ -40,7 +40,7 @@ export async function getRewards(): Promise<Reward[]> {
     return rewards;
 }
 
-export async function  getRewardsByContent(contentData: any): Promise<Reward[]> {
+export async function getRewardsByContent(contentData: any): Promise<Reward[]> {
     const resourceName = contentData.resourceType.toLowerCase()
     const includeData = {
         [`${resourceName}`]: true
@@ -54,7 +54,7 @@ export async function  getRewardsByContent(contentData: any): Promise<Reward[]> 
             ...includeData
         },
     });
-  
+
     return rewards;
 }
 
@@ -75,6 +75,48 @@ export async function getRewardById(id: number): Promise<Reward | null> {
     return reward;
 }
 
+export async function countRewardsByResource(): Promise<{
+    survey: number,
+    voting: number,
+    dataset: number,
+    discussion: number,
+}> {
+    const result = await prisma.reward.groupBy({
+        by: ['surveyId', 'votingId', 'datasetId', 'discussionId'],
+        _sum: {
+            sum: true,
+        },
+        where: {
+            OR: [
+                { surveyId: { not: null } },
+                { votingId: { not: null } },
+                { datasetId: { not: null } },
+                { discussionId: { not: null } },
+            ],
+        },
+    });
+
+    // Initialize sums with zero
+    let surveySum = 0;
+    let votingSum = 0;
+    let datasetSum = 0;
+    let discussionSum = 0;
+
+    // Summarize the results
+    result.forEach(row => {
+        if (row.surveyId !== null) surveySum += row._sum.sum || 0;
+        if (row.votingId !== null) votingSum += row._sum.sum || 0;
+        if (row.datasetId !== null) datasetSum += row._sum.sum || 0;
+        if (row.discussionId !== null) discussionSum += row._sum.sum || 0;
+    });
+
+    return {
+        survey: surveySum,
+        voting: votingSum,
+        dataset: datasetSum,
+        discussion: discussionSum,
+    };
+}
 // Get rewards by surveyId
 export async function getRewardsBySurveyId(surveyId: number): Promise<Reward[]> {
     const rewards = await prisma.reward.findMany({

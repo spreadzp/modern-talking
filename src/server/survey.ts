@@ -9,7 +9,7 @@ export async function createSurvey(surveyData: any, userId: number, greetingMess
             sum: 100,
         },
     ];
-    const {hashLot, ...restData} = surveyData
+    const {hashLot,nftId, ...restData} = surveyData
     const newSurvey = await prisma.survey.create({
         data: {
             ...restData,
@@ -47,6 +47,7 @@ export async function createSurvey(surveyData: any, userId: number, greetingMess
             typeLot: LotType.Survey,
             hashResource: newSurvey.hash,
             hashLot,
+            nftId,
             price: BigInt(price),
         },
     });

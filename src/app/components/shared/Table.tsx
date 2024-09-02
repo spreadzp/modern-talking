@@ -4,6 +4,7 @@ import { TableData } from '../../interfaces/table.interfaces';
 import { getIconByName } from './Icons';
 import WalletAddressDisplay from './WalletAddressDisplay';
 import { disabledHeaderTableNames } from './disabledHeaderTableNames';
+import Spinner from './Spinner';
 
 type TableProps = {
     data: any[];
@@ -67,6 +68,9 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
         }
         if (header === 'hashResource') {
             return (<WalletAddressDisplay address={value} />)
+        }
+        if (header === 'rewardSumInUsd') {
+            return (<div  >{value === undefined ? <div className="max-h-2"><Spinner /></div> : value}</div>)
         }
         return stringifyValue(value);
     };

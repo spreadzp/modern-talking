@@ -2,21 +2,19 @@
 
 import { useState } from "react";
 import { sendDiscordMessage } from "../../../hooks/discordMessage";
+import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts";
 
 const Collaboration: React.FC = () => {
     const [isSending, setIsSending] = useState(false);
-    const [name, setName] = useState("");
     const [message, setMessage] = useState("");
     const [subject, setSubject] = useState("");
-
+    const { activeAccount } = useKeylessAccounts();
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
-            if (name && message && subject) {
+            if (message && subject) {
                 setIsSending(true);
                 e.preventDefault();
-                console.log("Form submitted:", { name, subject, message });
-                const response = await sendDiscordMessage(`New ${subject.toLowerCase()} from ${name}: ${message}`);
-                setName("");
+                const response = await sendDiscordMessage(`Topic ${subject.toLowerCase()}\n Message: ${message}\n address: ${activeAccount?.accountAddress ? activeAccount.accountAddress.toString() : ""}`);
                 setSubject("");
                 setMessage("");
                 console.log("🚀 ~ handleSubmit ~ response:", response);
@@ -40,13 +38,6 @@ const Collaboration: React.FC = () => {
             </div>
             <div className="collaboration-right text-black">
                 <form onSubmit={handleSubmit} className="collaboration-form">
-                    <input
-                        type="text"
-                        placeholder="Your Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
                     <input
                         type="text"
                         placeholder="Subject (Question/Proposal)"

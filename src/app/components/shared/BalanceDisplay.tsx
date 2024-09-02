@@ -23,6 +23,7 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
         console.log('call getBalance :>>',)
         getBalance(address)
             .then((balance) => {
+                console.log("🚀 ~ .then ~ balance:", balance)
                 if (coin.decimals) {
                     const clearAmount = +balance[0].amount / 10 ** coin.decimals;
                     setAmount(clearAmount);
@@ -32,10 +33,10 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
             })
             .catch((error) => {
                 console.log("🚀 ~ .then ~ error:", error);
-                fundTestAptAccount(address)
-                    .then((balance) => {
-                        console.log("🚀 ~ .then ~ balance:", balance);
-                    });
+                // fundTestAptAccount(address)
+                //     .then((balance) => {
+                //         console.log("🚀 ~ .then ~ balance:", balance);
+                //     });
             });
     }, [address, setAmount, coin]);
 

@@ -68,29 +68,26 @@ export async function listNftWithFixedPrice(signer: KeylessAccount, nftId: strin
 
 // Function to purchase
 export async function purchase(signer: KeylessAccount, object: string): Promise<any> {
-
-    console.log('signer.accountAddress.toString() :>>', signer.accountAddress.toString())
-    const txn = await aptosClient.transaction.build.simple({    
+    console.log("🚀 ~ purchase ~ object:", object)
+    const txn = await aptosClient.transaction.build.simple({
         sender: signer.accountAddress.toString(),
         data: {
             function: `${ABI['address']}::marketplace::purchase`,
             typeArguments: [], // `${ABI['address']}::nft::NFT`
             functionArguments: [object],
-        } 
+        }
     });
-const balance = await getBalance('0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6')
-console.log("🚀 ~ purchase ~ balance:", balance)
-const committedTxn = await aptosClient.signAndSubmitTransaction({
-    signer,
-    transaction: txn,
-});
-console.log("🚀 ~ purchase ~ committedTxn:", committedTxn)
-return await aptosClient.waitForTransaction({
-    transactionHash: committedTxn.hash,
-});
+    const committedTxn = await aptosClient.signAndSubmitTransaction({
+        signer,
+        transaction: txn,
+    });
+    console.log("🚀 ~ purchase ~ committedTxn:", committedTxn)
+    return await aptosClient.waitForTransaction({
+        transactionHash: committedTxn.hash,
+    });
 }
 
-async function getBalance(accountAddress: string, coinType: string = "0x1::aptos_coin::AptosCoin"): Promise<number> {
+export async function getBalance(accountAddress: string, coinType: string = "0x1::aptos_coin::AptosCoin"): Promise<number> {
     const resources = await aptosClient.getAccountResources({ accountAddress });
     console.log("🚀 ~ getBalance ~ resources:", resources);
     const coinResource = resources.find((resource) => resource.type === `0x1::coin::CoinStore<${coinType}>`);
@@ -149,7 +146,7 @@ export async function getListingObjectAndSeller(listingObjectAddr: string): Prom
 }
 
 // Function to get listing object price
-export async function getListingObjectPrice(listingObjectAddr: string): Promise<number | undefined> {
+export async function getListingObjectPrice(listingObjectAddr: string): Promise<any> {
     try {
         console.log("🚀 ~ getListingObjectPrice ~ listingObjectAddr:", listingObjectAddr);
         const listingObjectPrice = await aptosClient.view({
@@ -161,9 +158,9 @@ export async function getListingObjectPrice(listingObjectAddr: string): Promise<
         });
         console.log("listing object price", JSON.stringify(listingObjectPrice));
         // @ts-ignore
-        return (listingObjectPrice["vec"][0] as number);
+        return (listingObjectPrice[0]["vec"][0] as number);
     } catch (error) {
         console.log("🚀 ~ getListingObjectPrice ~ error:", error);
-        return undefined; // Explicitly return undefined in case of an error
+        //throw error;
     }
 }

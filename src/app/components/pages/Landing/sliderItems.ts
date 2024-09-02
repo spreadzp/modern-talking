@@ -17,7 +17,9 @@ const sliderItems: PosterProps[] = [
             "Reliable reward mechanisms using blockchain technology.",
             "Be an Early Adopter: Shape the future of NFTs with cutting-edge technology."
         ],
-        callToAction: "Join Modern Talking and be part of a pioneering SocialFi experience where your voice not only matters but also earns you rewards."
+        callToAction: "Modern Talking and be part of a pioneering SocialFi experience where your voice not only matters but also earns you rewards.",
+        joinUrl: "/",
+        activeLabel: "Join To"
     },
     {
         title: "Discussions",
@@ -30,7 +32,9 @@ const sliderItems: PosterProps[] = [
             "Moderation powered by AI for relevance and appropriateness.",
             "Ownership of discussion data through NFTs."
         ],
-        callToAction: "Join the conversation and earn rewards for your contributions."
+        callToAction: "in the conversation and earn rewards for your contributions.",
+        joinUrl: "/discussions",
+        activeLabel: "Participate"
     },
     {
         title: "Voting",
@@ -43,7 +47,9 @@ const sliderItems: PosterProps[] = [
             "Customizable voting topics and options.",
             "Integration with NFTs for unique voting rights."
         ],
-        callToAction: "Cast your vote and make a difference while earning rewards."
+        callToAction: "your vote and make a difference while earning rewards.",
+        joinUrl: "/voting-list",
+        activeLabel: "Cast"
     },
     {
         title: "Surveys",
@@ -56,7 +62,9 @@ const sliderItems: PosterProps[] = [
             "Customizable survey templates.",
             "Ownership of survey results through NFTs."
         ],
-        callToAction: "Participate in surveys and get rewarded for your opinions."
+        callToAction: "in surveys and get rewarded for your opinions.",
+        joinUrl: "/surveys",
+        activeLabel: "Participate"
     },
     {
         title: "AI Tagging and Dataset Annotation",
@@ -69,7 +77,9 @@ const sliderItems: PosterProps[] = [
             "AI-powered quality checks on annotations.",
             "Contribute to the future of AI development."
         ],
-        callToAction: "Contribute to AI development and earn rewards by tagging and annotating datasets."
+        callToAction: "to AI development and earn rewards by tagging and annotating datasets.",
+        joinUrl: "/data-sets",
+        activeLabel: "Contribute"
     },
 ];
 

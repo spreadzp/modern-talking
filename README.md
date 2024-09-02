@@ -8,6 +8,7 @@ Modern Talking is a revolutionary SocialFi application designed to engage users 
 
 Visit the hosted application: [Modern Talking](https://like-to-earn.vercel.app/)
 https://t.me/vote_to_earn_bot   
+https://t.me/vote_to_earn_bot
 ## Getting Started
 
 To get started with the development server, follow these steps:

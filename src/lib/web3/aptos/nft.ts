@@ -27,8 +27,8 @@ export async function mintNft(signer: KeylessAccount, uri: string): Promise<any>
     });
 }
 
-export async function transferNft(signer: KeylessAccount,receiverAddress: string, nftId: string): Promise<any> {
-// 0x6079fe53376605ddf06d6b99de0e6a5b05b004e196ba6a2958483673390136d3
+export async function transferNft(signer: KeylessAccount, receiverAddress: string, nftId: string): Promise<any> {
+    // 0x6079fe53376605ddf06d6b99de0e6a5b05b004e196ba6a2958483673390136d3
     const txn = await aptosClient.transaction.build.simple({
         sender: signer.accountAddress.toString(),
         data: {
@@ -46,13 +46,31 @@ export async function transferNft(signer: KeylessAccount,receiverAddress: string
     });
 }
 
+export async function getOwnerByNftId(nftId: string): Promise<any> {
+    return await aptosClient.view({
+        payload: {
+            function: `${ABI['address']}::nft::get_owner_by_id` as never,
+            typeArguments: [],
+            functionArguments: [nftId],
+        }
+    });
+}
 
-export async function getNftIdByHash(address: string, hash: string) { 
+export async function getOwnerByHash(hash: string, addressCaller: string): Promise<any> {
+    return await aptosClient.view({
+        payload: {
+            function: `${ABI['address']}::nft::get_owner_by_hash` as never,
+            typeArguments: [],
+            functionArguments: [hash, addressCaller],
+        }
+    });
+}
+export async function getNftIdByHash(address: string, hash: string) {
     return await aptosClient.view({
         payload: {
             function: `${ABI['address']}::nft::get_nft_id_by_hash` as never,
             typeArguments: [],
-            functionArguments: [address, hash],
+            functionArguments: [hash, address],
         }
     });
 

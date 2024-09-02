@@ -5,8 +5,8 @@ import { FaGithub, FaTelegram, FaDiscord } from 'react-icons/fa';
 
 const socialNetworks = [
 
-    { name: 'GitHub', link: 'https://github.com/spreadzp/web2-web3-site' },
-    { name: 'Telegram', link: 'https://t.me/caravan2025' },
+    { name: 'GitHub', link: 'https://github.com/spreadzp/modern-talking' },
+    { name: 'Telegram', link: 'https://t.me/vote_to_earn_bot' },
     { name: 'Discord', link: 'https://discord.gg/a8gPjzGg' },
 ];
 

@@ -37,6 +37,9 @@ const FeatureSlider: React.FC<FeatureSliderProps> = ({ items }) => {
                 <div
                     key={index}
                     className={`slider-item ${index === currentIndex ? 'active' : ''}`}
+                    style={{
+                        display: index === currentIndex ? 'block' : 'none'
+                    }}
                 >
                     <Poster {...item} />
                 </div>

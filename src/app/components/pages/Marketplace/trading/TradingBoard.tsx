@@ -43,7 +43,6 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
     });
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
     const [showChangeBidModal, setShowChangeBidModal] = useState<boolean>(false);
     const [showAcceptBidModal, setShowAcceptBidModal] = useState<boolean>(false);
     const [selectedBid, setSelectedBid] = useState<Bid & { owner: User } | null>(null);
@@ -64,6 +63,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                     debugger
                     lot.price = Number(lot.price) / 10 ** coin.decimals
                     const resp = await getListingObjectPrice(lot.hashLot);
+                    console.log("🚀 ~ fetchData ~ resp:", resp)
 
                     setLotData(lot);
                     if (resp) {
@@ -74,11 +74,11 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                         setLotData(lot);
                     }
                 } else {
-                    setError(new Error('No active account'));
+                    setErrorMessage((new Error('No active account')).message);
                     router?.push(`/`);
                 }
             } catch (err) {
-                setError(err as Error);
+                setErrorMessage((err as Error).message);
             } finally {
                 setLoading(false);
             }
@@ -149,7 +149,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                 setLotData(prev => ({ ...prev, bids: [...prev.bids, createdBid] }));
             }
         } catch (err) {
-            setError(err as Error);
+            setErrorMessage((err as Error).message);
         }
     }, [newBidPrice, activeAccount, lotData.id, coin.decimals]);
 
@@ -213,8 +213,8 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                 // const tx = await getNftIdByHash('0xd2aff1788f6153c67bf89a20c60ea6f43de12b6a17b353546ae5ff1ec0c576b6', lotData.hashResource);
                 // debugger
                 // const nftId = `${tx[0]}`
-                // console.log("🚀 ~ handleAcceptLot ~ nftId:", nftId);
-
+                // console.log("🚀 ~ handleAcceptLot ~ nftId:", nftId); 
+                console.log("🚀 ~ handleAcceptLot ~ lotData:", lotData);
                 const res = await purchase(activeAccount, lotData.hashLot);
                 console.log("🚀 ~ handleAcceptLot ~ res:", res);
                 if (res) {
@@ -242,13 +242,13 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                 setErrorMessage((err as Error).message);
             }
         } else {
-            setError(new Error('No active account'));
+            setErrorMessage((new Error('No active account')).message);
             router?.push(`/`);
         }
     }, [activeAccount, lotData.hashResource, router]);
 
     if (loading) return <Spinner text='Loading trading board...' />;
-    if (error) return <p>Error: {error.message}</p>;
+    if (errorMessage) return <p>Error: {errorMessage}</p>;
 
     return (
         <>
@@ -294,7 +294,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                     )}
                 </div>
             </div>}
-            {error && <ErrorModal message={error} onClose={() => setError(null)} />}
+            {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
             {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
 
             {showListingNftModal && (

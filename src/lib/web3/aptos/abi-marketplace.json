@@ -1,8 +1,33 @@
 {
-    "address": "0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a",
+    "address": "0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001",
     "name": "marketplace",
     "friends": [],
     "exposed_functions": [
+        {
+            "name": "change_listing_price",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "0x1::object::Object<0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::marketplace::Listing>",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "claim_nft_by_id",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address"
+            ],
+            "return": []
+        },
         {
             "name": "get_nft_listing",
             "visibility": "public",
@@ -27,6 +52,19 @@
             ],
             "return": [
                 "vector<address>"
+            ]
+        },
+        {
+            "name": "get_seller_signer",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "address"
             ]
         },
         {
@@ -78,7 +116,7 @@
                 "u64"
             ],
             "return": [
-                "0x1::object::Object<0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::marketplace::Listing>"
+                "0x1::object::Object<0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::marketplace::Listing>"
             ]
         },
         {
@@ -88,7 +126,7 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
-                "0x1::object::Object<0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::marketplace::Listing>"
+                "0x1::object::Object<0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::marketplace::Listing>"
             ],
             "return": [
                 "0x1::object::Object<0x1::object::ObjectCore>",
@@ -102,7 +140,7 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
-                "0x1::object::Object<0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::marketplace::Listing>"
+                "0x1::object::Object<0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::marketplace::Listing>"
             ],
             "return": [
                 "0x1::option::Option<u64>"
@@ -187,6 +225,21 @@
                 {
                     "name": "listings",
                     "type": "0x1::smart_vector::SmartVector<address>"
+                }
+            ]
+        },
+        {
+            "name": "SellerSigners",
+            "is_native": false,
+            "abilities": [
+                "store",
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "seller_address",
+                    "type": "address"
                 }
             ]
         },

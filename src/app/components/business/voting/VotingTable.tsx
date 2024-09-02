@@ -10,6 +10,9 @@ import StarryBackground from '../../shared/StarryBackground';
 import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
 import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
+import ErrorModal from '../../shared/Modal/ErrorModal';
+import SuccessModal from '../../shared/Modal/SuccessModal';
+import LoginPage from '@/app/login/LoginPage';
 
 const VotingTable: React.FC = () => {
     const { activeAccount } = useKeylessAccounts();
@@ -17,6 +20,8 @@ const VotingTable: React.FC = () => {
     const router = useRouter();
     const { setVotingList, votingList, currentUser, setVotingData } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const updateVotingList = useCallback(() => {
         getVotingList().then((data) => {
             console.log("🚀 ~ getVotingList ~ data:", data)
@@ -57,28 +62,38 @@ const VotingTable: React.FC = () => {
                                     .then(async (response) => {
                                         console.log("@@@@@@@@@", response)
                                         restData.hashLot = response.changes[0].address
-                                        await createVoting(restData, currentUser?.id, `Let's start Voting:  ${restData.topic}`, priceForVoting);
+                                        const newVoting = await createVoting(restData, currentUser?.id, `Let's start Voting:  ${restData.topic}`, priceForVoting);
+                                        if (newVoting) {
+                                            setSuccessMessage('Voting created successfully')
+                                        }
                                         updateVotingList()
                                     })
 
+                            })
+                            .catch((error) => {
+                                console.error('Error getting NFT ID:', error);
+                                setErrorMessage('Error getting NFT ID');
+                                setModalOpen(false);
+                                updateVotingList()
                             })
                     })
             }
 
         } catch (error) {
             console.error('Error creating Voting:', error);
+            setErrorMessage('Error creating Voting');
         }
     };
     return (
         <>
             <StarryBackground />
-            <div className="min-h-screen ">
+            {activeAccount ? <div className="min-h-screen ">
                 <div className="container mx-auto p-4">
                     <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
                         Create a new voting
                     </button>
                     {
-                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Voting"  typeModal={'Voting'}/> :
+                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Voting" typeModal={'Voting'} /> :
                             (votingList.length === 0 ? <Spinner /> : <Table
                                 data={votingList}
                                 onBuyClick={handleVotingClick}
@@ -86,8 +101,9 @@ const VotingTable: React.FC = () => {
                             />)
                     }
                 </div>
-            </div>
-
+                {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
+                {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
+            </div> : <LoginPage />}
         </>
     );
 };

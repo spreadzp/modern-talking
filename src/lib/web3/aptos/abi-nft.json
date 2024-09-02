@@ -1,19 +1,8 @@
 {
-    "address": "0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a",
+    "address": "0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001",
     "name": "nft",
     "friends": [],
     "exposed_functions": [
-        {
-            "name": "exists_metadata_map",
-            "visibility": "public",
-            "is_entry": false,
-            "is_view": true,
-            "generic_type_params": [],
-            "params": [],
-            "return": [
-                "bool"
-            ]
-        },
         {
             "name": "get_creator",
             "visibility": "public",
@@ -21,6 +10,20 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
+                "address"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_creator_by_hash",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "0x1::string::String",
                 "address"
             ],
             "return": [
@@ -47,7 +50,8 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
-                "0x1::string::String"
+                "0x1::string::String",
+                "address"
             ],
             "return": [
                 "address"
@@ -60,7 +64,8 @@
             "is_view": true,
             "generic_type_params": [],
             "params": [
-                "0x1::string::String"
+                "0x1::string::String",
+                "address"
             ],
             "return": [
                 "address"
@@ -107,6 +112,26 @@
     ],
     "structs": [
         {
+            "name": "CreatorNftId",
+            "is_native": false,
+            "abilities": [
+                "copy",
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "creator",
+                    "type": "address"
+                },
+                {
+                    "name": "nft_id",
+                    "type": "address"
+                }
+            ]
+        },
+        {
             "name": "MetadataMap",
             "is_native": false,
             "abilities": [
@@ -116,7 +141,7 @@
             "fields": [
                 {
                     "name": "map",
-                    "type": "0x1::table::Table<0x1::string::String, address>"
+                    "type": "0x1::table::Table<0x1::string::String, 0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::nft::CreatorNftId>"
                 }
             ]
         },
@@ -142,7 +167,7 @@
                 },
                 {
                     "name": "events",
-                    "type": "0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::nft::NFTEventHandlers"
+                    "type": "0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::nft::NFTEventHandlers"
                 }
             ]
         },
@@ -156,7 +181,7 @@
             "fields": [
                 {
                     "name": "transfer_events",
-                    "type": "0x1::event::EventHandle<0x193888a044a09f9ebd4411b1f4dfdfcf29c8a002b598c556e84398101cd9532a::nft::TransferEvent>"
+                    "type": "0x1::event::EventHandle<0x2d72a811429b734ac00ed5dc88064c22257cc8c85c12de094d12ce13cf35e001::nft::TransferEvent>"
                 }
             ]
         },

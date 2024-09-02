@@ -9,7 +9,7 @@ export async function createVoting(votingData: any, userId: number, greetingMess
             sum: 100,
         },
     ];
-    const {hashLot, ...restData} = votingData
+    const { hashLot, nftId, ...restData } = votingData
     const newVoting = await prisma.voting.create({
         data: {
             ...restData,
@@ -47,13 +47,14 @@ export async function createVoting(votingData: any, userId: number, greetingMess
             typeLot: LotType.Voting,
             hashResource: newVoting.hash,
             hashLot,
+            nftId,
             price: BigInt(price),
         },
     });
     return newVoting;
 }
 
-export async function getVotingList(): Promise<any[]> { 
+export async function getVotingList(): Promise<any[]> {
     const votingList = await prisma.voting.findMany({
         include: {
             owner: true,
@@ -64,7 +65,7 @@ export async function getVotingList(): Promise<any[]> {
             },
             rewards: true,
         },
-    });  
+    });
     if (votingList.length === 0) {
         return votingList
 
@@ -88,12 +89,12 @@ export async function getVotingList(): Promise<any[]> {
 }
 
 
-export async function getVotingListByOwnerAddress( address: string): Promise<any[]> {
+export async function getVotingListByOwnerAddress(address: string): Promise<any[]> {
     const votingList = await prisma.voting.findMany({
-        where: {    
-            owner: { 
-                address, 
-            }   
+        where: {
+            owner: {
+                address,
+            }
         },
         include: {
             owner: true,
@@ -135,20 +136,20 @@ export async function getVotingByHash(hash: string): Promise<any | null> {
             owner: true,
             chat: {
                 include: {
-                    messages: true, 
+                    messages: true,
                 },
             },
             rewards: true,
         },
     });
-    if(voting) {
+    if (voting) {
         return {
             owner: voting.owner,
             hash: voting.hash,
             sourceUrl: voting.sourceUrl,
-            title: voting.topic, 
+            title: voting.topic,
             description: voting.description,
-            promptRestrictions: voting.prompt, 
+            promptRestrictions: voting.prompt,
             rewards: voting.rewards,
             topic: voting.topic,
             chat: voting.chat,

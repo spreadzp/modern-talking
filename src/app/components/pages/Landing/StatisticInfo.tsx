@@ -3,15 +3,22 @@ import Table from "../../shared/Table";
 import { useRouter } from "next/navigation";
 import { StatisticTableData } from "../../../interfaces/table.interfaces";
 import { getCountDiscussions } from "@/server/discussion-db";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSiteStore } from "../../../hooks/store";
 import { getCountSurveys } from "@/server/survey";
 import { getCountDataSets } from "@/server/dataset";
 import { getCountVoting } from "@/server/voting";
 import StarryBackground from "../../shared/StarryBackground";
-
+import { countRewardsByResource } from "@/server/reward";
+type RewardsSum = {
+    survey: number,
+    voting: number,
+    dataset: number,
+    discussion: number,
+}
 
 export const StatisticInfo = () => {
+    const [rewardsSum, setRewardsSum] = useState({} as RewardsSum)
     const { setCountDiscussions, countDiscussions, setCountSurveys, countSurveys, countDataSet, setCountDataSet, countVotingList, setCountVotingList } = useSiteStore()
     useEffect(() => {
         getCountDiscussions()
@@ -37,12 +44,17 @@ export const StatisticInfo = () => {
             .catch((error) => {
                 console.error('Error fetching surveys:', error);
             });
+        countRewardsByResource()
+            .then((data) => {
+                console.log("🚀 ~ .then ~ data:", data)
+                setRewardsSum(data)
+            })
     }, [setCountDiscussions, setCountSurveys, setCountDataSet, setCountVotingList]);
     const tableData: StatisticTableData[] = [
-        { id: 1, name: 'Discussions', amount: countDiscussions, rewardSumDollar: 1500, rewardSumInTokens: 12233333, routeName: 'discussions' },
-        { id: 2, name: 'Surveys', amount: countSurveys, rewardSumDollar: 2157, rewardSumInTokens: 54545, routeName: 'surveys' },
-        { id: 3, name: 'Voting', amount: countVotingList, rewardSumDollar: 3432, rewardSumInTokens: 45354, routeName: 'voting-list' },
-        { id: 4, name: 'Data Sets', amount: countDataSet, rewardSumDollar: 3435, rewardSumInTokens: 45435, routeName: 'data-sets' },
+        { id: 1, name: 'Discussions', amount: countDiscussions, rewardSumInUsd: rewardsSum.discussion, routeName: 'discussions' },
+        { id: 2, name: 'Surveys', amount: countSurveys, rewardSumInUsd: rewardsSum.survey, routeName: 'surveys' },
+        { id: 3, name: 'Voting', amount: countVotingList, rewardSumInUsd: rewardsSum.voting, routeName: 'voting-list' },
+        { id: 4, name: 'Data Sets', amount: countDataSet, rewardSumInUsd: rewardsSum.dataset, routeName: 'data-sets' },
     ];
     const router = useRouter();
 
@@ -52,13 +64,13 @@ export const StatisticInfo = () => {
 
     return (
         <>
-        <StarryBackground />
-        
-        <div className="">
-            <div className="container mx-auto p-4">
-                <Table data={tableData} onBuyClick={handleStatisticClick} buttonLabel="Join" />
+            <StarryBackground />
+
+            <div className="">
+                <div className="container mx-auto p-4">
+                    <Table data={tableData} onBuyClick={handleStatisticClick} buttonLabel="Join" />
+                </div>
             </div>
-        </div>
 
         </>
     );

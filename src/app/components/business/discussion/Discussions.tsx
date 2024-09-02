@@ -14,7 +14,7 @@ import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 import ErrorModal from '../../shared/Modal/ErrorModal';
 import { fundTestAptAccount } from '@/lib/web3/aptos/provider';
 import LoginPage from '@/app/login/LoginPage';
-import { calculatePrice } from '@/app/hooks/utils';
+import SuccessModal from '../../shared/Modal/SuccessModal';
 
 const Discussions: React.FC = () => {
     const { activeAccount } = useKeylessAccounts();
@@ -22,6 +22,7 @@ const Discussions: React.FC = () => {
     const { setDiscussionsData, discussionsData, setDiscussionData, currentUser, userBalance } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     useEffect(() => {
         updateDiscussions()
@@ -41,11 +42,11 @@ const Discussions: React.FC = () => {
     const handleSubmit = async (newDiscussion: any) => {//  Discussion & {price: number}) => {
         try {
             if (userBalance < 0.005 && activeAccount) {
-                fundTestAptAccount(activeAccount?.accountAddress.toString())
-                    .then((tx) => {
-                        console.log('fundTestAptAccount tx :>>', tx)
-                        setErrorMessage('Insufficient balance');
-                    })
+                // fundTestAptAccount(activeAccount?.accountAddress.toString())
+                //     .then((tx) => {
+                //         console.log('fundTestAptAccount tx :>>', tx)
+                //         setErrorMessage('Insufficient balance');
+                //     })
 
             } else {
                 if (currentUser && activeAccount) {
@@ -63,7 +64,7 @@ const Discussions: React.FC = () => {
                                     const nftId = tx[0] as string
                                     console.log("🚀 ~ .then ~ nftId:", nftId)
                                     console.log(' newDiscussion.price :>>', newDiscussion.price)
-                                    const price = newDiscussion.price.toString().split('.')[0] 
+                                    const price = newDiscussion.price.toString().split('.')[0]
                                     console.log("🚀 ~ .then ~ price:", price)
                                     listNftWithFixedPrice(activeAccount, nftId, price)
                                         .then(async (response) => {
@@ -73,13 +74,17 @@ const Discussions: React.FC = () => {
                                                 discussion.nftId = transferEvent.data.object
                                                 discussion.hashLot = transferEvent.data.to
                                                 debugger
-                                                await createDiscussion(discussion, currentUser?.id, `Let's discuss topic:  ${newDiscussion.topic}`, price);
+                                                const nd = await createDiscussion(discussion, currentUser?.id, `Let's discuss topic:  ${newDiscussion.topic}`, price);
+                                                if (nd) {
+                                                    setSuccessMessage('Discussion created successfully')
+                                                }
                                                 updateDiscussions()
                                             }
 
                                         })
                                         .catch((error) => {
                                             console.error('Error listing with fixed price:', error);
+                                            setErrorMessage((error as Error).message);
                                         });
 
                                 })
@@ -90,6 +95,7 @@ const Discussions: React.FC = () => {
 
         } catch (error) {
             console.error('Error creating discussion:', error);
+            setErrorMessage((error as Error).message);
         } finally {
             closeModal();
         }
@@ -122,9 +128,10 @@ const Discussions: React.FC = () => {
                                 buttonLabel="Join"
                             />)
                     }
-                    {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
                 </div>
             </div> : <LoginPage />}
+            {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
+            {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
         </>
     );
 };
