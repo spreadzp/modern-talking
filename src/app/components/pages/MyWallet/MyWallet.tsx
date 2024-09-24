@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import JoinActivityModal from './JoinActivityModal';
-import StarryBackground from '../../shared/StarryBackground';
 import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 import { getDiscussionListByOwnerAddress } from '@/server/discussion-db';
@@ -29,7 +28,7 @@ export interface Reward {
 }
 
 const MyWallet: React.FC = () => {
-    const {   setDataSet, setDiscussionData, setSurveyData, setVotingData } = useSiteStore()
+    const { setDataSet, setDiscussionData, setSurveyData, setVotingData } = useSiteStore()
     const { activeAccount } = useKeylessAccounts();
     const [assets, setAssets] = useState<Asset[]>([]);
     const [rewards, setRewards] = useState<Reward[]>([]);
@@ -135,7 +134,6 @@ const MyWallet: React.FC = () => {
     };
     return (
         <>
-            <StarryBackground />
             <div className="min-h-screen ">
                 <div className="container mx-auto p-4">
                     <div className="flex items-center justify-center">
@@ -159,17 +157,17 @@ const MyWallet: React.FC = () => {
                     />
                     <MyRewardsTable rewards={rewards} onJoin={handleJoin} />
 
-                    {showDiscussions && (discussionResp.length === 0 ? <Spinner /> :<div>    <Title
+                    {showDiscussions && (discussionResp.length === 0 ? <Spinner /> : <div>    <Title
                         titleName="Discussion"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     /> <Table data={discussionResp} onBuyClick={handleDiscussionClick} buttonLabel="Join" /></div>)}
-                    {showSurveys && (surveyResp.length === 0 ? <Spinner /> :<div>    <Title
+                    {showSurveys && (surveyResp.length === 0 ? <Spinner /> : <div>    <Title
                         titleName="Surveys"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     /> <Table data={surveyResp} onBuyClick={handleSurveyClick} buttonLabel="Join" /></div>)}
-                    {showVoting && (votingResp.length === 0 ? <Spinner /> :<div>    <Title
+                    {showVoting && (votingResp.length === 0 ? <Spinner /> : <div>    <Title
                         titleName="Voting"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}

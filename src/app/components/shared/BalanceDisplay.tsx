@@ -8,28 +8,32 @@ interface BalanceDisplayProps {
 }
 
 const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
-    const [amount, setAmount] = useState(0);
-    const { coin, setCoin, setUserBalance } = useSiteStore()
+    const [balances, setBalances] = useState<{ amount: number; symbol: string; decimals: number }[]>([]);
+    const { setCoin, setUserBalance } = useSiteStore();
+
     useEffect(() => {
         const coin: CoinChain = {
             name: 'Aptos',
             symbol: 'APT',
             decimals: 8,
             logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/aptos/info/logo.png'
-        }
-        setCoin(coin)
-    }, [setCoin])
-    useEffect(() => {
-        console.log('call getBalance :>>',)
-        getBalance(address)
-            .then((balance) => {
-                console.log("🚀 ~ .then ~ balance:", balance)
-                if (coin.decimals) {
-                    const clearAmount = +balance[0].amount / 10 ** coin.decimals;
-                    setAmount(clearAmount);
-                    setUserBalance(+balance[0].amount);
-                }
+        };
+        setCoin(coin);
+    }, [setCoin]);
 
+    useEffect(() => {
+        console.log('call getBalance :>>');
+        getBalance(address)
+            .then((balanceList) => {
+                console.log("🚀 ~ .then ~ balanceList:", balanceList);
+                const formattedBalances = balanceList.map(balance => {
+                    const symbol = balance?.metadata?.symbol || '';
+                    const decimals = balance?.metadata?.decimals || 0;
+                    const clearAmount = +balance.amount / 10 ** decimals;
+                    return { amount: clearAmount, symbol, decimals };
+                });
+                setBalances(formattedBalances);
+                setUserBalance(balanceList[0].amount); // Assuming you want to set the balance of the first coin
             })
             .catch((error) => {
                 console.log("🚀 ~ .then ~ error:", error);
@@ -38,14 +42,17 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
                 //         console.log("🚀 ~ .then ~ balance:", balance);
                 //     });
             });
-    }, [address, setAmount, coin]);
+    }, [address, setUserBalance]);
 
-    const formattedBalance = useMemo(() => {
-        return `${amount} ${coin.symbol}`;
-    }, [amount, coin.symbol]);
+    const formattedBalances = useMemo(() => {
+        return balances.map(balance => `${balance.amount} ${balance.symbol}`);
+    }, [balances]);
+
     return (
         <div className="mr-4">
-            {formattedBalance}
+            {formattedBalances.map((balance, index) => (
+                <div key={index}>{balance}</div>
+            ))}
         </div>
     );
 };

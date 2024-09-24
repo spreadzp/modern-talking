@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 import Spinner from '../../shared/Spinner';
 import Table from '../../shared/Table';
 import { useRouter } from 'next/navigation';
-import StarryBackground from '../../shared/StarryBackground';
 import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 import ExpandableContent from '../../shared/ExpandableTable';
 
@@ -57,7 +56,6 @@ const Marketplace: React.FC = () => {
 
     return (
         <>
-            <StarryBackground />
             <div className="">
                 <div className="container mx-auto p-4 ">
                     <div className="flex items-center justify-center"><Title

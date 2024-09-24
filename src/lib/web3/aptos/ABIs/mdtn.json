@@ -1,0 +1,188 @@
+{
+    "address": "0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a",
+    "name": "mdtn",
+    "friends": [],
+    "exposed_functions": [
+        {
+            "name": "burn",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "deployer_store",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "0x1::object::Object<0x1::fungible_asset::FungibleStore>"
+            ]
+        },
+        {
+            "name": "metadata",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "0x1::object::Object<0x1::fungible_asset::Metadata>"
+            ]
+        },
+        {
+            "name": "metadata_address",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "mint",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "register_account",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer"
+            ],
+            "return": []
+        },
+        {
+            "name": "transfer",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "withdraw",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": false,
+            "generic_type_params": [
+                {
+                    "constraints": [
+                        "key"
+                    ]
+                }
+            ],
+            "params": [
+                "0x1::object::Object<T0>",
+                "u64",
+                "&0x1::fungible_asset::TransferRef"
+            ],
+            "return": [
+                "0x1::fungible_asset::FungibleAsset"
+            ]
+        }
+    ],
+    "structs": [
+        {
+            "name": "Burn",
+            "is_native": false,
+            "is_event": true,
+            "abilities": [
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "minter",
+                    "type": "address"
+                },
+                {
+                    "name": "from",
+                    "type": "address"
+                },
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "Management",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "extend_ref",
+                    "type": "0x1::object::ExtendRef"
+                },
+                {
+                    "name": "mint_ref",
+                    "type": "0x1::fungible_asset::MintRef"
+                },
+                {
+                    "name": "burn_ref",
+                    "type": "0x1::fungible_asset::BurnRef"
+                },
+                {
+                    "name": "transfer_ref",
+                    "type": "0x1::fungible_asset::TransferRef"
+                }
+            ]
+        },
+        {
+            "name": "Mint",
+            "is_native": false,
+            "is_event": true,
+            "abilities": [
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "minter",
+                    "type": "address"
+                },
+                {
+                    "name": "to",
+                    "type": "address"
+                },
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        }
+    ]
+}

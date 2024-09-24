@@ -16,13 +16,13 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({ title, children, 
 
     return (
         <div className="w-full text-center text-white font-bold mb-4" >
-            <h2  className="flex items-center justify-center text-xl font-semibold mb-2 cursor-pointer" onClick={toggleExpansion} >
-            <Title
+            <div className="flex items-center justify-center text-xl font-semibold mb-2 cursor-pointer" onClick={toggleExpansion} >
+                <Title
                     titleName={title}
                     titleSize={TitleSize.H4}
                     titleEffect={TitleEffect.Gradient}
-                /> {isExpanded ? '▲' : '▼'}
-            </h2>
+                /> <div>{isExpanded ? '▲' : '▼'}</div>
+            </div>
             {isExpanded && children}
         </div>
     );

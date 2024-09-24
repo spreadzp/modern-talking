@@ -1,0 +1,243 @@
+{
+    "address": "0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a",
+    "name": "reward",
+    "friends": [],
+    "exposed_functions": [
+        {
+            "name": "change_admin",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address"
+            ],
+            "return": []
+        },
+        {
+            "name": "execute_reward",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "address"
+            ],
+            "return": []
+        },
+        {
+            "name": "get_admin_address",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_reward_info",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address",
+                "address"
+            ],
+            "return": [
+                "u64",
+                "u64",
+                "address",
+                "bool"
+            ]
+        },
+        {
+            "name": "init_admin",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer"
+            ],
+            "return": []
+        },
+        {
+            "name": "set_addresses",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "address",
+                "vector<address>"
+            ],
+            "return": []
+        },
+        {
+            "name": "setup_reward",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "u64",
+                "u64",
+                "address"
+            ],
+            "return": []
+        }
+    ],
+    "structs": [
+        {
+            "name": "Admin",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "admin",
+                    "type": "address"
+                }
+            ]
+        },
+        {
+            "name": "ChangeAdmin",
+            "is_native": false,
+            "is_event": true,
+            "abilities": [
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "prev_admin",
+                    "type": "address"
+                },
+                {
+                    "name": "new_admin",
+                    "type": "address"
+                }
+            ]
+        },
+        {
+            "name": "RewardConfig",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "drop",
+                "store",
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "end_time",
+                    "type": "u64"
+                },
+                {
+                    "name": "nft_id",
+                    "type": "address"
+                },
+                {
+                    "name": "addresses",
+                    "type": "0x1::option::Option<vector<address>>"
+                },
+                {
+                    "name": "is_active",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "RewardEvent",
+            "is_native": false,
+            "is_event": true,
+            "abilities": [
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "end_time",
+                    "type": "u64"
+                },
+                {
+                    "name": "nft_id",
+                    "type": "address"
+                },
+                {
+                    "name": "is_active",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "RewardMap",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "map",
+                    "type": "0x1::table::Table<address, 0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a::reward::RewardConfig>"
+                }
+            ]
+        },
+        {
+            "name": "RewardsExecuteEvent",
+            "is_native": false,
+            "is_event": true,
+            "abilities": [
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "nft_id",
+                    "type": "address"
+                },
+                {
+                    "name": "total_sum",
+                    "type": "u64"
+                },
+                {
+                    "name": "per_address_amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "addresses_for_rewards",
+                    "type": "vector<address>"
+                }
+            ]
+        }
+    ]
+}

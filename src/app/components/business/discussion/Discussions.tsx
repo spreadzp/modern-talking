@@ -6,7 +6,6 @@ import { useSiteStore } from '../../../hooks/store';
 import { createDiscussion, getDiscussions } from '@/server/discussion-db';
 import { Modal } from '../../shared/Modal/Modal';
 import Spinner from '../../shared/Spinner';
-import StarryBackground from '../../shared/StarryBackground';
 import Title, { TitleEffect, TitleSize } from '../../shared/Title';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 import { getNftIdByHash, mintNft, transferNft } from '@/lib/web3/aptos/nft';
@@ -23,6 +22,7 @@ const Discussions: React.FC = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [isTxProcess, setIsTxProcess] = useState(false)
 
     useEffect(() => {
         updateDiscussions()
@@ -41,6 +41,7 @@ const Discussions: React.FC = () => {
 
     const handleSubmit = async (newDiscussion: any) => {//  Discussion & {price: number}) => {
         try {
+            setIsTxProcess(true);
             if (userBalance < 0.005 && activeAccount) {
                 // fundTestAptAccount(activeAccount?.accountAddress.toString())
                 //     .then((tx) => {
@@ -98,6 +99,7 @@ const Discussions: React.FC = () => {
             setErrorMessage((error as Error).message);
         } finally {
             closeModal();
+            setIsTxProcess(false)
         }
     };
     const updateDiscussions = () => {
@@ -109,27 +111,28 @@ const Discussions: React.FC = () => {
 
     return (
         <>
-            <StarryBackground />
-            {activeAccount ? <div className="min-h-screen ">
-                <div className="container mx-auto p-4">
-                    <div className="flex items-center justify-center"><Title
-                        titleName="Discussions"
-                        titleSize={TitleSize.H3}
-                        titleEffect={TitleEffect.Gradient}
-                    /></div>
-                    <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
-                        Create new discussion
-                    </button>
-                    {
-                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion" typeModal={'Discussion'} /> :
-                            (discussionsData.length === 0 ? <Spinner /> : <Table
-                                data={discussionsData}
-                                onBuyClick={handleDiscussionClick}
-                                buttonLabel="Join"
-                            />)
-                    }
-                </div>
-            </div> : <LoginPage />}
+            {isTxProcess ? <Spinner text='Transaction in process' /> :
+                <div> {activeAccount ? <div className="min-h-screen ">
+                    <div className="container mx-auto p-4">
+                        <div className="flex items-center justify-center"><Title
+                            titleName="Discussions"
+                            titleSize={TitleSize.H3}
+                            titleEffect={TitleEffect.Gradient}
+                        /></div>
+                        <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
+                            Create new discussion
+                        </button>
+                        {
+                            isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create Discussion" typeModal={'Discussion'} /> :
+                                (discussionsData.length === 0 ? <Spinner /> : <Table
+                                    data={discussionsData}
+                                    onBuyClick={handleDiscussionClick}
+                                    buttonLabel="Join"
+                                />)
+                        }
+                    </div>
+                </div> : <LoginPage />}
+                </div>}
             {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
             {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
         </>

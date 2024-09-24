@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ModalProps } from "./modal.interfaces";
 import { createHashForPrivateKeyFromString } from "@/app/hooks/utils";
 import { APT_UNIT } from "@/lib/web3/aptos/marketplace";
+import { reworkYouTubeUrl } from "@/lib/web3/aptos/utils";
 
 export const DiscussionModal: React.FC<Omit<ModalProps, 'typeModal'>> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
     // State and logic specific to DiscussionModal
@@ -15,13 +16,14 @@ export const DiscussionModal: React.FC<Omit<ModalProps, 'typeModal'>> = ({ isOpe
     const handleSubmit = (e: any) => {
         debugger
         e.preventDefault();
-        const identity = createHashForPrivateKeyFromString(sourceUrl);
-        const hash =  identity?.address as string;
-        if (hash && sourceUrl && description && prompt && topic) {
+        const url = reworkYouTubeUrl(sourceUrl);
+        const identity = createHashForPrivateKeyFromString(url);
+        const hash = identity?.address as string;
+        if (hash && url && description && prompt && topic) {
             const price = Number(priceDecimals) * APT_UNIT;
             const newDiscussion: any = {
                 hash,
-                sourceUrl,
+                sourceUrl: url,
                 description,
                 prompt,
                 topic,
@@ -80,7 +82,7 @@ export const DiscussionModal: React.FC<Omit<ModalProps, 'typeModal'>> = ({ isOpe
                                 Price for sell
                             </label>
                             <input className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="price" type="text" value={priceDecimals} onChange={(e) => setPrice( e.target.value )} />
+                                id="price" type="text" value={priceDecimals} onChange={(e) => setPrice(e.target.value)} />
                         </div>
                         <div className="modal-footer">
                             <button className="px-4 py-2 font-bold text-white bg-blue-500 rounded shadow hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">

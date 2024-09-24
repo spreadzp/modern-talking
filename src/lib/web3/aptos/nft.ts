@@ -1,6 +1,6 @@
 import { KeylessAccount, InputGenerateTransactionPayloadData, TransactionWorkerEventsEnum } from "@aptos-labs/ts-sdk";
 import { IndexerClient } from "aptos";
-import * as ABI from "./abi-nft.json";
+import * as ABI from "./ABIs/abi-nft.json";
 import { aptosClient } from "./constants";
 
 export const APT = "0x1::aptos_coin::AptosCoin";

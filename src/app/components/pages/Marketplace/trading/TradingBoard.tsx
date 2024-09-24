@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, use } from 'react';
 import { useSiteStore } from '@/app/hooks/store';
 import { createMarketplace, getMarketplaceByHash, updateMarketplaceByNewOwnerId } from '@/server/marketplace';
 import { Bid, LotType, Marketplace, User } from '@prisma/client';
-import StarryBackground from '@/app/components/shared/StarryBackground';
 
 import BidTable from './BidTable';
 import HistoryTradeTable from './HistoryTradeTable';
@@ -39,7 +38,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
         nftId: '',
         hashLot: '',
         bids: [],
-        historyTrades: []
+        historyTrades: [],
     });
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -215,26 +214,24 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                 // const nftId = `${tx[0]}`
                 // console.log("🚀 ~ handleAcceptLot ~ nftId:", nftId); 
                 console.log("🚀 ~ handleAcceptLot ~ lotData:", lotData);
-                const res = await purchase(activeAccount, lotData.hashLot);
-                console.log("🚀 ~ handleAcceptLot ~ res:", res);
-                if (res) {
-                    const transferEvent = res.events.find((event: any) => event.type === "0x1::object::TransferEvent");
-                    console.log("🚀 ~ handleAcceptLot ~ transferEvent:", transferEvent);
-                    console.log("🚀 ~ handleAcceptLot ~ transferEvent.data:", transferEvent.data);
-                    try {
-                        await updateMarketplaceByNewOwnerId(lotData.id, transferEvent.data.to);
-                        // const response = await listNftWithFixedPrice(activeAccount, transferEvent.data.object, lotData.price)
+                console.log('lotData[ owner ].address :>>', lotData?.owner?.address)
+                if (lotData?.owner?.address) {
+                    const res = await purchase(activeAccount, lotData?.owner?.address, lotData.hashLot);
+                    console.log("🚀 ~ handleAcceptLot ~ res:", res);
+                    if (res) {
+                        const transferEvent = res.events.find((event: any) => event.type === "0x1::object::TransferEvent");
+                        console.log("🚀 ~ handleAcceptLot ~ transferEvent:", transferEvent);
+                        console.log("🚀 ~ handleAcceptLot ~ transferEvent.data:", transferEvent.data);
+                        try {
+                            await updateMarketplaceByNewOwnerId(lotData.id, transferEvent.data.to);
+                            setSuccessMessage('Lot accepted successfully!');
+                            setShowListingNftModal(true);
 
-                        // .catch((error) => {
-                        //     console.error('Error listing with fixed price:', error);
-                        // });
-                        setSuccessMessage('Lot accepted successfully!');
-                        setShowListingNftModal(true);
-
-                    } catch (err) {
-                        setErrorMessage((err as Error).message);
-                    } finally {
-                        router?.push(`/trading-board/${hashResource}-${resourceType}`);
+                        } catch (err) {
+                            setErrorMessage((err as Error).message);
+                        } finally {
+                            router?.push(`/trading-board/${hashResource}-${resourceType}`);
+                        }
                     }
                 }
 
@@ -252,7 +249,6 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
 
     return (
         <>
-            <StarryBackground />
             {accepted ? <Spinner text='Accepting lot process ...' /> : <div className="min-h-screen ">
                 <div className="container mx-auto p-4">
                     <Title

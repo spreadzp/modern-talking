@@ -3,13 +3,24 @@ import { useCallback, useEffect, useState } from 'react';
 import Table from '../../shared/Table';
 import { useSiteStore } from '../../../hooks/store';
 import { Modal } from '../../shared/Modal/Modal';
-import { Reward, Survey } from '@prisma/client';
+import { Reward } from '@prisma/client';
 import Spinner from '../../shared/Spinner';
-import StarryBackground from '../../shared/StarryBackground';
-import { createReward, createRewardByResource, getRewards, getRewardsByContent } from '@/server/reward';
+import { createRewardByResource, getRewardsByContent } from '@/server/reward';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
 import { useRouter } from 'next/navigation';
+import { getRewardInfo, setupReward } from '@/lib/web3/aptos/rewardsContract';
+import { getMarketplaceByHash } from '@/server/marketplace';
+import ErrorModal from '../../shared/Modal/ErrorModal';
+import SuccessModal from '../../shared/Modal/SuccessModal';
+import SetupAddresses from './SetupAddresses';
+import { getUsersAddresses } from '@/server/users';
 
+export type UpComingRewards = {
+    amount: string,
+    endTimeToStartRewards: Date,
+    nftId: string,
+    isStarted: boolean
+}
 interface RewardsTableProps {
     contentData: any;
 }
@@ -18,11 +29,35 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
     const [isResourceLot, setIsResourceLot] = useState(false);
     const { setRewards, rewards, currentUser, setReward } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
+    const [activeNftId, setActiveNftId] = useState('')
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [currentReward, setCurrentReward] = useState({} as UpComingRewards);
+    const [isSetupAddresses, setSetupAddresses] = useState(false)
+    const [usersAddresses, setUsersAddresses] = useState<string[]>([])
     const router = useRouter();
     useEffect(() => {
         if (contentData.owner.address === activeAccount?.accountAddress.toString()) {
-
-            setIsResourceLot(true)
+            setIsResourceLot(true);
+            if (contentData) {
+                const usersIds = contentData.chat.messages.map((message: any) => message.userId)
+                getUsersAddresses(usersIds)
+                    .then((addr: string[]) => {
+                        setUsersAddresses(() => [...addr])
+                    })
+                console.log("🚀 ~ useEffect ~ contentData:", contentData)
+                getMarketplaceByHash(contentData.hash).then((data) => {
+                    if (data) {
+                        setActiveNftId(data.nftId);
+                        getRewardInfo(data.nftId)
+                            .then(data => {
+                                setCurrentReward({ amount: data[0], endTimeToStartRewards: new Date(+data[1] * 1000), nftId: data[2], isStarted: data[3] })
+                                console.log('getRewardInfo data :>>', data)
+                            })
+                            .catch(err => console.log('not init yet:>>', err))
+                    }
+                });
+            }
         }
     }, [setIsResourceLot, contentData])
     const updateRewards = useCallback(() => {
@@ -40,6 +75,13 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
             });
         }
     }, [setRewards, rewards, contentData]);
+
+    useEffect(() => {
+        console.log('currentReward.endTimeToStartRewards >= Date.now() :>>', currentReward.endTimeToStartRewards, new Date(Date.now()));
+        if (!currentReward.isStarted && currentReward.endTimeToStartRewards <= new Date(Date.now())) {
+            setSetupAddresses(true);
+        }
+    }, [currentReward, setSetupAddresses]);
 
     useEffect(() => {
         updateRewards()
@@ -61,10 +103,20 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
 
     const handleSubmit = useCallback(async (newReward: Reward) => {
         try {
-            if (newReward) {
-                const createdReward = await createRewardByResource(newReward, contentData);
-                if (createdReward) {
-                    updateRewards();
+            if (newReward && activeAccount && activeNftId !== '') {
+                try {
+                    const tx = await setupReward(activeAccount, newReward.sum, Math.floor(Date.now() / 1000), activeNftId);
+                    if (tx) {
+                        const createdReward = await createRewardByResource(newReward, contentData);
+                        if (createdReward) {
+                            updateRewards();
+                        }
+                        setSuccessMessage('Reward created successfully');
+                    }
+                } catch (error) {
+                    console.log("🚀 ~ handleSubmit ~ error:", error)
+                    setErrorMessage('Error creating reward');
+                    return;
                 }
             }
         } catch (error) {
@@ -74,22 +126,24 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
 
     return (
         <>
-            <StarryBackground />
             <div className="min-h-screen ">
                 <div className="container mx-auto p-4  shadow-lg rounded-lg">
-                    {isResourceLot && <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
-                        Create a new Reward
-                    </button>}
-                    {
-                        isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create a new Reward" typeModal={'Reward'} /> :
-                            (rewards.length === 0 ? <Spinner text='Loading rewards...'/> : <Table
-                                data={rewards}
-                                onBuyClick={handleRewardClick}
-                                buttonLabel="Join"
-                            />)
-                    }
+                    <div>{
+                        isResourceLot && !currentReward.amount ?
+                            <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
+                                Create a new Reward
+                            </button> :
+                            isSetupAddresses ?
+                                <SetupAddresses currentReward={{ nftId: currentReward.nftId, usersAddresses, totalSum: +currentReward.amount }} /> :
+                                <Spinner text='the vote collection program is still ongoing' />
+                    }</div>
+                    <div>
+                        {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create a new Reward" typeModal={'Reward'} />}
+                    </div>
                 </div>
             </div>
+            {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
+            {successMessage && <SuccessModal message={successMessage} onClose={() => setSuccessMessage(null)} />}
         </>
     );
 };

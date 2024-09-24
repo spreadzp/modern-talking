@@ -6,7 +6,6 @@ import { useSiteStore } from '../../../hooks/store';
 import { Modal } from '../../shared/Modal/Modal';
 import Spinner from '../../shared/Spinner';
 import { createVoting, getVotingList } from '@/server/voting';
-import StarryBackground from '../../shared/StarryBackground';
 import { getNftIdByHash, mintNft } from '@/lib/web3/aptos/nft';
 import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
@@ -86,7 +85,6 @@ const VotingTable: React.FC = () => {
     };
     return (
         <>
-            <StarryBackground />
             {activeAccount ? <div className="min-h-screen ">
                 <div className="container mx-auto p-4">
                     <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">

@@ -10,18 +10,18 @@ interface LeftSideProps {
     contentData: ContentData;
 }
 
-const Content: React.FC<LeftSideProps> = ({ contentData }) => { 
-    const {setSelectedOwnerAddress, setCurrentResourceType}  = useSiteStore();
+const Content: React.FC<LeftSideProps> = ({ contentData }) => {
+    const { setSelectedOwnerAddress, setCurrentResourceType } = useSiteStore();
     useEffect(() => {
         setSelectedOwnerAddress(contentData.owner?.address)
         setCurrentResourceType(contentData?.resourceType)
     }, [contentData, setSelectedOwnerAddress, setCurrentResourceType])
     return (
-        <div className="w-full md:pl-4 md:mr-4 flex flex-col "> 
-            <MarketData hash={contentData.hash} /> 
-            {contentData.owner && 
-                    <OwnerPanel  /> }
-            <p className="mb-2">
+        <div className="w-full md:pl-4 md:mr-4 flex flex-col ">
+            <MarketData hash={contentData.hash} />
+            {contentData.owner &&
+                <OwnerPanel />}
+            <div className="mb-2">
                 Source:{' '}
                 <a
                     href={contentData.sourceUrl}
@@ -31,24 +31,24 @@ const Content: React.FC<LeftSideProps> = ({ contentData }) => {
                 >
                     {contentData.title}
                 </a>
-            </p>
+            </div>
             <iframe
                 src={contentData.sourceUrl}
                 width="100%"
-                height="300" 
+                height="300"
                 allowFullScreen
                 title="YouTube Video"
                 className="mb-2"
             />
-            <p className="mb-2">
+            <div className="mb-2">
                 <strong>Description:</strong> {contentData.description}
-            </p>
-            <p className="mb-2">
+            </div>
+            <div className="mb-2">
                 <strong>Prompt Restrictions:</strong> {contentData.promptRestrictions}
-            </p>
-            <p className="mb-2">
-            <Rewards contentData={contentData}/>
-            </p>
+            </div>
+            <div className="mb-2">
+                <Rewards contentData={contentData} />
+            </div>
         </div>
 
     );

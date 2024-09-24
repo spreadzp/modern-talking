@@ -8,21 +8,24 @@ interface RewardModalProps {
 }
 
 const RewardModal: React.FC<RewardModalProps> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
- 
+
     const [description, setDescription] = useState('');
     const [condition, setCondition] = useState('');
     const [sum, setSum] = useState('');
     //const [token, setToken] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if ( description && condition && sum ) {
-            const newReward = { 
+
+        if (description && condition && sum) {
+            const newReward = {
                 description,
                 condition,
                 sum: Number(sum),
-               // token,
+                // token,
+
             };
+
             onSubmit(newReward);
             onClose();
         }
@@ -42,7 +45,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ isOpen, onClose, onSubmit, na
                             </svg>
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit}> 
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="description">
                                 Description

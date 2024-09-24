@@ -52,13 +52,14 @@ describe("Marketplace Module Tests", () => {
 
         const listing = await client.view({
             payload: {
-            function: `${ABI.address}::marketplace::get_nft_listing`,
-            typeArguments: [],
-            functionArguments: [nftAddress],
-        }});
+                function: `${ABI.address}::marketplace::get_nft_listing`,
+                typeArguments: [],
+                functionArguments: [nftAddress],
+            }
+        });
         console.log("🚀 ~ test ~ listing:", listing)
 
-        
+
         // Example: expect(listing.price).toBe(1000000);
     });
 
@@ -67,13 +68,14 @@ describe("Marketplace Module Tests", () => {
 
         const listings = await client.view({
             payload: {
-            function: `${ABI.address}::marketplace::get_seller_listings`,
-            typeArguments: [],
-            functionArguments: [sellerAddress],
-        }});
+                function: `${ABI.address}::marketplace::get_seller_listings`,
+                typeArguments: [],
+                functionArguments: [sellerAddress],
+            }
+        });
         console.log("🚀 ~ test ~ listings:", listings)
 
-      
+
         // Example: expect(listings).toContain(nftAddress);
     });
 
@@ -102,10 +104,11 @@ describe("Marketplace Module Tests", () => {
     test("Get Sellers", async () => {
         const sellers = await client.view({
             payload: {
-            function: `${ABI.address}::marketplace::get_sellers`,
-            typeArguments: [],
-            functionArguments: [],
-        }});
+                function: `${ABI.address}::marketplace::get_sellers`,
+                typeArguments: [],
+                functionArguments: [],
+            }
+        });
 
         // Add assertions to verify sellers
         // Example: expect(sellers).toContain(seller.accountAddress.toString());

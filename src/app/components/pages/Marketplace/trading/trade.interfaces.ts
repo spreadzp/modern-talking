@@ -9,6 +9,7 @@ export interface LotData {
     hashLot: string;
     bids: (Bid & { owner: User })[];
     historyTrades: HistoryTrade[];
+    owner?: User;
 }
 
 export interface BidData {

@@ -39,7 +39,7 @@ interface MTSite {
     selectedOwnerAddress: string;
     setSelectedOwnerAddress: (selectedOwnerAddress: string) => void;
     currentResourceType: LotType;
-    setCurrentResourceType: (currentResourceType: LotType) => void; 
+    setCurrentResourceType: (currentResourceType: LotType) => void;
     coin: CoinChain;
     setCoin: (coin: CoinChain) => void;
     rewards: RewardTableData[];
@@ -50,6 +50,8 @@ interface MTSite {
     setCountRewards: (countRewards: number) => void;
     userBalance: number;
     setUserBalance: (userBalance: number) => void;
+    selectedNftId: string;
+    setSelectedNftId: (selectedNftId: string) => void;
 
 }
 
@@ -100,6 +102,7 @@ export const useSiteStore = create<MTSite>((set) => ({
     setCountRewards: (countRewards: number) => set({ countRewards }),
     userBalance: 0,
     setUserBalance: (userBalance: number) => set({ userBalance }),
-
+    selectedNftId: '',
+    setSelectedNftId: (selectedNftId: string) => set({ selectedNftId }),
 })
 )

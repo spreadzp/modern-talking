@@ -1,5 +1,5 @@
 import { KeylessAccount } from "@aptos-labs/ts-sdk";
-import * as ABI from "./abi-marketplace.json";
+import * as ABI from "./ABIs/abi-marketplace.json";
 import { aptosClient } from "./constants";
 
 export const APT = "0x1::aptos_coin::AptosCoin";
@@ -67,14 +67,14 @@ export async function listNftWithFixedPrice(signer: KeylessAccount, nftId: strin
 
 
 // Function to purchase
-export async function purchase(signer: KeylessAccount, object: string): Promise<any> {
-    console.log("🚀 ~ purchase ~ object:", object)
+export async function purchase(signer: KeylessAccount, seller: string, offer_id: string): Promise<any> {
+    console.log("🚀 ~ purchase ~ object:", offer_id)
     const txn = await aptosClient.transaction.build.simple({
         sender: signer.accountAddress.toString(),
         data: {
-            function: `${ABI['address']}::marketplace::purchase`,
+            function: `${ABI['address']}::marketplace::accept_offer`,
             typeArguments: [], // `${ABI['address']}::nft::NFT`
-            functionArguments: [object],
+            functionArguments: [seller, offer_id],
         }
     });
     const committedTxn = await aptosClient.signAndSubmitTransaction({
@@ -151,7 +151,7 @@ export async function getListingObjectPrice(listingObjectAddr: string): Promise<
         console.log("🚀 ~ getListingObjectPrice ~ listingObjectAddr:", listingObjectAddr);
         const listingObjectPrice = await aptosClient.view({
             payload: {
-                function: `${ABI['address']}::marketplace::price`,
+                function: `${ABI['address']}::marketplace::get_listing_price`,
                 typeArguments: [], //`${ABI['address']}::nft::NFT`
                 functionArguments: [listingObjectAddr],
             }

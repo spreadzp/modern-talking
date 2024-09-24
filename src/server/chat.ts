@@ -1,7 +1,7 @@
 'use server'
-import { Chat,   Message, PrismaClient  } from '@prisma/client'
+import { Chat, Message, PrismaClient } from '@prisma/client'
 import { getDiscussionByHash } from './discussion-db'
- 
+
 
 const prisma = new PrismaClient()
 
@@ -28,7 +28,7 @@ export async function getMessagesByChatId(chatId: number, address?: string, owne
                 type: 'text',
                 forwarded: false,
                 replyButton: true,
-                removeButton: address === ownerAddress ? true: false,
+                removeButton: address === ownerAddress ? true : false,
                 title: item.user.address === address ? 'You' : item.user.address,
             }
             return message
@@ -38,6 +38,7 @@ export async function getMessagesByChatId(chatId: number, address?: string, owne
         return null
     }
 }
+
 
 export async function removeMessageById(id: number): Promise<any> {
     const message = await prisma.message.delete({

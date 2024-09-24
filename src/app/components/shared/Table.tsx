@@ -66,7 +66,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
                 );
             }
         }
-        if (header === 'hashResource') {
+        if (header === 'hashResource' || header === 'address') {
             return (<WalletAddressDisplay address={value} />)
         }
         if (header === 'rewardSumInUsd') {

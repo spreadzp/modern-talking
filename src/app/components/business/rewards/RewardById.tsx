@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSiteStore } from '../../../hooks/store';
 import Spinner from '../../shared/Spinner';
-import StarryBackground from '../../shared/StarryBackground';
 import { getRewardById } from '@/server/reward';
 
 const RewardById: React.FC = () => {
@@ -22,7 +21,6 @@ const RewardById: React.FC = () => {
 
     return (
         <>
-            <StarryBackground />
             <div className="min-h-screen flex items-center justify-center  ">
                 {!reward.description ? (
                     <Spinner />

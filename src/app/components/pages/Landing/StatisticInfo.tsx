@@ -8,7 +8,6 @@ import { useSiteStore } from "../../../hooks/store";
 import { getCountSurveys } from "@/server/survey";
 import { getCountDataSets } from "@/server/dataset";
 import { getCountVoting } from "@/server/voting";
-import StarryBackground from "../../shared/StarryBackground";
 import { countRewardsByResource } from "@/server/reward";
 type RewardsSum = {
     survey: number,
@@ -64,7 +63,6 @@ export const StatisticInfo = () => {
 
     return (
         <>
-            <StarryBackground />
 
             <div className="">
                 <div className="container mx-auto p-4">

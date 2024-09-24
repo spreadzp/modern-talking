@@ -1,0 +1,456 @@
+{
+    "address": "0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a",
+    "name": "marketplace",
+    "friends": [],
+    "exposed_functions": [
+        {
+            "name": "accept_offer",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "address"
+            ],
+            "return": []
+        },
+        {
+            "name": "change_price_offer",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "claim_offer_by_owner_nft",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address"
+            ],
+            "return": []
+        },
+        {
+            "name": "close_offer",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address"
+            ],
+            "return": []
+        },
+        {
+            "name": "exists_listing",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "bool"
+            ]
+        },
+        {
+            "name": "get_listing_object_address",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_listing_price",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "u64"
+            ]
+        },
+        {
+            "name": "get_listing_seller",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_marketplace_signer",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "signer"
+            ]
+        },
+        {
+            "name": "get_marketplace_signer_addr",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_nft_listing",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_offer_id_by_nft_id",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "0x1::option::Option<address>"
+            ]
+        },
+        {
+            "name": "get_seller_at",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "u64"
+            ],
+            "return": [
+                "address"
+            ]
+        },
+        {
+            "name": "get_seller_listings",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "vector<address>"
+            ]
+        },
+        {
+            "name": "get_seller_listings_length",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "u64"
+            ]
+        },
+        {
+            "name": "get_sellers",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "vector<address>"
+            ]
+        },
+        {
+            "name": "get_sellers_count",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [],
+            "return": [
+                "u64"
+            ]
+        },
+        {
+            "name": "list_nft_with_fixed_price",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "address",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "list_with_fixed_price_internal",
+            "visibility": "friend",
+            "is_entry": false,
+            "is_view": false,
+            "generic_type_params": [],
+            "params": [
+                "&signer",
+                "0x1::object::Object<0x1::object::ObjectCore>",
+                "u64"
+            ],
+            "return": []
+        },
+        {
+            "name": "listing",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "address"
+            ],
+            "return": [
+                "0x1::option::Option<0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a::marketplace::ListingInfo>"
+            ]
+        },
+        {
+            "name": "price",
+            "visibility": "public",
+            "is_entry": false,
+            "is_view": true,
+            "generic_type_params": [],
+            "params": [
+                "0x1::object::Object<0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a::marketplace::ListingWithPrice>"
+            ],
+            "return": [
+                "0x1::option::Option<u64>"
+            ]
+        }
+    ],
+    "structs": [
+        {
+            "name": "ListingAddressMap",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "map",
+                    "type": "0x1::table::Table<0x1::string::String, address>"
+                }
+            ]
+        },
+        {
+            "name": "ListingEvent",
+            "is_native": false,
+            "is_event": true,
+            "abilities": [
+                "copy",
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "nft_id",
+                    "type": "address"
+                },
+                {
+                    "name": "price",
+                    "type": "u64"
+                },
+                {
+                    "name": "listing_addr",
+                    "type": "address"
+                },
+                {
+                    "name": "status",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "ListingInfo",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "copy",
+                "drop",
+                "store"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "object_address",
+                    "type": "address"
+                },
+                {
+                    "name": "seller",
+                    "type": "address"
+                },
+                {
+                    "name": "price",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "ListingWithPrice",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "drop",
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "object",
+                    "type": "0x1::object::Object<0x1::object::ObjectCore>"
+                },
+                {
+                    "name": "seller",
+                    "type": "address"
+                },
+                {
+                    "name": "delete_ref",
+                    "type": "0x1::object::DeleteRef"
+                },
+                {
+                    "name": "extend_ref",
+                    "type": "0x1::object::ExtendRef"
+                },
+                {
+                    "name": "price",
+                    "type": "u64"
+                },
+                {
+                    "name": "transfer_ref",
+                    "type": "0x1::object::TransferRef"
+                },
+                {
+                    "name": "listing_event",
+                    "type": "0x77a3037cec05236afc07574d5b8b0df53a47ddd232d0c19874a75274a12d59a::marketplace::ListingEvent"
+                }
+            ]
+        },
+        {
+            "name": "MarketplaceSigner",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "extend_ref",
+                    "type": "0x1::object::ExtendRef"
+                }
+            ]
+        },
+        {
+            "name": "Offer",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "drop",
+                "store",
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "object",
+                    "type": "0x1::object::Object<0x1::object::ObjectCore>"
+                },
+                {
+                    "name": "buyer",
+                    "type": "address"
+                },
+                {
+                    "name": "price",
+                    "type": "u64"
+                },
+                {
+                    "name": "transfer_ref",
+                    "type": "0x1::object::TransferRef"
+                }
+            ]
+        },
+        {
+            "name": "SellerListings",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "store",
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "listings",
+                    "type": "vector<address>"
+                }
+            ]
+        },
+        {
+            "name": "Sellers",
+            "is_native": false,
+            "is_event": false,
+            "abilities": [
+                "key"
+            ],
+            "generic_type_params": [],
+            "fields": [
+                {
+                    "name": "addresses",
+                    "type": "vector<address>"
+                }
+            ]
+        }
+    ]
+}

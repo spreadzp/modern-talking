@@ -16,7 +16,7 @@ export default function SingButtons() {
     const { activeAccount, disconnectKeylessAccount, accounts } = useKeylessAccounts();
     const { setUserAddressWallet, setCurrentUser, setCoin } = useSiteStore()
 
-  
+
     useEffect(() => {
         if (accounts && accounts[0] && activeAccount) {
             getUserByEmail(accounts[0].idToken.decoded.email!)
@@ -24,18 +24,18 @@ export default function SingButtons() {
                     setCurrentUser(user)
                     setUserAddressWallet(activeAccount?.accountAddress.toString())
                 });
-                // fundTestAptAccount(activeAccount.accountAddress.toString())
-                // .then((tx) => {
-                //     console.log('fundTestAptAccount tx :>>', tx)
-                // })
+            // fundTestAptAccount(activeAccount.accountAddress.toString())
+            // .then((tx) => {
+            //     console.log('fundTestAptAccount tx :>>', tx)
+            // })
             // mintNft(activeAccount, '0xd46708AE20B66B06B27Cb5f328e5819eF4D25879')
             // .then(tx => {
             //     console.log('!!!!!!!!!!!!tx :>>', tx)
             // })
-            // getCollectionDataByCreatorAddress(activeAccount )
-            //     .then((tx) => {
-            //         console.log('getCollectionDataByCreatorAddress tx :>>', tx)
-            //     })
+            getCollectionDataByCreatorAddress(activeAccount)
+                .then((tx) => {
+                    console.log('getCollectionDataByCreatorAddress tx :>>', tx)
+                })
             // getNftIdByHash(activeAccount.accountAddress.toString(), '0xd46708AE20B66B06B27Cb5f328e5819eF4D25879')
             //     .then((tx) => {
             //         console.log('getNftIdByHash tx :>>', tx)
