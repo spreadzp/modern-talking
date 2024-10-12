@@ -5,6 +5,7 @@ import { getIconByName } from './Icons';
 import WalletAddressDisplay from './WalletAddressDisplay';
 import { disabledHeaderTableNames } from './disabledHeaderTableNames';
 import Spinner from './Spinner';
+import { RewardStatusEnum } from '@prisma/client';
 
 type TableProps = {
     data: any[];
@@ -50,7 +51,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
         }
     };
 
-    const renderValueByHeader = (header: string, value: string) => {
+    const renderValueByHeader = (header: string, value: any) => {
         if (header === 'sourceUrl') {
             if (value.includes('https://www.youtube.com')) {
                 return (
@@ -66,13 +67,68 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
                 );
             }
         }
-        if (header === 'hashResource' || header === 'address') {
+        if (header === 'hashResource' || header === 'address' || header === 'nftId') {
             return (<WalletAddressDisplay address={value} />)
         }
         if (header === 'rewardSumInUsd') {
             return (<div  >{value === undefined ? <div className="max-h-2"><Spinner /></div> : value}</div>)
         }
+        if (header === 'startDate') {
+            const dateString = value instanceof Date ? value.toLocaleDateString() : value;
+            return (<div className="text-red-500">{dateString}</div>)
+        }
         return stringifyValue(value);
+    };
+
+    const getRewardLabel = (value: string, item: any) => {
+        const headers = Object.keys(item);
+        if (headers.includes('startDate') && headers.includes('status') && onBuyClick) {
+            switch (item.status) {
+                case RewardStatusEnum.Pending:
+                    return (<button
+                        className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                        onClick={() => onBuyClick(item)}
+                    >
+                        Activate
+                    </button>)
+                case RewardStatusEnum.Started:
+                    return item.startDate && item.startDate.toISOString() <= new Date().toISOString() ?
+                        (<button
+                            className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                            onClick={() => onBuyClick(item)}
+                        >
+                            Set recipients
+                        </button>) : (<button
+                            className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-green-500 font-bold py-2 px-4 rounded"
+                            disabled
+                        >
+                            In progress
+                        </button>);
+                case RewardStatusEnum.Executing:
+                    return (<button
+                        className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                        onClick={() => onBuyClick(item)}
+                    >
+                        Start rewards
+                    </button>);
+                case RewardStatusEnum.Finish:
+                    return (<button
+                        className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-green-500 font-bold py-2 px-4 rounded"
+                        disabled
+                    >
+                        Ended
+                    </button>);
+                default: null
+            }
+        } else if (onBuyClick) {
+            return (<button
+                className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                onClick={() => onBuyClick(item)}
+            >
+                {value || 'Buy'}
+            </button>);
+        }
+
     };
 
     return (
@@ -99,12 +155,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
                             ))}
                             {onBuyClick && (
                                 <td className="border px-4 py-2 text-center align-middle">
-                                    <button
-                                        className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
-                                        onClick={() => onBuyClick(item)}
-                                    >
-                                        {buttonLabel || "Buy"}
-                                    </button>
+                                    {getRewardLabel(buttonLabel || 'Buy', item)}
                                 </td>
                             )}
                             {onTradeClick && (

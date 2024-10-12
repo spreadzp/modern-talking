@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'; 
-import { createMessage, getMessagesByChatId, removeMessageById } from '@/server/chat'; 
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { createMessage, getMessagesByChatId, removeMessageById } from '@/server/chat';
 import { MessageList } from 'react-chat-elements';
-import { Button, Input } from 'react-chat-elements'; 
+import { Button, Input } from 'react-chat-elements';
 import EditMessageModal from './EditMessageModal';
 import RemoveMessageModal from './RemoveMessageModal';
 import ForwardMessageModal from './ForwardMessageModal';
 import { useSiteStore } from '@/app/hooks/store';
 import { ContentData } from '@/app/interfaces/table.interfaces';
 import Spinner from '@/app/components/shared/Spinner';
-import ReplyMessageModal from './ReplyMessageModal'; 
+import ReplyMessageModal from './ReplyMessageModal';
 
 interface ChatProps {
     contentData: ContentData;
@@ -22,14 +22,14 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [showReplyModal, setShowReplyModal] = useState<boolean>(false);
     const [ownerAddress, setOwnerAddress] = useState('')
-    
+
     const [showRemoveModal, setShowRemoveModal] = useState<boolean>(false);
     const [showForwardModal, setShowForwardModal] = useState<boolean>(false);
     const messageListReference = useRef<HTMLDivElement>(null);
     const inputReference = useRef<HTMLTextAreaElement>(null);
 
     const getLastMessages = useCallback(() => {
-        if(contentData.owner) {
+        if (contentData.owner) {
             setOwnerAddress(contentData.owner.address)
         }
         setChatMessages(contentData?.chat.messages);
@@ -40,7 +40,7 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
                     setChatMessages(data);
                 }
             });
-    }, [setChatMessages, contentData, currentUser]);
+    }, [setChatMessages, contentData, currentUser, ownerAddress]);
 
     useEffect(() => {
         if (contentData && contentData?.chat && contentData?.chat.messages.length > 0 && currentUser) {
@@ -59,7 +59,8 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
                 chatId: chatId,
                 user: currentUser,
             };
-            await createMessage(message);
+            console.log('contentData :>>', contentData)
+            await createMessage(message, contentData.resourceType);
             setInputValue('');
             getMessagesByChatId(chatId, currentUser?.address, ownerAddress).then((data) => {
                 if (data) {
@@ -78,7 +79,7 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
         setShowEditModal(true);
     };
 
-    const handleReplyMessage = (message: any) => { 
+    const handleReplyMessage = (message: any) => {
         setSelectedMessage(message);
         setShowReplyModal(true);
     };
@@ -95,7 +96,7 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
                 chatId: chatId,
                 user: currentUser,
             };
-            createMessage(message);
+            createMessage(message, contentData.resourceType);
             getMessagesByChatId(chatId, currentUser?.address, ownerAddress).then((data) => {
                 if (data) {
                     setChatMessages(data);
@@ -104,7 +105,7 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
         }
     }
 
-    const handleOnRemove = (selectedMessage: any ) => {
+    const handleOnRemove = (selectedMessage: any) => {
         if (selectedMessage) {
             console.log("🚀 ~ handleOnRemove ~ selectedMessage:", selectedMessage)
             removeMessageById(selectedMessage.id);
@@ -130,10 +131,10 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
                     lockable={true}
                     toBottomHeight={'100%'}
                     dataSource={chatMessages}
-                    onReplyClick={handleReplyMessage} 
+                    onReplyClick={handleReplyMessage}
                     onContextMenu={handleEditMessage}
                     onRemoveMessageClick={handleRemoveMessage}
-                   // onForwardClick={handleForwardMessage}
+                // onForwardClick={handleForwardMessage}
                 />}
 
                 <Input
@@ -155,7 +156,7 @@ const Chat: React.FC<ChatProps> = ({ contentData }) => {
                         }}
                     />
                 )}
-                    {showReplyModal && (
+                {showReplyModal && (
                     <ReplyMessageModal
                         message={selectedMessage}
                         onClose={() => setShowReplyModal(false)}

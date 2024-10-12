@@ -17,8 +17,8 @@ const Content: React.FC<LeftSideProps> = ({ contentData }) => {
         setCurrentResourceType(contentData?.resourceType)
     }, [contentData, setSelectedOwnerAddress, setCurrentResourceType])
     return (
-        <div className="w-full md:pl-4 md:mr-4 flex flex-col ">
-            <MarketData hash={contentData.hash} />
+        <div className="w-full md:pl-4 md:mr-4 flex flex-col text-yellow-500">
+            {contentData.listingStatus === 'Listed' && < MarketData hash={contentData.hash} />}
             {contentData.owner &&
                 <OwnerPanel />}
             <div className="mb-2">

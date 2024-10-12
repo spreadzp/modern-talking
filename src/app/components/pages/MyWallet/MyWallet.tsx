@@ -86,7 +86,7 @@ const MyWallet: React.FC = () => {
         } else {
             router?.push(`/`);
         }
-    }, [activeAccount]);
+    }, [activeAccount, router]);
 
     const handleDiscussionClick = (discussion: any) => {
         setDiscussionData(discussion)

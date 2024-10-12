@@ -1,6 +1,7 @@
 "use client";
 
-import Voting from "../../components/business/voting/Voting";
+import Voting from "@/app/components/business/voting/Voting";
+
 
 function Page() {
     return (

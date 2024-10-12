@@ -1,20 +1,11 @@
 'use server'
 import { PrismaClient, DataSet, LotType } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createDataSet(dataSet: any, userId: number, greetingMessage: string, price: number): Promise<DataSet> {
-    const rewardsData: any[] = [
-        {
-            description: 'First reward',
-            condition: 'Complete the task',
-            sum: 100,
-        },
-    ];
-
-    const { hashLot, nftId, ...restData } = dataSet
+export async function createDataSet(dataSet: any, userId: number, greetingMessage: string): Promise<DataSet> {
 
     const newDataSet = await prisma.dataSet.create({
         data: {
-            ...restData,
+            ...dataSet,
             owner: {
                 connect: {
                     id: userId,
@@ -34,23 +25,7 @@ export async function createDataSet(dataSet: any, userId: number, greetingMessag
                     },
                 },
             },
-            rewards: {
-                create: rewardsData
-            }
-        },
-    });
-    await prisma.marketplace.create({
-        data: {
-            owner: {
-                connect: {
-                    id: userId,
-                },
-            },
-            typeLot: LotType.DataSet,
-            hashResource: newDataSet.hash,
-            hashLot,
-            nftId,
-            price: BigInt(price),
+
         },
     });
     return newDataSet;
@@ -146,12 +121,14 @@ export async function getDataSetByHash(hash: string): Promise<any | null> {
     });
     if (dataSet) {
         return {
+            id: dataSet.id,
             owner: dataSet.owner,
             hash: dataSet.hash,
             sourceUrl: dataSet.sourceUrl,
             title: dataSet.topic,
             description: dataSet.description,
             promptRestrictions: dataSet.prompt,
+            nftId: dataSet.nftId,
             rewards: dataSet.rewards,
             topic: dataSet.topic,
             chat: dataSet.chat,

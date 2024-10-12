@@ -30,21 +30,12 @@ const DiscussionComponent: React.FC = () => {
         <>
             <div className="min-h-screen ">
                 {!discussionData.title ? <Spinner /> : <div className="container mx-auto flex flex-col md:flex-row h-full">
-                    <div className="md:w-1/2 md:pr-4 md:mb-4 md:mb-0 md:ml-4 overflow-y-auto p-4 border-2 border-dotted border-gray-500">
-                        <ExpandableContent
-                            title={`Content block: ${discussionData.title}`}
-                            isOpenContent={true}
-                        >
-                            <Content contentData={discussionData} />
-                        </ExpandableContent>
+                    <div className="md:w-1/2 md:pr-4 md:mb-4 md:mb-0 md:ml-4 overflow-y-auto p-4 border-2 border-dotted border-gray-500 text-yellow-500 ">
+
+                        <Content contentData={discussionData} />
                     </div>
                     <div className="md:w-1/2 md:pl-4 md:mr-4 flex flex-col border-2 border-dotted border-gray-500 p-4">
-                        <ExpandableContent
-                            title={`Chat block: ${discussionData.title}`}
-                            isOpenContent={true}
-                        >
-                            <Chat contentData={discussionData} />
-                        </ExpandableContent>
+                        <Chat contentData={discussionData} />
                     </div>
                 </div>}
             </div>

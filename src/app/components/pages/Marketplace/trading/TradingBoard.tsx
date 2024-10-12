@@ -20,10 +20,9 @@ import Title, { TitleEffect, TitleSize } from '@/app/components/shared/Title';
 import ErrorModal from '@/app/components/shared/Modal/ErrorModal';
 import { getNftIdByHash } from '@/lib/web3/aptos/nft';
 import { fundTestAptAccount } from '@/lib/web3/aptos/provider';
-import LoginPage from '@/app/login/LoginPage';
-import SuccessModal from '@/app/components/shared/Modal/SuccessModal';
+
 import ListingNftModal from '../ListingNftModal';
-import { createDiscussion } from '@/server/discussion-db';
+import SuccessModal from '@/app/components/shared/Modal/SuccessModal';
 
 
 const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = ({ hashResource, resourceType }) => {
@@ -90,7 +89,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
         }
 
         fetchData();
-    }, [hashResource, setShowAcceptBidModal, selectedOwnerAddress, userAddressWallet]);
+    }, [hashResource, setShowAcceptBidModal, selectedOwnerAddress, userAddressWallet, activeAccount, router, coin.decimals]);
 
     const handleAccept = (bid: Bid & { owner: User }) => {
         setSelectedBid(bid);
@@ -196,7 +195,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
                 setAccepted(false);
             }
         }
-    }, [activeAccount, lotData.nftId, lotData.price])
+    }, [activeAccount, lotData.nftId, lotData.hashResource, coin.decimals, currentUser?.id]);
 
     const handleAcceptLot = useCallback(async () => {
         if (activeAccount) {
@@ -242,7 +241,7 @@ const TradingBoard: React.FC<{ hashResource: string, resourceType: LotType }> = 
             setErrorMessage((new Error('No active account')).message);
             router?.push(`/`);
         }
-    }, [activeAccount, lotData.hashResource, router]);
+    }, [activeAccount, router, resourceType, hashResource, lotData]);
 
     if (loading) return <Spinner text='Loading trading board...' />;
     if (errorMessage) return <p>Error: {errorMessage}</p>;

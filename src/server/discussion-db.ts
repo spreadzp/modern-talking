@@ -1,11 +1,11 @@
 'use server'
 
 import { Discussion, LotType, PrismaClient } from '@prisma/client'
- 
+
 
 const prisma = new PrismaClient()
 
-export async function getDiscussions(): Promise<any[]> {
+export async function getDiscussions(): Promise<any[] | null> {
     const discussions = await prisma.discussion.findMany({
         include: {
             owner: true,
@@ -14,24 +14,24 @@ export async function getDiscussions(): Promise<any[]> {
                     messages: true,
                 },
             },
-            rewards: true, 
+            rewards: true,
 
         },
     });
     if (discussions.length === 0) {
-        return discussions
+        return null
 
     } else {
 
         return discussions.map(discussion => {
-
             return {
-                owner: discussion.owner, 
+                owner: discussion.owner,
                 hash: discussion.hash,
                 sourceUrl: discussion.sourceUrl,
                 title: discussion.topic,
                 description: discussion.description,
                 promptRestrictions: discussion.prompt,
+                nftId: discussion.nftId,
                 rewards: discussion.rewards,
                 topic: discussion.topic,
                 chat: discussion.chat,
@@ -42,11 +42,11 @@ export async function getDiscussions(): Promise<any[]> {
     }
 }
 
-export async function getDiscussionListByOwnerAddress( address: string): Promise<any[]> {
+export async function getDiscussionListByOwnerAddress(address: string): Promise<any[]> {
     const discussions = await prisma.discussion.findMany({
         where: {
-            owner: { 
-                address, 
+            owner: {
+                address,
             }
         },
         include: {
@@ -65,19 +65,20 @@ export async function getDiscussionListByOwnerAddress( address: string): Promise
     } else {
         return discussions.map(discussion => {
             return {
-                owner: discussion.owner, 
+                owner: discussion.owner,
                 hash: discussion.hash,
                 sourceUrl: discussion.sourceUrl,
                 title: discussion.topic,
                 description: discussion.description,
                 promptRestrictions: discussion.prompt,
+                nftId: discussion.nftId,
                 rewards: discussion.rewards,
                 topic: discussion.topic,
                 chat: discussion.chat,
                 messages: discussion.chat?.messages.length || 0,
-                resourceType: LotType.Discussion    
+                resourceType: LotType.Discussion
             };
-        }); 
+        });
     }
 }
 
@@ -105,6 +106,7 @@ export async function getDiscussionByHash(hash: string): Promise<any | null> {
             title: discussion.topic,
             description: discussion.description,
             promptRestrictions: discussion.prompt,
+            nftId: discussion.nftId,
             rewards: discussion.rewards,
             topic: discussion.topic,
             chat: discussion.chat,
@@ -122,18 +124,11 @@ export async function getCountDiscussions(): Promise<number> {
     return count;
 }
 
-export async function createDiscussion(discussion: any, userId: number, greetingMessage: string, price: number): Promise<Discussion> {
-    const rewardsData: any[] = [
-        {
-            description: 'First reward',
-            condition: 'Complete the task',
-            sum: 100,
-        },
-    ];
-const {hashLot, nftId, ...restData} = discussion
+export async function createDiscussion(discussion: any, userId: number, greetingMessage: string): Promise<Discussion> {
+
     const newDiscussion = await prisma.discussion.create({
         data: {
-            ...restData,
+            ...discussion,
             owner: {
                 connect: {
                     id: userId,
@@ -152,25 +147,7 @@ const {hashLot, nftId, ...restData} = discussion
                         },
                     },
                 },
-            },
-            rewards: {
-                create: rewardsData
             }
-        },
-    });
-
-    await prisma.marketplace.create({
-        data: {
-            owner: {
-                connect: {
-                    id: userId,
-                },
-            },
-            typeLot: LotType.Discussion,
-            hashResource: newDiscussion.hash,
-            nftId,
-            hashLot,
-            price: BigInt(price),
         },
     });
     return newDiscussion;

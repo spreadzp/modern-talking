@@ -9,89 +9,99 @@ generator client {
 }
 
 model Discussion {
-  id          Int      @id @default(autoincrement())
-  hash        String   @unique
-  ownerId     Int // Add this field to reference the owner
-  owner       User     @relation(fields: [ownerId], references: [id])
-  sourceUrl   String   @unique
-  description String
-  prompt      String
-  topic       String
-  rewards     Reward[]
-  chat        Chat?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            Int           @id @default(autoincrement())
+  hash          String        @unique
+  ownerId       Int // Add this field to reference the owner
+  owner         User          @relation(fields: [ownerId], references: [id])
+  sourceUrl     String        @unique
+  description   String
+  nftId         String?
+  prompt        String
+  listingStatus ListingStatus @default(Unlisted)
+  topic         String
+  rewards       Reward[]
+  chat          Chat?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
 
   @@map("discussions")
 }
 
 model Survey {
-  id          Int      @id @default(autoincrement())
-  hash        String   @unique
-  ownerId     Int // Add this field to reference the owner
-  owner       User     @relation(fields: [ownerId], references: [id])
-  sourceUrl   String   @unique
-  description String
-  prompt      String
-  topic       String
-  rewards     Reward[]
-  chat        Chat?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            Int           @id @default(autoincrement())
+  hash          String        @unique
+  ownerId       Int // Add this field to reference the owner
+  owner         User          @relation(fields: [ownerId], references: [id])
+  sourceUrl     String        @unique
+  description   String
+  nftId         String?
+  prompt        String
+  listingStatus ListingStatus @default(Unlisted)
+  topic         String
+  rewards       Reward[]
+  chat          Chat?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
 
   @@map("surveys")
 }
 
 model Voting {
-  id          Int      @id @default(autoincrement())
-  hash        String   @unique
-  ownerId     Int // Add this field to reference the owner
-  owner       User     @relation(fields: [ownerId], references: [id])
-  sourceUrl   String   @unique
-  description String
-  prompt      String
-  topic       String
-  rewards     Reward[]
-  chat        Chat?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            Int           @id @default(autoincrement())
+  hash          String        @unique
+  ownerId       Int // Add this field to reference the owner
+  owner         User          @relation(fields: [ownerId], references: [id])
+  sourceUrl     String        @unique
+  description   String
+  nftId         String?
+  prompt        String
+  listingStatus ListingStatus @default(Unlisted)
+  topic         String
+  rewards       Reward[]
+  chat          Chat?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
 
   @@map("voting_list")
 }
 
 model DataSet {
-  id          Int      @id @default(autoincrement())
-  hash        String   @unique
-  ownerId     Int // Add this field to reference the owner
-  owner       User     @relation(fields: [ownerId], references: [id])
-  sourceUrl   String   @unique
-  description String
-  prompt      String
-  topic       String
-  rewards     Reward[]
-  chat        Chat?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            Int           @id @default(autoincrement())
+  hash          String        @unique
+  ownerId       Int // Add this field to reference the owner
+  owner         User          @relation(fields: [ownerId], references: [id])
+  sourceUrl     String        @unique
+  description   String
+  nftId         String?
+  prompt        String
+  listingStatus ListingStatus @default(Unlisted)
+  topic         String
+  rewards       Reward[]
+  chat          Chat?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
 
   @@map("datasets")
 }
 
 model Reward {
-  id           Int         @id @default(autoincrement())
+  id           Int              @id @default(autoincrement())
   description  String
   condition    String
   sum          Int
   token        Token?
-  surveyId     Int?        
-  survey       Survey?     @relation(fields: [surveyId], references: [id])
-  votingId     Int?        
-  voting       Voting?     @relation(fields: [votingId], references: [id])
-  datasetId    Int?        
-  dataset      DataSet?    @relation(fields: [datasetId], references: [id])
-  discussionId Int?        
-  discussion   Discussion? @relation(fields: [discussionId], references: [id])
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  startDate    DateTime?
+  status       RewardStatusEnum @default(Pending)
+  surveyId     Int?
+  survey       Survey?          @relation(fields: [surveyId], references: [id])
+  votingId     Int?
+  voting       Voting?          @relation(fields: [votingId], references: [id])
+  datasetId    Int?
+  dataset      DataSet?         @relation(fields: [datasetId], references: [id])
+  discussionId Int?
+  discussion   Discussion?      @relation(fields: [discussionId], references: [id])
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
 
   @@map("rewards")
 }
@@ -156,10 +166,10 @@ model User {
   id               Int           @id @default(autoincrement())
   address          String        @unique
   email            String
-  discussions      Discussion[]  
-  surveys          Survey[]  
-  votings          Voting[]  
-  datasets         DataSet[]  
+  discussions      Discussion[]
+  surveys          Survey[]
+  votings          Voting[]
+  datasets         DataSet[]
   messages         Message[]
   wallet           Wallet?
   createdAt        DateTime      @default(now()) @map("created_at")
@@ -185,6 +195,13 @@ model Mail {
   @@map("mails")
 }
 
+enum RewardStatusEnum {
+  Pending
+  Started
+  Executing
+  Finish
+}
+
 enum LotType {
   DataSet
   Voting
@@ -196,6 +213,12 @@ enum BidStatus {
   Pending
   Accepted
   Rejected
+}
+
+enum ListingStatus {
+  Unlisted
+  Listed
+  Withdrawn
 }
 
 enum StatusLot {

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Table from '../../shared/Table';
 import { useSiteStore } from '../../../hooks/store';
 import { Modal } from '../../shared/Modal/Modal';
-import { Reward } from '@prisma/client';
+import { Reward, RewardStatusEnum } from '@prisma/client';
 import Spinner from '../../shared/Spinner';
 import { createRewardByResource, getRewardsByContent } from '@/server/reward';
 import { useKeylessAccounts } from '@/lib/web3/aptos/keyless/useKeylessAccounts';
@@ -14,6 +14,7 @@ import ErrorModal from '../../shared/Modal/ErrorModal';
 import SuccessModal from '../../shared/Modal/SuccessModal';
 import SetupAddresses from './SetupAddresses';
 import { getUsersAddresses } from '@/server/users';
+import RewardsInProgress from './RewardsInProgress';
 
 export type UpComingRewards = {
     amount: string,
@@ -35,31 +36,43 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
     const [currentReward, setCurrentReward] = useState({} as UpComingRewards);
     const [isSetupAddresses, setSetupAddresses] = useState(false)
     const [usersAddresses, setUsersAddresses] = useState<string[]>([])
+    const [statusReward, setStatusReward] = useState<RewardStatusEnum>(RewardStatusEnum.Pending)
     const router = useRouter();
     useEffect(() => {
+        debugger
         if (contentData.owner.address === activeAccount?.accountAddress.toString()) {
             setIsResourceLot(true);
             if (contentData) {
                 const usersIds = contentData.chat.messages.map((message: any) => message.userId)
-                getUsersAddresses(usersIds)
-                    .then((addr: string[]) => {
-                        setUsersAddresses(() => [...addr])
-                    })
-                console.log("🚀 ~ useEffect ~ contentData:", contentData)
-                getMarketplaceByHash(contentData.hash).then((data) => {
-                    if (data) {
-                        setActiveNftId(data.nftId);
-                        getRewardInfo(data.nftId)
-                            .then(data => {
-                                setCurrentReward({ amount: data[0], endTimeToStartRewards: new Date(+data[1] * 1000), nftId: data[2], isStarted: data[3] })
-                                console.log('getRewardInfo data :>>', data)
-                            })
-                            .catch(err => console.log('not init yet:>>', err))
-                    }
-                });
+                debugger
+                const status = contentData.rewards.length > 0 ? contentData.rewards[0].status : RewardStatusEnum.Pending
+                setStatusReward(status)
+                // console.log("🚀 ~ useEffect ~ usersIds:", usersIds   )
+                // getUsersAddresses(usersIds)
+                //     .then((addr: string[]) => {
+                //         setUsersAddresses(() => [...addr])
+                //     })
+                // console.log("🚀 ~ useEffect ~ contentData:", contentData)
+                // if (contentData.listingStatus === 'Listed') {
+                //     {
+                //         getMarketplaceByHash(contentData.hash).then((data) => {
+                //             if (data) {
+                //                 setActiveNftId(data.nftId);
+                //                 getRewardInfo(data.nftId)
+                //                     .then(data => {
+                //                         setCurrentReward({ amount: data[0], endTimeToStartRewards: new Date(+data[1] * 1000), nftId: data[2], isStarted: data[3] })
+                //                         console.log('getRewardInfo data :>>', data)
+                //                     })
+                //                     .catch(err => console.log('not init yet:>>', err))
+                //             }
+                //         });
+                //     }
+
+                // }
             }
         }
-    }, [setIsResourceLot, contentData])
+    }, [setIsResourceLot, contentData, activeAccount, setUsersAddresses])
+
     const updateRewards = useCallback(() => {
         if (contentData) {
             getRewardsByContent(contentData).then((data) => {
@@ -85,7 +98,7 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
 
     useEffect(() => {
         updateRewards()
-    }, []);
+    }, [updateRewards]);
 
     const handleRewardClick = useCallback((reward: any) => {
         console.log("🚀 ~ handleRewardClick ~ reward:", reward)
@@ -103,16 +116,22 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
 
     const handleSubmit = useCallback(async (newReward: Reward) => {
         try {
-            if (newReward && activeAccount && activeNftId !== '') {
+            debugger
+            if (newReward && activeAccount) {
                 try {
-                    const tx = await setupReward(activeAccount, newReward.sum, Math.floor(Date.now() / 1000), activeNftId);
-                    if (tx) {
-                        const createdReward = await createRewardByResource(newReward, contentData);
-                        if (createdReward) {
-                            updateRewards();
-                        }
-                        setSuccessMessage('Reward created successfully');
+                    const createdReward = await createRewardByResource(newReward, contentData);
+                    if (createdReward) {
+                        updateRewards();
                     }
+                    setSuccessMessage('Reward created successfully need to wait for approval by admin');
+                    // const tx = await setupReward(activeAccount, newReward.sum, Math.floor(new Date(newReward?.startDate as any).getTime() / 1000), activeNftId);
+                    // if (tx) {
+                    //     const createdReward = await createRewardByResource(newReward, contentData);
+                    //     if (createdReward) {
+                    //         updateRewards();
+                    //     }
+                    //     setSuccessMessage('Reward created successfully');
+                    // }
                 } catch (error) {
                     console.log("🚀 ~ handleSubmit ~ error:", error)
                     setErrorMessage('Error creating reward');
@@ -122,21 +141,23 @@ const RewardsTable: React.FC<RewardsTableProps> = ({ contentData }) => {
         } catch (error) {
             console.error('Error creating survey:', error);
         }
-    }, [currentUser, updateRewards]);
+    }, [updateRewards, activeAccount, contentData, setErrorMessage, setSuccessMessage]);
 
     return (
         <>
             <div className="min-h-screen ">
                 <div className="container mx-auto p-4  shadow-lg rounded-lg">
                     <div>{
-                        isResourceLot && !currentReward.amount ?
-                            <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
-                                Create a new Reward
-                            </button> :
-                            isSetupAddresses ?
-                                <SetupAddresses currentReward={{ nftId: currentReward.nftId, usersAddresses, totalSum: +currentReward.amount }} /> :
-                                <Spinner text='the vote collection program is still ongoing' />
-                    }</div>
+                        isResourceLot && !currentReward.amount && statusReward === RewardStatusEnum.Pending &&
+                        <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
+                            Create a new Reward
+                        </button>}
+                        {currentReward && statusReward === RewardStatusEnum.Started && <RewardsInProgress currentReward={contentData.rewards[0]} />}
+                        {statusReward === RewardStatusEnum.Executing &&
+                            <SetupAddresses currentReward={{ nftId: currentReward.nftId, usersAddresses, totalSum: +currentReward.amount }} />}
+
+                        {statusReward === RewardStatusEnum.Finish && <Spinner text='The rewards program has not yet been established' />}
+                    </div>
                     <div>
                         {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create a new Reward" typeModal={'Reward'} />}
                     </div>

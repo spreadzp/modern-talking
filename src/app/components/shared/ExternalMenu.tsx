@@ -43,6 +43,11 @@ const menuItems = [
         href: "/my-assets",
     },
     {
+        icon: getIconByName('Admin'),
+        label: "Admin",
+        href: "/admin",
+    },
+    {
         icon: getIconByName('Help'),
         label: "Help",
         href: "/help",

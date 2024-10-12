@@ -1,11 +1,11 @@
 "use client";
 
-import Surveys from "../components/business/survey/Surveys"; 
+import SurveyTable from "../components/business/survey/SurveyTable";
 
 function Page() {
     return (
         <>
-            <Surveys />
+            <SurveyTable />
         </>
     );
 }

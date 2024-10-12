@@ -22,10 +22,8 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
     }, [setCoin]);
 
     useEffect(() => {
-        console.log('call getBalance :>>');
         getBalance(address)
             .then((balanceList) => {
-                console.log("🚀 ~ .then ~ balanceList:", balanceList);
                 const formattedBalances = balanceList.map(balance => {
                     const symbol = balance?.metadata?.symbol || '';
                     const decimals = balance?.metadata?.decimals || 0;
@@ -37,10 +35,6 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ address }) => {
             })
             .catch((error) => {
                 console.log("🚀 ~ .then ~ error:", error);
-                // fundTestAptAccount(address)
-                //     .then((balance) => {
-                //         console.log("🚀 ~ .then ~ balance:", balance);
-                //     });
             });
     }, [address, setUserBalance]);
 

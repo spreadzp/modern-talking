@@ -1,8 +1,9 @@
 "use client";
+import VotingTable from "../components/business/voting/VotingTable";
 
-import VotingList from "../components/business/voting/VotingList"; function Page() {
-    return ( 
-            <VotingList /> 
+function Page() {
+    return (
+        <VotingTable />
     );
 }
 

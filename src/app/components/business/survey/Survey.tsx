@@ -33,17 +33,13 @@ const Survey: React.FC = () => {
             <div className="min-h-screen ">
                 {!surveyData.title ? <Spinner /> : <div className="container mx-auto flex flex-col md:flex-row h-full">
                     <div className="md:w-1/2 md:pr-4 md:mb-4 md:mb-0 md:ml-4 overflow-y-auto p-4 border-2 border-dotted border-gray-500">
-                        <ExpandableContent title={`Content block: ${surveyData.title}`} isOpenContent={true}>
-                            <Content contentData={surveyData} />
-                        </ExpandableContent>
+                        <Content contentData={surveyData} />
                     </div>
                     <div className="md:w-1/2 md:pl-4 md:mr-4 flex flex-col border-2 border-dotted border-gray-500 p-4">
-                        <ExpandableContent title={`Chat block: ${surveyData.title}`} isOpenContent={true}>
-                            <Chat contentData={surveyData} />
-                        </ExpandableContent>
+                        <Chat contentData={surveyData} />
                     </div>
                 </div>}
-            </div>
+            </div >
         </>
     );
 };

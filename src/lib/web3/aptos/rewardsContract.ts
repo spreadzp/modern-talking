@@ -25,7 +25,7 @@ export async function getAdminRewardsAddress(admin: string): Promise<any> {
 
 
 export async function setupReward(signer: KeylessAccount, amount: number, end_time: number, nft_id: string): Promise<any> {
-
+    debugger
     const txn = await aptosClient.transaction.build.simple({
         sender: signer.accountAddress.toString(),
         data: {
@@ -63,7 +63,7 @@ export async function changeAdmin(signer: KeylessAccount, new_admin: string): Pr
 }
 
 export async function setAddresses(signer: KeylessAccount, nft_id: string, addresses: string[]): Promise<any> {
-
+    debugger
     const txn = await aptosClient.transaction.build.simple({
         sender: signer.accountAddress.toString(),
         data: {
@@ -96,7 +96,7 @@ export async function getRewardInfo(nft_id: string): Promise<any> {
 }
 
 export async function executeReward(signer: KeylessAccount, nft_id: string): Promise<any> {
-
+    debugger
     const txn = await aptosClient.transaction.build.simple({
         sender: signer.accountAddress.toString(),
         data: {

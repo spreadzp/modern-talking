@@ -11,7 +11,7 @@ const WalletAddressDisplay: React.FC<WalletAddressDisplayProps> = ({ address }) 
     const handleCopyClick = () => {
         navigator.clipboard.writeText(address).then(() => {
             setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);  
+            setTimeout(() => setIsCopied(false), 2000);
         });
     };
 
@@ -23,12 +23,12 @@ const WalletAddressDisplay: React.FC<WalletAddressDisplayProps> = ({ address }) 
     return (
         <div className="flex items-center space-x-4">
             <span>{formatAddress(address)}</span>
-            <button 
-                onClick={handleCopyClick} 
+            <button
+                onClick={handleCopyClick}
                 className="focus:outline-none"
                 title={isCopied ? 'Copied!' : 'Copy to clipboard'}
             >
-               {getIconByName('Copy')}
+                {getIconByName('Copy')}
             </button>
         </div>
     );

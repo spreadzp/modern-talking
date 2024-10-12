@@ -1,4 +1,4 @@
-import { Chat, Reward } from "@prisma/client";
+import { Chat, ListingStatus, Reward } from "@prisma/client";
 
 export type Nft = {
     address?: string;
@@ -45,6 +45,7 @@ export type SurveyData = {
     sourceUrl: string;
     title: string;
     description: string;
+    listingStatus: ListingStatus
     promptRestrictions: string;
     rewards?: Reward[];
     topic: string;
@@ -56,6 +57,7 @@ export type VotingData = {
     sourceUrl: string;
     title: string;
     description: string;
+    listingStatus: ListingStatus
     promptRestrictions: string;
     rewards?: Reward[];
     topic: string;
@@ -67,6 +69,7 @@ export type DataSetType = {
     sourceUrl: string;
     title: string;
     description: string;
+    listingStatus: ListingStatus
     promptRestrictions: string;
     rewards?: Reward[];
     topic: string;
@@ -79,6 +82,7 @@ export type DiscussionData = {
     sourceUrl: string;
     title: string;
     description: string;
+    listingStatus: ListingStatus
     promptRestrictions: string;
     rewards?: Reward[];
     topic: string;

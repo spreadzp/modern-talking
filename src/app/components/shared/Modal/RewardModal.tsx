@@ -8,22 +8,20 @@ interface RewardModalProps {
 }
 
 const RewardModal: React.FC<RewardModalProps> = ({ isOpen, onClose, onSubmit, nameSubmit }) => {
-
     const [description, setDescription] = useState('');
     const [condition, setCondition] = useState('');
     const [sum, setSum] = useState('');
-    //const [token, setToken] = useState('');
+    const [startDate, setStartDate] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (description && condition && sum) {
+        debugger
+        if (description && condition && sum && startDate) {
             const newReward = {
                 description,
                 condition,
                 sum: Number(sum),
-                // token,
-
+                startDate: new Date(startDate),
             };
 
             onSubmit(newReward);
@@ -62,18 +60,18 @@ const RewardModal: React.FC<RewardModalProps> = ({ isOpen, onClose, onSubmit, na
                         </div>
                         <div className="mb-4">
                             <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="sum">
-                                Sum
+                                MDTN tokens to be rewarded
                             </label>
                             <input className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                                 id="sum" type="text" value={sum} onChange={(e) => setSum(e.target.value)} />
                         </div>
-                        {/* <div className="mb-4">
-                            <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="token">
-                                Token
+                        <div className="mb-4">
+                            <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="startDate">
+                                Start Date
                             </label>
                             <input className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="token" type="text" value={token} onChange={(e) => setToken(e.target.value)} />
-                        </div> */}
+                                id="startDate" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                        </div>
                         <div className="modal-footer">
                             <button className="px-4 py-2 font-bold text-white bg-blue-500 rounded shadow hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">
                                 {`${nameSubmit}`}

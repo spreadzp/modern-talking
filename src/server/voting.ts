@@ -1,18 +1,12 @@
 'use server'
 import { LotType, PrismaClient, Voting } from "@prisma/client";
 const prisma = new PrismaClient()
-export async function createVoting(votingData: any, userId: number, greetingMessage: string, price: number): Promise<Voting> {
-    const rewardsData: any[] = [
-        {
-            description: 'First reward',
-            condition: 'Complete the task',
-            sum: 100,
-        },
-    ];
-    const { hashLot, nftId, ...restData } = votingData
+export async function createVoting(votingData: any, userId: number, greetingMessage: string): Promise<Voting> {
+
+
     const newVoting = await prisma.voting.create({
         data: {
-            ...restData,
+            ...votingData,
             owner: {
                 connect: {
                     id: userId,
@@ -32,25 +26,10 @@ export async function createVoting(votingData: any, userId: number, greetingMess
                     },
                 },
             },
-            rewards: {
-                create: rewardsData
-            }
+
         },
     });
-    await prisma.marketplace.create({
-        data: {
-            owner: {
-                connect: {
-                    id: userId,
-                },
-            },
-            typeLot: LotType.Voting,
-            hashResource: newVoting.hash,
-            hashLot,
-            nftId,
-            price: BigInt(price),
-        },
-    });
+
     return newVoting;
 }
 
@@ -144,6 +123,7 @@ export async function getVotingByHash(hash: string): Promise<any | null> {
     });
     if (voting) {
         return {
+            id: voting.id,
             owner: voting.owner,
             hash: voting.hash,
             sourceUrl: voting.sourceUrl,
@@ -151,6 +131,7 @@ export async function getVotingByHash(hash: string): Promise<any | null> {
             description: voting.description,
             promptRestrictions: voting.prompt,
             rewards: voting.rewards,
+            nftId: voting.nftId,
             topic: voting.topic,
             chat: voting.chat,
             messages: voting.chat?.messages.length || 0,

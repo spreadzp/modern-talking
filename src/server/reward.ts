@@ -1,5 +1,6 @@
 'use server'
-import { PrismaClient, Reward } from "@prisma/client";
+import { PrismaClient, Reward, RewardStatusEnum } from "@prisma/client";
+import { getMarketplaceByHash } from "./marketplace";
 const prisma = new PrismaClient()
 
 // Create a new reward
@@ -13,6 +14,7 @@ export async function createReward(rewardData: any): Promise<Reward> {
 }
 
 export async function createRewardByResource(rewardData: any, contentData: any): Promise<Reward> {
+    debugger
     const resourceName = contentData.resourceType.toLowerCase();
     const resourceIdField = `${resourceName}Id`;
 
@@ -38,6 +40,116 @@ export async function getRewards(): Promise<Reward[]> {
         },
     });
     return rewards;
+}
+
+export async function getRewardsByStatus(status: RewardStatusEnum): Promise<any[]> {
+    const rewards = await prisma.reward.findMany({
+        where: {
+            status: status
+        },
+        include: {
+            survey: {
+                include: {
+                    chat: {
+                        include: {
+                            messages: {
+                                include: {
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            voting: {
+                include: {
+                    chat: {
+                        include: {
+                            messages: {
+                                include: {
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            dataset: {
+                include: {
+                    chat: {
+                        include: {
+                            messages: {
+                                include: {
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            discussion: {
+                include: {
+                    chat: {
+                        include: {
+                            messages: {
+                                include: {
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+    });
+
+    return rewards.map(reward => {
+
+        const userAddressesToReward = [];
+        let nftId = null
+        if (reward.survey?.chat?.messages) {
+            userAddressesToReward.push(...reward.survey.chat.messages.map(message => message.user.address));
+            nftId = reward.survey.nftId
+        }
+
+        if (reward.voting?.chat?.messages) {
+            userAddressesToReward.push(...reward.voting.chat.messages.map(message => message.user.address));
+            nftId = reward.voting.nftId
+        }
+
+        if (reward.dataset?.chat?.messages) {
+            userAddressesToReward.push(...reward.dataset.chat.messages.map(message => message.user.address));
+            nftId = reward.dataset.nftId
+        }
+
+        if (reward.discussion?.chat?.messages) {
+            userAddressesToReward.push(...reward.discussion.chat.messages.map(message => message.user.address));
+            nftId = reward.discussion.nftId
+
+        }
+        return {
+            id: reward.id,
+            description: reward.description,
+            condition: reward.condition,
+            startDate: reward.startDate,
+            status: reward.status,
+            sum: reward.sum,
+            nftId,
+            userAddressesToReward: [...new Set(userAddressesToReward)] // Remove duplicates
+        };
+    });
+}
+
+export async function updateStatusById(id: number, status: RewardStatusEnum): Promise<Reward> {
+    const updatedReward = await prisma.reward.update({
+        where: {
+            id: id,
+        },
+        data: {
+            status: status
+        },
+    });
+    return updatedReward;
 }
 
 export async function getRewardsByContent(contentData: any): Promise<Reward[]> {

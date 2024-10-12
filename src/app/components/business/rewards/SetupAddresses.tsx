@@ -36,7 +36,7 @@ const SetupAddresses: React.FC<SetupAddressesProps> = ({ currentReward }) => {
             setUsers(usersData);
             setLoading(false);
         }
-    }, [currentReward.nftId]);
+    }, [currentReward.nftId, currentReward.usersAddresses, currentReward.totalSum]);
 
     const approveListAddresses = useCallback(async () => {
         try {
@@ -47,7 +47,7 @@ const SetupAddresses: React.FC<SetupAddressesProps> = ({ currentReward }) => {
         } catch (error) {
             console.error('Error approving addresses:', error);
         }
-    }, [setAddresses, users, currentReward, activeAccount]);
+    }, [currentReward, activeAccount]);
 
     const startReward = useCallback(async () => {
         try {
@@ -58,7 +58,7 @@ const SetupAddresses: React.FC<SetupAddressesProps> = ({ currentReward }) => {
         } catch (error) {
             console.error('Error approving addresses:', error);
         }
-    }, [])
+    }, [activeAccount, currentReward]);
     return (
         <div className="container mx-auto p-4 shadow-lg rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Setup Addresses</h2>

@@ -1,6 +1,9 @@
 'use server'
-import { Chat, Message, PrismaClient } from '@prisma/client'
+import { Chat, DataSet, Discussion, LotType, Message, PrismaClient, Survey, Voting } from '@prisma/client'
 import { getDiscussionByHash } from './discussion-db'
+import { getVotingByHash } from './voting'
+import { getSurveyByHash } from './survey'
+import { getDataSetByHash } from './dataset'
 
 
 const prisma = new PrismaClient()
@@ -50,21 +53,48 @@ export async function removeMessageById(id: number): Promise<any> {
 }
 
 
-export async function createMessage(message: any): Promise<Message> {
+export async function createMessage(message: any, type: LotType): Promise<Message> {
     if (!message.message) {
         throw new Error('Message is required');
     }
 
     let chat: Chat | null = null;
-    const discussion = await getDiscussionByHash(message.discussionHash)
-    if (!discussion) {
-        throw new Error('Discussion not found');
+    let entity: Discussion | Voting | Survey | DataSet | null = null;
+
+    switch (type) {
+        case LotType.Discussion:
+            entity = await getDiscussionByHash(message.contentDataHash);
+            if (!entity) {
+                throw new Error('Discussion not found');
+            }
+            break;
+        case LotType.Voting:
+            entity = await getVotingByHash(message.contentDataHash);
+            if (!entity) {
+                throw new Error('Voting not found');
+            }
+            break;
+        case LotType.Survey:
+            entity = await getSurveyByHash(message.contentDataHash);
+            if (!entity) {
+                throw new Error('Survey not found');
+            }
+            break;
+        case LotType.DataSet:
+            entity = await getDataSetByHash(message.contentDataHash);
+            if (!entity) {
+                throw new Error('DataSet not found');
+            }
+            break;
+        default:
+            throw new Error('Invalid LotType');
     }
+
     if (!message.chatId) {
         chat = await prisma.chat.create({
             data: {
-                discussion: {
-                    connect: { id: discussion.id }
+                [type.toLowerCase()]: {
+                    connect: { id: entity.id }
                 }
             }
         });

@@ -60,7 +60,7 @@ export async function listNftWithFixedPrice(signer: KeylessAccount, nftId: strin
             transactionHash: committedTxn.hash,
         });
     } catch (error) {
-        console.log("🚀 ~ error:", error)
+        throw error;
     }
 
 }

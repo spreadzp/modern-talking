@@ -1,8 +1,8 @@
- 'use client'
-import DataSets from "../components/business/dataset/DataSets"; 
+'use client'
+import DataSetTable from "../components/business/dataset/DataSetTable";
 
-function Page() { 
-    return <DataSets  />;
+function Page() {
+    return <DataSetTable />;
 }
 
 export default Page;

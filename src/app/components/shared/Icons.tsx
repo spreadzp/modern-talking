@@ -1,6 +1,6 @@
 import { ModernTalkingSvgContent } from "./ModernTalkingIcon";
 
- 
+
 
 export const HomeIcon = () => (
     <svg
@@ -37,7 +37,7 @@ export const MarketplaceIcon = () => (
         />
     </svg>
 );
- 
+
 export const Item2Icon = () => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ export const BurgerIcon = () => (
         />
     </svg>
 );
- 
+
 
 
 const bscSvgBase64 = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgZmlsbD0ibm9uZSI+PGcgY2xpcC1wYXRoPSJ1cmwoI2EpIj48cGF0aCBmaWxsPSIjRjBCOTBCIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNCAwYzcuNzMzIDAgMTQgNi4yNjcgMTQgMTRzLTYuMjY3IDE0LTE0IDE0UzAgMjEuNzMzIDAgMTQgNi4yNjcgMCAxNCAwWiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTcuNjk0IDE0IC4wMSAzLjcwMiAzLjE0NiAxLjg1djIuMTY4bC00Ljk4Ni0yLjkyNHYtNS44NzhMNy42OTQgMTRabTAtMy43MDJ2Mi4xNTdsLTEuODMyLTEuMDgzVjkuMjE0bDEuODMyLTEuMDgzIDEuODQxIDEuMDgzLTEuODQgMS4wODRabTQuNDctMS4wODQgMS44MzItMS4wODMgMS44NCAxLjA4My0xLjg0IDEuMDg0LTEuODMyLTEuMDg0WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik05LjAxOCAxNi45MzV2LTIuMTY4bDEuODMyIDEuMDg0djIuMTU3bC0xLjgzMi0xLjA3M1ptMy4xNDYgMy4zOTQgMS44MzIgMS4wODQgMS44NC0xLjA4NHYyLjE1N2wtMS44NCAxLjA4NC0xLjgzMi0xLjA4NFYyMC4zM1ptNi4zLTExLjExNSAxLjgzMi0xLjA4MyAxLjg0IDEuMDgzdjIuMTU4bC0xLjg0IDEuMDgzdi0yLjE1N2wtMS44MzItMS4wODRabTEuODMyIDguNDg4LjAxLTMuNzAyIDEuODMxLTEuMDg0djUuODc5bC00Ljk4NiAyLjkyNHYtMi4xNjdsMy4xNDUtMS44NVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtMTguOTgyIDE2LjkzNS0xLjgzMiAxLjA3M3YtMi4xNTdsMS44MzItMS4wODR2Mi4xNjhaIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTE4Ljk4MiAxMS4wNjUuMDEgMi4xNjgtMy4xNTUgMS44NXYzLjcxMmwtMS44MzEgMS4wNzMtMS44MzItMS4wNzN2LTMuNzExbC0zLjE1NS0xLjg1MXYtMi4xNjhsMS44NC0xLjA4MyAzLjEzNSAxLjg2IDMuMTU1LTEuODYgMS44NCAxLjA4M2gtLjAwN1ptLTkuOTY0LTMuNyA0Ljk3Ny0yLjkzNSA0Ljk4NyAyLjkzNS0xLjgzMiAxLjA4My0zLjE1NC0xLjg2LTMuMTQ2IDEuODYtMS44MzItMS4wODZabTEuODMyIDguNDg4LjAxLTMuNzAyIDEuODMxLTEuMDg0djUuODc5bC00Ljk4NiAyLjkyNHYtMi4xNjdsMy4xNDUtMS44NVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtMTguOTgyIDE2LjkzNS0xLjgzMiAxLjA3M3YtMi4xNTdsMS44MzItMS4wODR2Mi4xNjhaIi8+PC9nPjxkZWZzPjxjbGlwUGF0aCBpZD0iYSI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMGgyOHYyOEgweiIvPjwvY2xpcFBhdGg+PC9kZWZzPjwvc3ZnPg==';
@@ -77,8 +77,8 @@ const bscSvgBase64 = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZH
 
 export const BscIcon = () => (
     <div className="w-6 h-6" dangerouslySetInnerHTML={{ __html: atob(bscSvgBase64.replace('data:image/svg+xml;base64,', '')) }} />
-); 
- 
+);
+
 
 
 const ethSvgBase64 = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzI1MjkyRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTQgMjhhMTQgMTQgMCAxIDAgMC0yOCAxNCAxNCAwIDAgMCAwIDI4WiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0idXJsKCNhKSIgZmlsbC1vcGFjaXR5PSIuMyIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTQgMjhhMTQgMTQgMCAxIDAgMC0yOCAxNCAxNCAwIDAgMCAwIDI4WiIgY2xpcC1ydWxlPSJldmVub2RkIi8+PHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTguMTkgMTQuNzcgMTQgMTguMjFsNS44LTMuNDQtNS44IDguMTktNS44MS04LjE5WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Im0xNCAxNi45My01LjgxLTMuNDRMMTQgNC4zNGw1LjgxIDkuMTVMMTQgMTYuOTNaIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCIgeDI9IjE0IiB5MT0iMCIgeTI9IjI4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iI2ZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIxNCIgeDI9IjE0IiB5MT0iMTQuNzciIHkyPSIyMi45NiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiNmZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iLjkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4K';
@@ -247,8 +247,8 @@ export const CopyIcon = () => (
 
 const ChatIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-</svg>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
 )
 
 export const SignInIcon = () => (
@@ -287,16 +287,37 @@ export const SignOutIcon = () => (
 
 export const YouTubeIcon = () => (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      className="h-6 w-6 text-red-600 hover:text-red-700"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        className="h-6 w-6 text-red-600 hover:text-red-700"
     >
-      <path
-        fill="currentColor"
-        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
-      />
+        <path
+            fill="currentColor"
+            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+        />
     </svg>
 )
+
+export const AdminIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-6 h-6"
+    >
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+        <path d="M12 4c2.76 0 5.22 1.12 7.01 2.92L12 13.83l-7-6.93C6.79 5.11 9.24 4 12 4z" />
+        <path d="M19.01 6.92C20.27 8.38 21 10.12 21 12c0 4.97-4.03 9-9 9-2.76 0-5.22-1.12-7.01-2.92L12 13.17l7 6.93C17.21 18.89 14.76 20 12 20c-4.41 0-8-3.59-8-8 0-1.88.73-3.62 1.99-5.08L12 13.83V4c2.76 0 5.22 1.12 7.01 2.92z" />
+        <path d="M12 13.83l-7-6.93C6.79 5.11 9.24 4 12 4v9.83z" />
+        <path d="M12 8c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z" />
+        <path d="M12 16c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+        <path d="M12 14c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+    </svg>
+);
 
 export const ChromeIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-6 w-6">
@@ -334,6 +355,7 @@ export const getIconByName = (name: string) => {
         YouTube: YouTubeIcon,
         Chrome: ChromeIcon,
         Chat: ChatIcon,
+        Admin: AdminIcon,
         //ModernTalking: ModernTalkingIcon,
 
 

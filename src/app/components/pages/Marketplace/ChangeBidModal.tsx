@@ -1,7 +1,7 @@
- 
+
 import { useSiteStore } from '@/app/hooks/store';
 import { Bid } from '@prisma/client';
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 
 interface ChangeBidModalProps {
     bid: Partial<Bid> | null;
@@ -15,8 +15,8 @@ const ChangeBidModal: React.FC<ChangeBidModalProps> = ({ bid, onClose, onSave, o
     const [newPrice, setNewPrice] = useState<number | undefined>(Number(bid?.price));
 
     useEffect(() => {
-        setNewPrice(Number(bid?.price)/ 10**coin.decimals);
-    }, [bid]);
+        setNewPrice(Number(bid?.price) / 10 ** coin.decimals);
+    }, [bid, coin]);
 
     const handleSave = () => {
         if (newPrice !== undefined) {
@@ -27,9 +27,9 @@ const ChangeBidModal: React.FC<ChangeBidModalProps> = ({ bid, onClose, onSave, o
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-4 rounded-lg">
-            <div className="flex  justify-between border-b-2 border-dotted">
-                <h2 className="text-lg font-bold mb-2 text-black">Change Bid</h2>
-                <span className="close text-blue-500 text-xl cursor-pointer" onClick={onClose}>&times;</span>
+                <div className="flex  justify-between border-b-2 border-dotted">
+                    <h2 className="text-lg font-bold mb-2 text-black">Change Bid</h2>
+                    <span className="close text-blue-500 text-xl cursor-pointer" onClick={onClose}>&times;</span>
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
