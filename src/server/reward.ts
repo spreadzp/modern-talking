@@ -14,7 +14,6 @@ export async function createReward(rewardData: any): Promise<Reward> {
 }
 
 export async function createRewardByResource(rewardData: any, contentData: any): Promise<Reward> {
-    debugger
     const resourceName = contentData.resourceType.toLowerCase();
     const resourceIdField = `${resourceName}Id`;
 
@@ -347,4 +346,25 @@ export async function createNewRewardByResourceId(resourceId: number, resourceTy
         data: rewardData,
     });
     return newReward;
+}
+
+export async function getRewardsByOwner(ownerAddress: string): Promise<Reward[]> {
+    const rewards = await prisma.reward.findMany({
+        where: {
+            OR: [
+                { survey: { owner: { address: ownerAddress } } },
+                { voting: { owner: { address: ownerAddress } } },
+                { dataset: { owner: { address: ownerAddress } } },
+                { discussion: { owner: { address: ownerAddress } } },
+            ],
+        },
+        include: {
+            survey: true,
+            voting: true,
+            dataset: true,
+            discussion: true,
+            token: true,
+        },
+    });
+    return rewards;
 }

@@ -95,6 +95,7 @@ export async function getSurveyListByOwnerAddress(address: string): Promise<any[
                 title: survey.topic,
                 description: survey.description,
                 promptRestrictions: survey.prompt,
+                nftId: survey.nftId,
                 rewards: survey.rewards,
                 topic: survey.topic,
                 chat: survey.chat,

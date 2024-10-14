@@ -28,11 +28,11 @@ const SurveyTable: React.FC = () => {
                 setSurveysData([...surveysData, ...data]);
             }
         });
-    }, [setSurveysData, surveysData]);
+    }, [setSurveysData]);
 
     useEffect(() => {
         updateSurveys()
-    }, [updateSurveys]);
+    }, []);
 
     const handleSurveyClick = (survey: any) => {
         setSurveyData(survey)
@@ -51,7 +51,7 @@ const SurveyTable: React.FC = () => {
         try {
             if (currentUser && activeAccount) {
                 setIsTxProcess(true);
-                const { price, ...restData } = newSurvey
+                const restData = newSurvey
 
                 mintNft(activeAccount, restData.hash)
                     .then(async trx => {

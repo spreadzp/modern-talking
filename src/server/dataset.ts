@@ -94,6 +94,7 @@ export async function getDataSetListByOwnerAddress(address: string): Promise<any
                 title: dataSet.topic,
                 description: dataSet.description,
                 promptRestrictions: dataSet.prompt,
+                nftId: dataSet.nftId,
                 rewards: dataSet.rewards,
                 topic: dataSet.topic,
                 chat: dataSet.chat,

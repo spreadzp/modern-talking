@@ -24,6 +24,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
             setHeaders(filteredHeaders);
         }
     }, [data]);
+
     const stringifyValue = (value: any): string => {
         const replacer = (key: string, val: any) => {
             if (typeof val === 'bigint') {
@@ -71,7 +72,7 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
             return (<WalletAddressDisplay address={value} />)
         }
         if (header === 'rewardSumInUsd') {
-            return (<div  >{value === undefined ? <div className="max-h-2"><Spinner /></div> : value}</div>)
+            return (<div>{value === undefined ? <div className="max-h-2"><Spinner /></div> : value}</div>)
         }
         if (header === 'startDate') {
             const dateString = value instanceof Date ? value.toLocaleDateString() : value;
@@ -132,34 +133,34 @@ const Table: React.FC<TableProps> = ({ data, onBuyClick, onTradeClick, buttonLab
     };
 
     return (
-        <div className="overflow-y-auto ">
+        <div className="overflow-y-auto">
             <table className="table-auto w-full text-yellow-200">
                 <thead>
                     <tr>
                         {headers.map((header, index) => (
-                            <th key={index} className="border px-4 py-2">
+                            <th key={index} className="border px-4 py-2 text-center">
                                 {header.charAt(0).toUpperCase() + header.slice(1)}
                             </th>
                         ))}
-                        {onBuyClick && <th className="border px-4 py-2">Action</th>}
-                        {onTradeClick && <th className="border px-4 py-2">Trade</th>}
+                        {onBuyClick && <th className="border px-4 py-2 text-center">Action</th>}
+                        {onTradeClick && <th className="border px-4 py-2 text-center">Trade</th>}
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} className="text-sm">
                             {headers.map((header, headerIndex) => (
-                                <td key={headerIndex} className={`border py-2 text-center align-middle ${header === 'sourceUrl' ? 'px-10' : 'px-4'}`}>
+                                <td key={headerIndex} className="border px-4 py-2 text-center">
                                     {renderValueByHeader(header, item[header])}
                                 </td>
                             ))}
                             {onBuyClick && (
-                                <td className="border px-4 py-2 text-center align-middle">
+                                <td className="border px-4 py-2 text-center">
                                     {getRewardLabel(buttonLabel || 'Buy', item)}
                                 </td>
                             )}
                             {onTradeClick && (
-                                <td className="border px-4 py-2 text-center align-middle">
+                                <td className="border px-4 py-2 text-center">
                                     <button
                                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                                         onClick={() => onTradeClick(item)}

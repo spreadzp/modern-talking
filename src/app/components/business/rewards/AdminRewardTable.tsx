@@ -75,6 +75,7 @@ const AdminRewardTable: React.FC<AdminRewardTableProps> = ({ contentData }) => {
 
     const handleStartRewardClick = async (reward: any) => {
         try {
+            debugger
             setSelectedReward(reward);
             setLoading(true);
             if (reward.status === 'Pending' && activeAccount) {

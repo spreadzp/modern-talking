@@ -13,11 +13,12 @@ import { listNftWithFixedPrice } from '@/lib/web3/aptos/marketplace';
 import ErrorModal from '../../shared/Modal/ErrorModal';
 import SuccessModal from '../../shared/Modal/SuccessModal';
 import LoginPage from '@/app/login/LoginPage';
+import { fundTestAptAccount } from '@/lib/web3/aptos/provider';
 
 const DataSetTable: React.FC = () => {
     const { activeAccount } = useKeylessAccounts();
     const router = useRouter();
-    const { setDataSets, dataSets, currentUser, setDataSet } = useSiteStore()
+    const { setDataSets, dataSets, currentUser, setDataSet, userBalance } = useSiteStore()
     const [isModalOpen, setModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -29,11 +30,11 @@ const DataSetTable: React.FC = () => {
                 setDataSets([...dataSets, ...data]);
             }
         });
-    }, [setDataSets, dataSets]);
+    }, [setDataSets]);
 
     useEffect(() => {
         updateDataSets()
-    }, [updateDataSets]);
+    }, []);
 
     const handleDataSetClick = (DataSet: any) => {
         setDataSet(DataSet)
@@ -48,10 +49,28 @@ const DataSetTable: React.FC = () => {
         setModalOpen(false);
     };
 
+    const fundTestApt = useCallback(async () => {
+        if (userBalance < 0.01 && activeAccount) {
+            try {
+                setIsTxProcess(true)
+                const tx = await fundTestAptAccount(activeAccount.accountAddress.toString())
+                if (tx) {
+                    setSuccessMessage("Funded your account with APT try again to create a DataSet reload the page to see the change balance")
+                }
+            } catch (error) {
+                console.error('Error approving addresses:', error);
+                setErrorMessage(`${(error as Error).message} need to fund APT your account to create a DataSet`);
+            } finally {
+                setIsTxProcess(false)
+            }
+        }
+
+    }, [activeAccount, userBalance])
+
     const handleSubmit = useCallback(async (newDataSet: any) => {
         try {
             if (currentUser && activeAccount) {
-                const { price, ...restData } = newDataSet
+                const restData = newDataSet
                 mintNft(activeAccount, restData.hash)
                     .then(async trx => {
                         console.log('!!!!!!!!!!!! mintNft :>>', trx)
@@ -84,8 +103,9 @@ const DataSetTable: React.FC = () => {
 
         } catch (error) {
             console.error('Error creating DataSet:', error);
-            setErrorMessage((error as Error).message);
+            setErrorMessage(`${(error as Error).message} `);
         } finally {
+            setErrorMessage(null);
             setIsTxProcess(false);
         }
     }, [currentUser, activeAccount, updateDataSets]);
@@ -95,9 +115,11 @@ const DataSetTable: React.FC = () => {
                 <div>
                     {activeAccount ? <div className="min-h-screen ">
                         <div className="container mx-auto p-4">
-                            <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
+                            {userBalance > 0 ? <button onClick={openModal} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
                                 Create a new DataSet
-                            </button>
+                            </button> : <button onClick={fundTestApt} className="mb-4 bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded">
+                                Fund your test account to create a DataSet
+                            </button>}
                             {
                                 isModalOpen ? <Modal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} nameSubmit="Create DataSet" typeModal={'DataSet'} /> :
                                     (dataSets.length === 0 ? <Spinner /> : <Table

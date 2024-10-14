@@ -97,6 +97,7 @@ export async function getVotingListByOwnerAddress(address: string): Promise<any[
                 title: voting.topic,
                 description: voting.description,
                 promptRestrictions: voting.prompt,
+                nftId: voting.nftId,
                 rewards: voting.rewards,
                 topic: voting.topic,
                 chat: voting.chat,

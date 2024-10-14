@@ -12,6 +12,7 @@ import { getDataSetListByOwnerAddress } from '@/server/dataset';
 import Spinner from '../../shared/Spinner'; // Assuming you have a Spinner component
 import Table from '../../shared/Table'; // Assuming you have a Table component
 import { useSiteStore } from '@/app/hooks/store';
+import { getRewardsByOwner } from '@/server/reward'; // Import the getRewardsByOwner function
 
 export interface Asset {
     id: number;
@@ -25,13 +26,14 @@ export interface Reward {
     ownedMe: number;
     sum: number;
     airdropDate: string;
+    status: string; // Add status field
 }
 
 const MyWallet: React.FC = () => {
     const { setDataSet, setDiscussionData, setSurveyData, setVotingData } = useSiteStore()
     const { activeAccount } = useKeylessAccounts();
     const [assets, setAssets] = useState<Asset[]>([]);
-    const [rewards, setRewards] = useState<Reward[]>([]);
+    const [rewards, setRewards] = useState<any[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<Asset | Reward | null>(null);
     const [showDiscussions, setShowDiscussions] = useState<boolean>(false);
@@ -50,17 +52,20 @@ const MyWallet: React.FC = () => {
 
             const fetchData = async () => {
                 try {
-                    const [discussions, surveys, voting, datasets] = await Promise.all([
+                    const [discussions, surveys, voting, datasets, rewardsData] = await Promise.all([
                         getDiscussionListByOwnerAddress(accountAddress),
                         getSurveyListByOwnerAddress(accountAddress),
                         getVotingListByOwnerAddress(accountAddress),
-                        getDataSetListByOwnerAddress(accountAddress)
+                        getDataSetListByOwnerAddress(accountAddress),
+                        getRewardsByOwner(accountAddress) // Fetch rewards by owner's address
                     ]);
 
+                    console.log("🚀 ~ fetchData ~ rewardsData:", rewardsData)
                     setDiscussionResp(discussions);
                     setSurveyResp(surveys);
                     setVotingResp(voting);
                     setDataSetResp(datasets);
+                    setRewards(rewardsData); // Set rewards data
 
                     const assetsData: Asset[] = [
                         { id: 1, name: 'Discussions', ownedMe: discussions.length },
@@ -69,14 +74,7 @@ const MyWallet: React.FC = () => {
                         { id: 4, name: 'Datasets', ownedMe: datasets.length }
                     ];
 
-                    const mockRewards: Reward[] = [
-                        { id: 1, name: 'Reward 1', ownedMe: 10, sum: 50, airdropDate: '2023-12-01' },
-                        { id: 2, name: 'Reward 2', ownedMe: 15, sum: 75, airdropDate: '2023-11-15' },
-                        { id: 3, name: 'Reward 3', ownedMe: 20, sum: 100, airdropDate: '2023-10-30' }
-                    ];
-
                     setAssets(assetsData.filter(asset => asset.ownedMe > 0));
-                    setRewards(mockRewards);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -138,7 +136,7 @@ const MyWallet: React.FC = () => {
                 <div className="container mx-auto p-4">
                     <div className="flex items-center justify-center">
                         <Title
-                            titleName="My Activity"
+                            titleName="My Assets"
                             titleSize={TitleSize.H3}
                             titleEffect={TitleEffect.Gradient}
                         />
@@ -148,31 +146,34 @@ const MyWallet: React.FC = () => {
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     />
-                    {assets.length === 0 ? <Spinner /> : <AssetsTable assets={assets} onJoin={handleJoin} />}
+                    {assets.length === 0 ? <Spinner text='Loading Assets' /> : <AssetsTable assets={assets} onJoin={handleJoin} />}
 
                     <Title
                         titleName="Rewards"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     />
-                    <MyRewardsTable rewards={rewards} onJoin={handleJoin} />
+                    {rewards && rewards.length === 0 ? <Spinner text='Loading Rewards' /> :
 
-                    {showDiscussions && (discussionResp.length === 0 ? <Spinner /> : <div>    <Title
+                        <MyRewardsTable rewards={rewards} onJoin={handleJoin} />
+                    }
+
+                    {showDiscussions && (discussionResp.length === 0 ? <Spinner text='Loading Discussions' /> : <div> <Title
                         titleName="Discussion"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     /> <Table data={discussionResp} onBuyClick={handleDiscussionClick} buttonLabel="Join" /></div>)}
-                    {showSurveys && (surveyResp.length === 0 ? <Spinner /> : <div>    <Title
+                    {showSurveys && (surveyResp.length === 0 ? <Spinner text='Loading Surveys' /> : <div><Title
                         titleName="Surveys"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     /> <Table data={surveyResp} onBuyClick={handleSurveyClick} buttonLabel="Join" /></div>)}
-                    {showVoting && (votingResp.length === 0 ? <Spinner /> : <div>    <Title
+                    {showVoting && (votingResp.length === 0 ? <Spinner text='Loading Voting' /> : <div>    <Title
                         titleName="Voting"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}
                     /> <Table data={votingResp} onBuyClick={handleVotingClick} buttonLabel="Join" /></div>)}
-                    {showDatasets && (dataSetResp.length === 0 ? <Spinner /> : <div>    <Title
+                    {showDatasets && (dataSetResp.length === 0 ? <Spinner text='Loading Datasets' /> : <div>    <Title
                         titleName="Data sets"
                         titleSize={TitleSize.H4}
                         titleEffect={TitleEffect.Gradient}

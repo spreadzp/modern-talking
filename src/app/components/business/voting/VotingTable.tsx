@@ -29,11 +29,11 @@ const VotingTable: React.FC = () => {
                 setVotingList([...votingList, ...data]);
             }
         });
-    }, [setVotingList, votingList]);
+    }, [setVotingList]);
 
     useEffect(() => {
         updateVotingList()
-    }, [updateVotingList]);
+    }, []);
 
     const handleVotingClick = (Voting: any) => {
         setVotingData(Voting)
@@ -51,7 +51,7 @@ const VotingTable: React.FC = () => {
     const handleSubmit = async (newVoting: any) => {
         try {
             if (currentUser && activeAccount) {
-                const { price, ...restData } = newVoting;
+                const restData = newVoting;
 
                 mintNft(activeAccount, newVoting.hash)
                     .then(async trx => {

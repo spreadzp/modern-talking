@@ -159,11 +159,9 @@ export async function getCollectionDataByCreatorAddress(signer: KeylessAccount) 
     const data = await aptosClient.getAccountCoinsData({
         accountAddress: '0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6', //signer.accountAddress.toString()
     })
-    console.log("🚀 ~ getNftIdByHash ~ getAccountCoinsData:", data)
     const data1 = await aptosClient.getCollectionDataByCreatorAddress({
         creatorAddress: '0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6', //signer.accountAddress.toString()
     })
-    console.log("🚀 ~ getNftIdByHash ~ getCollectionDataByCreatorAddress:", data1)
     const datam = await aptosClient.getAccountModules({
         accountAddress: '0xd348822abc4c50a68be8be6382f1883deeb365bf54367791ab9ed584f67b9cc6', //signer.accountAddress.toString()
     })

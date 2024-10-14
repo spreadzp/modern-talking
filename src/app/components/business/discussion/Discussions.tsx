@@ -30,11 +30,11 @@ const Discussions: React.FC = () => {
                 setDiscussionsData([...discussionsData, ...data])
             }
         })
-    }, [setDiscussionsData, discussionsData]);
+    }, [setDiscussionsData]);
 
     useEffect(() => {
         updateDiscussions()
-    }, [updateDiscussions]);
+    }, []);
     const handleDiscussionClick = (discussion: any) => {
         setDiscussionData(discussion)
         router?.push(`/discussion/${discussion.hash}`);
@@ -51,7 +51,7 @@ const Discussions: React.FC = () => {
         try {
             if (currentUser && activeAccount) {
                 setIsTxProcess(true);
-                const { price, ...discussion } = newDiscussion
+                const discussion = newDiscussion
                 mintNft(activeAccount, discussion.hash)
                     .then(async trx => {
                         console.log('!!!!!!!!!!!! mintNft :>>', trx)
@@ -60,7 +60,6 @@ const Discussions: React.FC = () => {
                                 console.log('getNftIdByHash tx :>>', tx)
                                 const nftId = tx[0] as string
                                 discussion.nftId = nftId
-                                console.log("🚀 ~ .then ~ price:", price)
                                 const nd = await createDiscussion(discussion, currentUser?.id, `Let's discuss topic:  ${newDiscussion.topic}`);
                                 if (nd) {
                                     setSuccessMessage('Discussion created successfully')
