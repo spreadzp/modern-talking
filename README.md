@@ -124,3 +124,14 @@ You can find the codebase and additional details in the following repository:
 - **Token Rewards**
 - **NFTs**
 - **Decentralized Applications**
+
+## Next steps
+-  **Launch NFT Marketplace**: We will introduce a marketplace for creators to buy, sell, and trade NFTs, allowing content creators to monetize their digital assets within the platform.
+
+- **DeFi Integration**: Next, we will implement a decentralized finance (DeFi) module, enabling users to exchange MDTN tokens for other cryptocurrencies, providing liquidity and utility for the MDTN ecosystem.
+
+- **Smart Contract Audit**: Before the full platform launch, we will conduct a comprehensive audit of all smart contracts to ensure security, functionality, and compliance with industry standards.
+
+- **MDTN Token Sale Preparation**: We will finalize preparations for the initial token sale, offering MDTN to investors, ensuring compliance, and generating early liquidity for the project.
+
+- **AI-Based Message Processing**: Message processing in the platform's chat will be powered by AI text models via API integrations. These models will also analyze chat interactions to verify fulfillment of reward conditions as set by the reward programs.
