@@ -1,24 +1,24 @@
 'use client';
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useCallback } from "react";
+import React from "react";
 import Title, { TitleEffect, TitleSize } from "../../shared/Title";
 
 export interface PosterProps {
     title: string;
-    imageUrl: any;
+    imageUrl: StaticImageData;
     description: string;
     features: string[];
     callToAction: string;
-    joinUrl: string; // Add this prop for the join URL
+    joinUrl: string;
     activeLabel?: string;
 }
 
 const Poster: React.FC<PosterProps> = ({ title, imageUrl, description, features, callToAction, joinUrl, activeLabel }) => {
     const router = useRouter();
-    const handleJoinClick = useCallback((url: string) => {
+    const handleJoinClick = (url: string) => {
         router?.push(url);
-    }, [router]);
+    };
 
     return (
         <div className="poster p-4 bg-white bg-opacity-20 text-orange-200">
@@ -31,13 +31,16 @@ const Poster: React.FC<PosterProps> = ({ title, imageUrl, description, features,
                         ))}
                     </ul>
                     <p className="text-xl text-center flex items-start">
-                        <div className="align-top cursor-pointer" onClick={() => handleJoinClick(joinUrl)}>
+                        <button
+                            className="align-top cursor-pointer"
+                            onClick={() => handleJoinClick(joinUrl)}
+                        >
                             <Title
                                 titleName={activeLabel || "Join"}
                                 titleSize={TitleSize.H3}
                                 titleEffect={TitleEffect.Gradient}
                             />
-                        </div>
+                        </button>
                         <span className="ml-2">{callToAction}</span>
                     </p>
                 </div>

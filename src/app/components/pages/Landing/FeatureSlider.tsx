@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Poster, { PosterProps } from './Poster'; // Import PosterProps
+import Poster, { PosterProps } from './Poster';
 
 interface FeatureSliderProps {
     items: PosterProps[];
@@ -27,9 +27,11 @@ const FeatureSlider: React.FC<FeatureSliderProps> = ({ items }) => {
 
     return (
         <div className="feature-slider relative text-orange-200">
+            {/* TODO: Replace with icon */}
             <button onClick={goToPrev} className="slider-button absolute left-0 top-1/2 transform -translate-y-1/2">
                 &lt;
             </button>
+            {/* TODO: Replace with icon */}
             <button onClick={goToNext} className="slider-button absolute right-0 top-1/2 transform -translate-y-1/2">
                 &gt;
             </button>
@@ -37,9 +39,6 @@ const FeatureSlider: React.FC<FeatureSliderProps> = ({ items }) => {
                 <div
                     key={index}
                     className={`slider-item ${index === currentIndex ? 'active' : ''}`}
-                    style={{
-                        display: index === currentIndex ? 'block' : 'none'
-                    }}
                 >
                     <Poster {...item} />
                 </div>
