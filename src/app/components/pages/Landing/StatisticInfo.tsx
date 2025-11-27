@@ -1,5 +1,4 @@
 
-import Table from "../../shared/Table";
 import { useRouter } from "next/navigation";
 import { StatisticTableData } from "../../../interfaces/table.interfaces";
 import { getCountDiscussions } from "@/server/discussion-db";
@@ -9,6 +8,9 @@ import { getCountSurveys } from "@/server/survey";
 import { getCountDataSets } from "@/server/dataset";
 import { getCountVoting } from "@/server/voting";
 import { countRewardsByResource } from "@/server/reward";
+import Table from "../../shared/Table";
+import Spinner from "../../shared/Spinner";
+
 type RewardsSum = {
     survey: number,
     voting: number,
@@ -49,6 +51,7 @@ export const StatisticInfo = () => {
                 setRewardsSum(data)
             })
     }, [setCountDiscussions, setCountSurveys, setCountDataSet, setCountVotingList]);
+
     const tableData: StatisticTableData[] = [
         { id: 1, name: 'Discussions', amount: countDiscussions, rewardSumInUsd: rewardsSum.discussion, routeName: 'discussions' },
         { id: 2, name: 'Surveys', amount: countSurveys, rewardSumInUsd: rewardsSum.survey, routeName: 'surveys' },
@@ -61,15 +64,33 @@ export const StatisticInfo = () => {
         router?.push(`/${statistic.routeName}`);
     };
 
+    const columns = [
+        { header: 'Name', accessor: 'name' },
+        { header: 'Amount', accessor: 'amount' },
+        {
+            header: 'Reward Sum (USD)',
+            accessor: 'rewardSumInUsd',
+            cell: (value: number | undefined) =>
+                value === undefined ? <Spinner /> : value,
+        },
+    ];
+
+    const action = {
+        label: 'Join',
+        onClick: handleStatisticClick,
+        getButton: (item: StatisticTableData) => (
+            <button
+                className="bg-blue-500 hover:bg-[hsl(187,100%,68%)] text-yellow-500 font-bold py-2 px-4 rounded"
+                onClick={() => handleStatisticClick(item)}
+            >
+                Join
+            </button>
+        ),
+    };
+
     return (
-        <>
-
-            <div className="">
-                <div className="container mx-auto p-4">
-                    <Table data={tableData} onBuyClick={handleStatisticClick} buttonLabel="Join" />
-                </div>
-            </div>
-
-        </>
+        <div className="container mx-auto p-4">
+            <DynamicTable data={tableData} columns={columns} action={action} />
+        </div>
     );
 };

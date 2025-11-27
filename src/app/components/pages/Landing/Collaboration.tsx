@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { sendDiscordMessage } from "../../../hooks/discordMessage";
 import { useKeylessAccounts } from "@/lib/web3/aptos/keyless/useKeylessAccounts";
+import Card from "../../shared/Card";
+import Title, { TitleEffect, TitleSize } from "../../shared/Title";
 
 const Collaboration: React.FC = () => {
     const [isSending, setIsSending] = useState(false);
@@ -29,9 +31,13 @@ const Collaboration: React.FC = () => {
     };
 
     return (
-        <div className="collaboration ">
+        <Card className="collaboration">
             <div className="collaboration-left text-yellow-200">
-                <h2>Contact Us</h2>
+                <Title
+                    titleName="Contact Us"
+                    titleSize={TitleSize.H2}
+                    titleEffect={TitleEffect.Gradient}
+                />
                 <p>
                     We`re here to help! Whether you have a question, a proposal, or just want to say hello, feel free to reach out. Fill out the form below, and we`ll get back to you as soon as possible.
                 </p>
@@ -54,7 +60,7 @@ const Collaboration: React.FC = () => {
                     <button type="submit" disabled={isSending}>Send</button>
                 </form>
             </div>
-        </div>
+        </Card>
     );
 };
 

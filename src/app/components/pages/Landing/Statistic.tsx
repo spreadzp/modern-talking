@@ -1,9 +1,10 @@
 import Title, { TitleEffect, TitleSize } from "../../shared/Title";
 import { StatisticInfo } from "./StatisticInfo";
+import Card from "../../shared/Card";
 
 export const Statistic = () => {
     return (
-        <div className="statistic p-4 bg-white bg-opacity-20 text-white">
+        <Card className="statistic">
             <Title
                 titleName="Statistics"
                 titleSize={TitleSize.H3}
@@ -11,6 +12,6 @@ export const Statistic = () => {
             />
 
             <StatisticInfo />
-        </div>
+        </Card>
     );
 }
