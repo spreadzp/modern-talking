@@ -1,8 +1,8 @@
-import posterImage from './../../../../../assets/poster-1.jpg';
-import voteImage from './../../../../../assets/vote.png';
-import discussionImage from './../../../../../assets/discussion.png';
-import surveyImage from './../../../../../assets/survey.png';
-import datasetImage from './../../../../../assets/dataset.png';
+import posterImage from '@/assets/poster-1.jpg';
+import voteImage from '@/assets/vote.png';
+import discussionImage from '@/assets/discussion.png';
+import surveyImage from '@/assets/survey.png';
+import datasetImage from '@/assets/dataset.png';
 import { PosterProps } from './Poster';
 
 const sliderItems: PosterProps[] = [
