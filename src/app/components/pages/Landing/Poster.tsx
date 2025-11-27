@@ -3,6 +3,7 @@ import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Title, { TitleEffect, TitleSize } from "../../shared/Title";
+import Card from "../../shared/Card";
 
 export interface PosterProps {
     title: string;
@@ -21,7 +22,7 @@ const Poster: React.FC<PosterProps> = ({ title, imageUrl, description, features,
     };
 
     return (
-        <div className="poster p-4 bg-white bg-opacity-20 text-orange-200">
+        <Card className="poster text-orange-200">
             <div className="poster-content">
                 <div className="poster-description ">
                     <p className="text-xl text-center">{description}</p>
@@ -48,7 +49,7 @@ const Poster: React.FC<PosterProps> = ({ title, imageUrl, description, features,
                     <Image src={imageUrl} alt={title} className="poster-image" width={1500} height={350} />
                 </div>
             </div>
-        </div>
+        </Card>
     );
 };
 
